@@ -1,4 +1,4 @@
-# PPLF Admin - canvas app source (Power Apps source code format, *.pa.yaml)
+# PPLF Configuration App - canvas app source (Power Apps source code format, *.pa.yaml)
 # Authoring source. After the app is built in Power Apps Studio, the exported
 # source (pac solution unpack / Git integration) replaces this folder.
 App:
@@ -51,16 +51,16 @@ App:
       PplfBrand = ColorValue("#0F6CBD");
 
       // ---- Self-logging (the admin app logs its own actions) -----------------
-      PplfSourceName = "PPLF Admin";
+      PplfSourceName = "PPLF Configuration App";
       PplfAppVersion = "1.0.0";
       PplfAdminLog(Level: Text, Component: Text, Message: Text): Void = {
           If(IsBlank(gblPplfSessionId), Set(gblPplfSessionId, GUID()));
           IfError(
-              Patch('PPLF Logs', Defaults('PPLF Logs'), {
+              Patch('PPLF | Logs', Defaults('PPLF | Logs'), {
                   Title: Left(Message, 200),
-                  Level: Switch(Level, "Warning", 'PPLF Log Level'.Warning, "Error", 'PPLF Log Level'.Error, 'PPLF Log Level'.Information),
+                  Level: Switch(Level, "Warning", 'PPLF | Log Level'.Warning, "Error", 'PPLF | Log Level'.Error, 'PPLF | Log Level'.Information),
                   Severity: Switch(Level, "Warning", 3, "Error", 4, 2),
-                  'Source Type': 'PPLF Source Type'.'Canvas App',
+                  'Source Type': 'PPLF | Source Type'.'Canvas App',
                   'Source Name': PplfSourceName,
                   Component: Component,
                   Message: Message,

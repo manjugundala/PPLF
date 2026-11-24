@@ -3,7 +3,7 @@
  * Power Platform Logging Framework - MIT licence
  *
  * Writes to the PPLF Log table with Xrm.WebApi. When the Log Target is
- * SharePoint, the "PPLF - Forward Dataverse Logs to SharePoint" flow moves
+ * SharePoint, the "PPLF | Forwarder | Dataverse to SharePoint" flow moves
  * the rows to SharePoint, so form scripts never need to know the target.
  *
  * Register on a form:

@@ -27,7 +27,7 @@ function allActionNames(def) {
 
 test('flow names are unique and prefixed', () => {
   assert.equal(byName.size, flows.length);
-  for (const f of flows) assert.match(f.name, /^PPLF - /);
+  for (const f of flows) assert.match(f.name, /^PPLF \| [A-Za-z]+ \| /);
 });
 
 test('action names are unique within a flow', () => {
@@ -80,25 +80,25 @@ test('connectors used are declared as connection references', () => {
 test('child flow calls resolve to flows in the set, with no cycles', () => {
   assert.doesNotThrow(() => orderFlows(flows));
   const order = orderFlows(flows).map((f) => f.name);
-  assert.ok(order.indexOf('PPLF - Writer Dataverse') < order.indexOf('PPLF - Log Router'));
-  assert.ok(order.indexOf('PPLF - Log Router') < order.indexOf('PPLF - Write Log'));
-  assert.ok(order.indexOf('PPLF - Write Log') < order.indexOf('PPLF - Template Try Catch'));
+  assert.ok(order.indexOf('PPLF | Writers | Dataverse') < order.indexOf('PPLF | Router | Route Logs'));
+  assert.ok(order.indexOf('PPLF | Router | Route Logs') < order.indexOf('PPLF | Logger | Write Log'));
+  assert.ok(order.indexOf('PPLF | Logger | Write Log') < order.indexOf('PPLF | Templates | Try Catch'));
 });
 
 test('SharePoint writer uses standard connectors only (no Dataverse)', () => {
-  const f = byName.get('PPLF - Writer SharePoint');
+  const f = byName.get('PPLF | Writers | SharePoint');
   assert.ok(!JSON.stringify(f).includes('commondataservice'));
 });
 
 test('Dataverse writer sets every log column', () => {
-  const f = byName.get('PPLF - Writer Dataverse');
+  const f = byName.get('PPLF | Writers | Dataverse');
   const text = JSON.stringify(f);
   const log = schema.tables.find((t) => t.logicalName === 'pplf_log');
   for (const c of [log.primaryName, ...log.columns]) assert.ok(text.includes(`item/${c.schemaName.toLowerCase()}`), c.schemaName);
 });
 
 test('SharePoint writer sets every log field', () => {
-  const text = JSON.stringify(byName.get('PPLF - Writer SharePoint'));
+  const text = JSON.stringify(byName.get('PPLF | Writers | SharePoint'));
   const log = schema.tables.find((t) => t.logicalName === 'pplf_log');
   for (const c of log.columns) assert.ok(text.includes(`item/${c.sp.internalName}`), c.sp.internalName);
 });

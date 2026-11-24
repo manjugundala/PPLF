@@ -1,7 +1,7 @@
 // =============================================================================
 // PPLF Logger for canvas apps - ROUTER mode (target-agnostic)
 // =============================================================================
-// Paste into App.Formulas and add the "PPLF - Ingest from Power Apps" flow to
+// Paste into App.Formulas and add the "PPLF | Ingest | Power Apps" flow to
 // the app (Power Automate pane). The app never needs to know where logs go:
 // the PPLF Log Target environment variable decides, so an admin can move from
 // SharePoint to Dataverse without touching the app.
@@ -13,7 +13,7 @@
 // The flow applies the per-source Minimum Level; PplfClientMinSeverity drops
 // noise before it leaves the device.
 //
-// If the flow has a different name in your app, change PPLFIngestfromPowerApps
+// If the flow has a different name in your app, change 'PPLF|Ingest|PowerApps'
 // in PplfFlush below to match.
 // =============================================================================
 
@@ -34,7 +34,7 @@ PplfNewCorrelation(): Void = {
 PplfFlush(): Void = {
     If(CountRows(colPplfBuffer) > 0,
         IfError(
-            PPLFIngestfromPowerApps.Run(JSON(colPplfBuffer, JSONFormat.IgnoreBinaryData));
+            'PPLF|Ingest|PowerApps'.Run(JSON(colPplfBuffer, JSONFormat.IgnoreBinaryData));
             Clear(colPplfBuffer),
             // Keep entries for the next attempt, but never let the buffer grow without bound.
             If(CountRows(colPplfBuffer) > 200, Clear(colPplfBuffer))

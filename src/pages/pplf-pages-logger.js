@@ -3,7 +3,7 @@
  * Power Platform Logging Framework - MIT licence
  *
  * Two transports:
- *   "flow"   (default) - posts batches to the "PPLF - Ingest from Power Pages" cloud flow
+ *   "flow"   (default) - posts batches to the "PPLF | Ingest | Power Pages" cloud flow
  *                         through the site's cloud flow API. Follows the PPLF Log Target
  *                         environment variable, so it works with SharePoint and Dataverse.
  *   "webapi"            - writes straight to the pplf_log table through the Power Pages

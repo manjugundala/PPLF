@@ -2,14 +2,14 @@
 
 The web resource `pplf_/scripts/logger.js` writes entries with `Xrm.WebApi`. It reads the app's own configuration row once per page, so entries below the minimum level are never sent.
 
-When the log target is **SharePoint**, the *PPLF - Forward Dataverse Logs to SharePoint* flow moves these rows to SharePoint, so form scripts never need to know the target.
+When the log target is **SharePoint**, the *PPLF | Forwarder | Dataverse to SharePoint* flow moves these rows to SharePoint, so form scripts never need to know the target.
 
 ## Set up
 
 1. Add the web resource to your solution: type **Script (JScript)**, name `pplf_/scripts/logger.js`, content from [`src/webresources/pplf_/scripts/logger.js`](https://github.com/manjugundala/power-platform-logging-framework/blob/main/src/webresources/pplf_/scripts/logger.js).
 2. On each form that should log: **Form libraries** → add `pplf_/scripts/logger.js`.
 3. Optional: **Events** → **On Load** → `Pplf.Logger.onFormLoad`, with *Pass execution context* on. This logs unhandled script errors on the form.
-4. Users need **PPLF Log Writer**.
+4. Users need **PPLF | Log Writer**.
 
 ## Use from your scripts
 

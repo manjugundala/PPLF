@@ -19,8 +19,8 @@ PplfSourceName = "My Canvas App";
 PplfAppVersion = "1.0.0";
 
 // ---- Configuration lookup (cached by the app, refreshed with Refresh()) ----
-PplfSourceConfig = LookUp('PPLF Log Configurations', 'Source Name' = PplfSourceName);
-PplfDefaultConfig = LookUp('PPLF Log Configurations', 'Source Name' = "*");
+PplfSourceConfig = LookUp('PPLF | Configurations', 'Source Name' = PplfSourceName);
+PplfDefaultConfig = LookUp('PPLF | Configurations', 'Source Name' = "*");
 PplfEnabled = Coalesce(PplfSourceConfig.Enabled, PplfDefaultConfig.Enabled, true);
 PplfMinSeverity = Coalesce(PplfSourceConfig.'Minimum Severity', PplfDefaultConfig.'Minimum Severity', 2);
 
@@ -41,17 +41,17 @@ PplfLog(Level: Text, Component: Text, Operation: Text, Message: Text, Details: T
     If(IsBlank(gblPplfSessionId), Set(gblPplfSessionId, GUID()));
     If(PplfEnabled && PplfSeverity(Level) >= PplfMinSeverity,
         IfError(
-            Patch('PPLF Logs', Defaults('PPLF Logs'), {
+            Patch('PPLF | Logs', Defaults('PPLF | Logs'), {
                 Title: Left(Coalesce(Message, "(no message)"), 200),
                 Level: Switch(Level,
-                    "Trace", 'PPLF Log Level'.Trace,
-                    "Debug", 'PPLF Log Level'.Debug,
-                    "Warning", 'PPLF Log Level'.Warning,
-                    "Error", 'PPLF Log Level'.Error,
-                    "Critical", 'PPLF Log Level'.Critical,
-                    'PPLF Log Level'.Information),
+                    "Trace", 'PPLF | Log Level'.Trace,
+                    "Debug", 'PPLF | Log Level'.Debug,
+                    "Warning", 'PPLF | Log Level'.Warning,
+                    "Error", 'PPLF | Log Level'.Error,
+                    "Critical", 'PPLF | Log Level'.Critical,
+                    'PPLF | Log Level'.Information),
                 Severity: PplfSeverity(Level),
-                'Source Type': 'PPLF Source Type'.'Canvas App',
+                'Source Type': 'PPLF | Source Type'.'Canvas App',
                 'Source Name': PplfSourceName,
                 Component: Left(Component, 200),
                 Operation: Left(Operation, 200),

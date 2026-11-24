@@ -15,7 +15,7 @@ Logs are a common way for personal data and secrets to leak. PPLF gives you the 
 
 | Store | Who can write | Who can read |
 |---|---|---|
-| Dataverse | Users with **PPLF Log Writer** (create only) | **PPLF Log Administrator** and system administrators |
+| Dataverse | Users with **PPLF | Log Writer** (create only) | **PPLF | Log Administrator** and system administrators |
 | SharePoint | Users with Contribute on the `PPLF Logs` list (Direct mode), or the flow connection (Router mode) | Anyone with Read on the list |
 
 For SharePoint, **break permission inheritance** on both lists. Give administrators Full Control or Edit. If app users write directly, create a custom permission level with *Add Items* only and grant it on `PPLF Logs`, so users can add entries but not read other people's.

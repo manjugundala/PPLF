@@ -67,10 +67,10 @@ jobs:
         uses: microsoft/powerplatform-actions/pack-solution@v1
         with:
           solution-folder: src/solution
-          solution-file: out/PowerPlatformLoggingFramework.zip
+          solution-file: out/PPLF.zip
           solution-type: Unmanaged
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: solution-unmanaged
-          path: out/PowerPlatformLoggingFramework.zip
+          path: out/PPLF.zip

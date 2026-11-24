@@ -1,15 +1,15 @@
 # Power Automate
 
-Flows log by calling the **PPLF - Write Log** child flow. It routes to Dataverse, SharePoint or both, so your flow never changes when the target does.
+Flows log by calling the **PPLF | Logger | Write Log** child flow. It routes to Dataverse, SharePoint or both, so your flow never changes when the target does.
 
 ## Requirements
 
 - Your flow must be in a **solution** (child flows can only be called from solution flows).
-- **PPLF - Write Log** must be on, with its connection references set.
+- **PPLF | Logger | Write Log** must be on, with its connection references set.
 
 ## Log one entry
 
-Add **Run a Child Flow** → **PPLF - Write Log**:
+Add **Run a Child Flow** → **PPLF | Logger | Write Log**:
 
 | Input | Example | Required |
 |---|---|---|
@@ -32,7 +32,7 @@ Link to the run that wrote the entry:
 
 ## Start from the Try/Catch template
 
-**PPLF - Template Try Catch** is a ready-made skeleton. Use **Save as** to copy it, then put your steps in **Try**.
+**PPLF | Templates | Try Catch** is a ready-made skeleton. Use **Save as** to copy it, then put your steps in **Try**.
 
 ```mermaid
 flowchart TD
@@ -49,7 +49,7 @@ The Catch scope collects every failed action inside Try with `result('Try')`, lo
 
 ## Standard-licence flows
 
-**PPLF - Write Log** goes through the router, which can call the Dataverse writer. If a flow must use standard connectors only and your target is SharePoint, call **PPLF - Writer SharePoint** directly with a one-item `LogsJson` array:
+**PPLF | Logger | Write Log** goes through the router, which can call the Dataverse writer. If a flow must use standard connectors only and your target is SharePoint, call **PPLF | Writers | SharePoint** directly with a one-item `LogsJson` array:
 
 ```json
 [{"level":"Warning","message":"Retrying","sourceName":"Nightly Sync","sourceType":"Cloud Flow"}]
@@ -59,19 +59,19 @@ See [licensing](licensing.md).
 
 ## Many entries at once
 
-To write a batch, call **PPLF - Log Router** with `LogsJson` set to a JSON array of entries in the [wire format](https://github.com/manjugundala/power-platform-logging-framework/blob/main/schema/log-entry.schema.json). The writers process up to 20 entries in parallel.
+To write a batch, call **PPLF | Router | Route Logs** with `LogsJson` set to a JSON array of entries in the [wire format](https://github.com/manjugundala/power-platform-logging-framework/blob/main/schema/log-entry.schema.json). The writers process up to 20 entries in parallel.
 
 ## The PPLF flows
 
 | Flow | Trigger | Purpose |
 |---|---|---|
-| PPLF - Write Log | Child flow | Plain inputs for flow makers |
-| PPLF - Log Router | Child flow | Reads `pplf_LogTarget`, calls the writers, sends alerts |
-| PPLF - Writer Dataverse | Child flow | Applies configuration, writes rows |
-| PPLF - Writer SharePoint | Child flow | Applies configuration, writes items (standard connectors) |
-| PPLF - Ingest from Power Apps | Power Apps (V2) | Canvas Router mode |
-| PPLF - Ingest from Power Pages | Power Pages | Power Pages logger |
-| PPLF - Provision SharePoint | Power Apps (V2) | Creates the lists from the setup wizard |
-| PPLF - Retention Cleanup | Daily | Deletes old entries |
-| PPLF - Forward Dataverse Logs to SharePoint | Dataverse row added | Moves pro-code entries to SharePoint when the target is SharePoint |
-| PPLF - Template Try Catch | Manual | Starting point for new flows |
+| PPLF | Logger | Write Log | Child flow | Plain inputs for flow makers |
+| PPLF | Router | Route Logs | Child flow | Reads `pplf_LogTarget`, calls the writers, sends alerts |
+| PPLF | Writers | Dataverse | Child flow | Applies configuration, writes rows |
+| PPLF | Writers | SharePoint | Child flow | Applies configuration, writes items (standard connectors) |
+| PPLF | Ingest | Power Apps | Power Apps (V2) | Canvas Router mode |
+| PPLF | Ingest | Power Pages | Power Pages | Power Pages logger |
+| PPLF | Setup | Provision SharePoint | Power Apps (V2) | Creates the lists from the setup wizard |
+| PPLF | Maintenance | Retention Cleanup | Daily | Deletes old entries |
+| PPLF | Forwarder | Dataverse to SharePoint | Dataverse row added | Moves pro-code entries to SharePoint when the target is SharePoint |
+| PPLF | Templates | Try Catch | Manual | Starting point for new flows |

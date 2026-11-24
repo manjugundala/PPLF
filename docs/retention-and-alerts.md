@@ -2,7 +2,7 @@
 
 ## Retention
 
-**PPLF - Retention Cleanup** runs every day at 07:00 UTC.
+**PPLF | Maintenance | Retention Cleanup** runs every day at 07:00 UTC.
 
 1. The maximum age for **all** entries is the `*` configuration row's *Retention (days)*, or `pplf_DefaultRetentionDays` if that is empty.
 2. A source row with its own *Retention (days)* deletes that source's entries sooner.

@@ -8,7 +8,7 @@ Canvas logging is a block of [user-defined functions](https://learn.microsoft.co
 |---|---|---|---|
 | [`PplfLogger.Dataverse.fx`](https://github.com/manjugundala/power-platform-logging-framework/blob/main/src/canvas/snippets/PplfLogger.Dataverse.fx) | Dataverse, directly | `PPLF Logs`, `PPLF Log Configurations` | Premium |
 | [`PplfLogger.SharePoint.fx`](https://github.com/manjugundala/power-platform-logging-framework/blob/main/src/canvas/snippets/PplfLogger.SharePoint.fx) | SharePoint, directly | `PPLF Logs`, `PPLF Log Config` lists | Standard |
-| [`PplfLogger.Router.fx`](https://github.com/manjugundala/power-platform-logging-framework/blob/main/src/canvas/snippets/PplfLogger.Router.fx) | Wherever `pplf_LogTarget` says, through a flow | Flow `PPLF - Ingest from Power Apps` | Standard |
+| [`PplfLogger.Router.fx`](https://github.com/manjugundala/power-platform-logging-framework/blob/main/src/canvas/snippets/PplfLogger.Router.fx) | Wherever `pplf_LogTarget` says, through a flow | Flow `PPLF | Ingest | Power Apps` | Standard |
 
 All three expose the same functions, so you can switch variants without touching the rest of the app. [Architecture](architecture.md#two-ways-for-canvas-apps-to-log) compares them.
 
@@ -57,7 +57,7 @@ PplfInfo("scrSubmit", "Submitting expense");
 SubmitExpenseFlow.Run(ThisItem.ID, gblPplfCorrelationId)
 ```
 
-In the flow, pass the correlation id to **PPLF - Write Log** (`CorrelationId` input). In **PPLF Admin → Logs**, select any entry and **Show everything with this correlation id**.
+In the flow, pass the correlation id to **PPLF | Logger | Write Log** (`CorrelationId` input). In **PPLF Configuration App → Logs**, select any entry and **Show everything with this correlation id**.
 
 ### Time something slow
 
@@ -78,6 +78,6 @@ Every entry includes: user email, session id (one per app session), correlation 
 ## Notes and limits
 
 - Logging failures never stop your formula: Direct mode puts failed entries in `colPplfFailed`, Router mode keeps the buffer for the next flush (up to 200 entries).
-- The configuration lookups (`PplfSourceConfig`, `PplfDefaultConfig`) are named formulas, evaluated when first used and cached. Call `Refresh('PPLF Log Configurations')` to pick up changes during a session.
-- If the flow appears under a different name in your app (for example `PPLFIngestfromPowerApps_1`), change the name in `PplfFlush`.
+- The configuration lookups (`PplfSourceConfig`, `PplfDefaultConfig`) are named formulas, evaluated when first used and cached. Call `Refresh('PPLF | Configurations')` to pick up changes during a session.
+- If the flow appears under a different name in your app (for example `'PPLF|Ingest|PowerApps'_1`), change the name in `PplfFlush`.
 - Never put passwords, tokens or more personal data than needed into `Message` or `Details`. See [security](security.md).

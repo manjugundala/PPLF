@@ -36,7 +36,7 @@ namespace Pplf.Plugins
             var context = (IPluginExecutionContext)serviceProvider.GetService(typeof(IPluginExecutionContext));
             var tracing = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             var factory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
-            // Write logs as SYSTEM so callers do not need the PPLF Log Writer role.
+            // Write logs as SYSTEM so callers do not need the PPLF | Log Writer role.
             var systemService = factory.CreateOrganizationService(null);
             var userService = factory.CreateOrganizationService(context.UserId);
             var log = new PplfLogger(systemService, tracing, context, _sourceName);

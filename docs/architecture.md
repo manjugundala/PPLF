@@ -109,7 +109,7 @@ sequenceDiagram
   participant U as User
   participant A as Canvas app
   participant F as Business flow
-  participant W as PPLF - Write Log
+  participant W as PPLF | Logger | Write Log
   participant P as Plug-in
   participant S as Store
 

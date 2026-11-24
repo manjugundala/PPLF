@@ -18,16 +18,16 @@
 | Canvas Direct mode, SharePoint target | SharePoint | Standard (Microsoft 365) |
 | Canvas Router mode, Dataverse or Both target | Flow → router → Dataverse writer | Premium |
 | Canvas Router mode, SharePoint target | Flow → router → SharePoint writer | Treat as **premium**: the router can call the Dataverse writer, so assume the whole chain counts as premium. Use Direct SharePoint mode for standard-only users. |
-| Flow calls **PPLF - Write Log** | Router chain | As above, through the parent flow |
-| Flow calls **PPLF - Writer SharePoint** directly | SharePoint | Standard |
+| Flow calls **PPLF | Logger | Write Log** | Router chain | As above, through the parent flow |
+| Flow calls **PPLF | Writers | SharePoint** directly | SharePoint | Standard |
 | Power Pages (flow transport) | Router chain | Power Pages capacity, plus a Power Automate licence for the flow ([Power Pages docs](https://learn.microsoft.com/power-pages/configure/cloud-flow-integration)) |
 | Model-driven apps, plug-ins | Dataverse | Already premium |
 | Retention, forwarder flows | Dataverse and SharePoint, scheduled/automated | The flow owner (a service account) needs premium |
-| PPLF Admin app | Dataverse | Premium, admins only |
+| PPLF Configuration App app | Dataverse | Premium, admins only |
 
 ## The standard-licence path, in one line
 
-**Target = SharePoint, canvas apps use `PplfLogger.SharePoint.fx`, flows call `PPLF - Writer SharePoint`.** Nothing in that path touches a premium connector.
+**Target = SharePoint, canvas apps use `PplfLogger.SharePoint.fx`, flows call `PPLF | Writers | SharePoint`.** Nothing in that path touches a premium connector.
 
 The solution itself still lives in a Dataverse environment (environment variables, flows in solutions). That is about where it is installed, not what your app users run.
 
