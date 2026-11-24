@@ -76,7 +76,7 @@
                   BasePaletteColor: =BrandTheme.Primary
                   Text: ="Logs"
                   Appearance: ='ButtonCanvas.Appearance'.Secondary
-                  Icon: ="TextBulletListLtr"
+                  Icon: ="DocumentBulletList"
                   Width: =140
                   OnSelect: =Navigate(scrLogs, ScreenTransition.None)
             - btnNavSettings:
@@ -94,7 +94,7 @@
                   BasePaletteColor: =BrandTheme.Primary
                   Text: ="Setup"
                   Appearance: ='ButtonCanvas.Appearance'.Secondary
-                  Icon: ="Wrench"
+                  Icon: ="TextBulletListSquareSettings"
                   Width: =140
                   OnSelect: =Navigate(scrSetup, ScreenTransition.None)
       - conHomeBody:
