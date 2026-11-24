@@ -11,7 +11,7 @@ Thanks for helping. Bug reports, docs fixes, new clients and new targets are all
 ## Set up
 
 ```bash
-git clone https://github.com/OWNER/power-platform-logging-framework.git
+git clone https://github.com/manjugundala/power-platform-logging-framework.git
 cd power-platform-logging-framework
 npm test
 ```

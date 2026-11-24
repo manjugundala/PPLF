@@ -1,6 +1,6 @@
 # Power Pages
 
-[`pplf-pages-logger.js`](https://github.com/OWNER/power-platform-logging-framework/blob/main/src/pages/pplf-pages-logger.js) is a small browser script that batches entries and sends them to PPLF. It also captures unhandled JavaScript errors and promise rejections, and flushes when the visitor leaves the page.
+[`pplf-pages-logger.js`](https://github.com/manjugundala/power-platform-logging-framework/blob/main/src/pages/pplf-pages-logger.js) is a small browser script that batches entries and sends them to PPLF. It also captures unhandled JavaScript errors and promise rejections, and flushes when the visitor leaves the page.
 
 ## Choose a transport
 
@@ -13,7 +13,7 @@
 
 1. **Upload the script.** In the Portal Management app, create a **Web File** at the site root: partial URL `pplf-pages-logger.js`, attach `src/pages/pplf-pages-logger.js`, publishing state *Published*.
 2. **Add the flow to the site.** In Power Pages design studio → **Set up** → **Cloud flows** → **+ Add cloud flow** → *PPLF - Ingest from Power Pages*. Choose the web roles allowed to log (usually *Authenticated Users*). Copy the flow's id from the list.
-3. **Initialise the logger** on every page, for example in the *Footer* content snippet. Use [`samples/power-pages/pplf-logger-snippet.html`](https://github.com/OWNER/power-platform-logging-framework/blob/main/samples/power-pages/pplf-logger-snippet.html) and replace `FLOW_GUID`.
+3. **Initialise the logger** on every page, for example in the *Footer* content snippet. Use [`samples/power-pages/pplf-logger-snippet.html`](https://github.com/manjugundala/power-platform-logging-framework/blob/main/samples/power-pages/pplf-logger-snippet.html) and replace `FLOW_GUID`.
 
 ```html
 <script src="/pplf-pages-logger.js"></script>

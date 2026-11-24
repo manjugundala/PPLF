@@ -14,4 +14,7 @@ keywords:
   - sharepoint
   - low-code
 authors:
-  - name: "Power Platform Logging Framework contributors"
+  - family-names: "Gundala"
+    given-names: "Manjunath"
+repository-code: "https://github.com/manjugundala/power-platform-logging-framework"
+url: "https://manjugundala.github.io/power-platform-logging-framework/"

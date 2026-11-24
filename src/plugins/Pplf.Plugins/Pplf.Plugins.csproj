@@ -12,7 +12,7 @@
     <AssemblyName>Pplf.Plugins</AssemblyName>
     <LangVersion>latest</LangVersion>
     <Version>1.0.0</Version>
-    <Authors>Power Platform Logging Framework contributors</Authors>
+    <Authors>Manjunath Gundala and contributors</Authors>
     <SignAssembly Condition="Exists('Pplf.Plugins.snk')">true</SignAssembly>
     <AssemblyOriginatorKeyFile>Pplf.Plugins.snk</AssemblyOriginatorKeyFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

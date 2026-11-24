@@ -4,10 +4,10 @@
 
 **One logging framework for Power Apps, Power Automate, Power Pages, model-driven apps and Dataverse plug-ins.<br/>Store logs in Dataverse or SharePoint, and switch with one setting.**
 
-[![CI](https://github.com/OWNER/power-platform-logging-framework/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/power-platform-logging-framework/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/OWNER/power-platform-logging-framework?sort=semver)](https://github.com/OWNER/power-platform-logging-framework/releases)
+[![CI](https://github.com/manjugundala/power-platform-logging-framework/actions/workflows/ci.yml/badge.svg)](https://github.com/manjugundala/power-platform-logging-framework/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/manjugundala/power-platform-logging-framework?sort=semver)](https://github.com/manjugundala/power-platform-logging-framework/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-0F6CBD)](https://OWNER.github.io/power-platform-logging-framework/)
+[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-0F6CBD)](https://manjugundala.github.io/power-platform-logging-framework/)
 
 [Get started](docs/getting-started.md) · [Architecture](docs/architecture.md) · [Canvas apps](docs/canvas-apps.md) · [Flows](docs/power-automate.md) · [Power Pages](docs/power-pages.md) · [Contribute](CONTRIBUTING.md)
 
@@ -55,7 +55,7 @@ Details, sequence diagrams and the data model: **[docs/architecture.md](docs/arc
 
 ## Quick start
 
-1. **Install**: import the managed solution from [Releases](https://github.com/OWNER/power-platform-logging-framework/releases), or build it from source in your browser:
+1. **Install**: import the managed solution from [Releases](https://github.com/manjugundala/power-platform-logging-framework/releases), or build it from source in your browser:
    open your environment, paste [`dist/pplf-deployer.browser.js`](dist/pplf-deployer.browser.js) into the dev tools console, run `await PplfDeployer.deploy()`.
 2. **Connect**: set the three connection references and turn on the flows.
 3. **Choose a target**: PPLF Admin → Setup → Dataverse, SharePoint or Both.
@@ -120,7 +120,7 @@ No dependencies to install: Node 22+ and Python 3 with PyYAML are all you need. 
 - Teams alerts and adaptive cards
 - Copilot Studio agent logging
 
-Ideas and votes welcome in [Discussions](https://github.com/OWNER/power-platform-logging-framework/discussions).
+Ideas and votes welcome in [Discussions](https://github.com/manjugundala/power-platform-logging-framework/discussions).
 
 ## Contributing
 

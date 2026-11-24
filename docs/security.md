@@ -35,4 +35,4 @@ The `pplf_log` and `pplf_logconfig` tables are organization-owned, so there is n
 
 ## Secrets in this repository
 
-There are none, and the `.gitignore` keeps local settings and key files out. Pipelines read environment URLs and service principal secrets from GitHub Actions secrets only. Report vulnerabilities through [SECURITY.md](https://github.com/OWNER/power-platform-logging-framework/blob/main/SECURITY.md).
+There are none, and the `.gitignore` keeps local settings and key files out. Pipelines read environment URLs and service principal secrets from GitHub Actions secrets only. Report vulnerabilities through [SECURITY.md](https://github.com/manjugundala/power-platform-logging-framework/blob/main/SECURITY.md).
