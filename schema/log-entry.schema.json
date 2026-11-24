@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/pplf/power-platform-logging-framework/schema/log-entry.schema.json",
+  "$id": "https://raw.githubusercontent.com/manjugundala/PPLF/main/schema/log-entry.schema.json",
   "title": "PPLF log entry (wire format)",
   "description": "The JSON shape every PPLF client sends. The ingestion flows accept a JSON array of these as the LogsJson input. Writers map it to Dataverse columns or SharePoint fields.",
   "type": "object",

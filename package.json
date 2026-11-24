@@ -1,5 +1,5 @@
 {
-  "name": "power-platform-logging-framework",
+  "name": "pplf",
   "version": "1.0.0",
   "private": true,
   "description": "Configurable logging for Power Apps, Power Automate, Power Pages, model-driven apps and plug-ins, with Dataverse or SharePoint storage.",
