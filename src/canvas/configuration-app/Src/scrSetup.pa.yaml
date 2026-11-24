@@ -1,7 +1,7 @@
 Screens:
   scrSetup:
     Properties:
-      Fill: =PplfSurface
+      Fill: =BrandTheme.Background
       OnVisible: |-
         =Set(gblSetupTarget, PplfTarget);
         Set(gblSiteUrl, PplfEnv("pplf_SharePointSite"))
@@ -15,11 +15,43 @@ Screens:
             LayoutDirection: =LayoutDirection.Vertical
             DropShadow: =DropShadow.None
           Children:
-            - hdrSetup:
-                Control: Header@0.0.44
+            - conHdrSetup:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
                 Properties:
-                  Title: ="Setup"
+                  LayoutDirection: =LayoutDirection.Vertical
                   Width: =Parent.Width
+                  Height: =76
+                  FillPortions: =0
+                  Fill: =BrandTheme.Primary
+                  PaddingLeft: =24
+                  PaddingTop: =12
+                  LayoutGap: =2
+                  DropShadow: =DropShadow.None
+                Children:
+                  - lblHdrTitleSetup:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="Power Platform Logging | Setup"
+                        FontColor: =BrandTheme.TextOnPrimary
+                        Size: =20
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Height: =32
+                        Width: =Parent.Width - 48
+                  - lblHdrSubSetup:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="Choose where logs are stored, create the SharePoint lists and send a test entry."
+                        FontColor: =BrandTheme.TextOnPrimary
+                        Size: =12
+                        Height: =22
+                        Width: =Parent.Width - 48
+            - recHdrLineSetup:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =BrandTheme.Accent
+                  Width: =Parent.Width
+                  Height: =4
             - conSetupNav:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
@@ -34,7 +66,7 @@ Screens:
                   - btnSetupBack:
                       Control: Button@0.0.45
                       Properties:
-                        BasePaletteColor: =PplfBrand
+                        BasePaletteColor: =BrandTheme.Primary
                         Text: ="Overview"
                         Appearance: ='ButtonCanvas.Appearance'.Subtle
                         Icon: ="ArrowLeft"
@@ -60,8 +92,8 @@ Screens:
                         LayoutDirection: =LayoutDirection.Vertical
                         Height: =250
                         FillPortions: =0
-                        Fill: =PplfCard
-                        BorderColor: =ColorValue("#E0E0E0")
+                        Fill: =BrandTheme.Surface
+                        BorderColor: =BrandTheme.Border
                         BorderThickness: =1
                         PaddingLeft: =PplfGap
                         PaddingTop: =PplfGap
@@ -81,7 +113,7 @@ Screens:
                             Properties:
                               Text: |-
                                 ="Dataverse: best for querying and security, needs premium licences. SharePoint: standard licences only. Both: write to both, useful while you move from one to the other."
-                              FontColor: =PplfMuted
+                              FontColor: =BrandTheme.TextSecondary
                               Wrap: =true
                               Height: =48
                               Width: =Parent.Width - 2 * PplfGap
@@ -97,7 +129,7 @@ Screens:
                         - btnSaveTarget:
                             Control: Button@0.0.45
                             Properties:
-                              BasePaletteColor: =PplfBrand
+                              BasePaletteColor: =BrandTheme.Primary
                               Text: ="Save log target"
                               Appearance: ='ButtonCanvas.Appearance'.Primary
                               Icon: ="Save"
@@ -112,7 +144,7 @@ Screens:
                             Control: Text@0.0.51
                             Properties:
                               Text: ="Create the SharePoint lists in step 2 before choosing SharePoint or Both."
-                              FontColor: =ColorValue("#BC4B09")
+                              FontColor: =BrandTheme.Warning
                               Visible: =gblSetupTarget <> "Dataverse" && IsBlank(PplfEnv("pplf_SharePointLogList"))
                               Height: =24
                               Width: =600
@@ -124,8 +156,8 @@ Screens:
                         LayoutDirection: =LayoutDirection.Vertical
                         Height: =260
                         FillPortions: =0
-                        Fill: =PplfCard
-                        BorderColor: =ColorValue("#E0E0E0")
+                        Fill: =BrandTheme.Surface
+                        BorderColor: =BrandTheme.Border
                         BorderThickness: =1
                         PaddingLeft: =PplfGap
                         PaddingTop: =PplfGap
@@ -145,7 +177,7 @@ Screens:
                             Control: Text@0.0.51
                             Properties:
                               Text: ="Creates the PPLF Logs and PPLF Log Config lists with indexed columns on the site. You need Manage Lists permission there. Safe to run again."
-                              FontColor: =PplfMuted
+                              FontColor: =BrandTheme.TextSecondary
                               Wrap: =true
                               Height: =48
                               Width: =Parent.Width - 2 * PplfGap
@@ -159,7 +191,7 @@ Screens:
                         - btnProvision:
                             Control: Button@0.0.45
                             Properties:
-                              BasePaletteColor: =PplfBrand
+                              BasePaletteColor: =BrandTheme.Primary
                               Text: =If(gblProvisioning, "Creating lists...", "Create lists")
                               Appearance: ='ButtonCanvas.Appearance'.Primary
                               Icon: ="TableAdd"
@@ -183,7 +215,7 @@ Screens:
                             Properties:
                               Text: |-
                                 ="Site: " & PplfEnv("pplf_SharePointSite") & "   ·   Log list: " & Coalesce(PplfEnv("pplf_SharePointLogList"), "not set") & "   ·   Config list: " & Coalesce(PplfEnv("pplf_SharePointConfigList"), "not set")
-                              FontColor: =PplfMuted
+                              FontColor: =BrandTheme.TextSecondary
                               Size: =12
                               Height: =24
                               Width: =Parent.Width - 2 * PplfGap
@@ -195,8 +227,8 @@ Screens:
                         LayoutDirection: =LayoutDirection.Vertical
                         Height: =200
                         FillPortions: =0
-                        Fill: =PplfCard
-                        BorderColor: =ColorValue("#E0E0E0")
+                        Fill: =BrandTheme.Surface
+                        BorderColor: =BrandTheme.Border
                         BorderThickness: =1
                         PaddingLeft: =PplfGap
                         PaddingTop: =PplfGap
@@ -214,7 +246,7 @@ Screens:
                         - btnTest:
                             Control: Button@0.0.45
                             Properties:
-                              BasePaletteColor: =PplfBrand
+                              BasePaletteColor: =BrandTheme.Primary
                               Text: ="Send test entry"
                               Appearance: ='ButtonCanvas.Appearance'.Secondary
                               Icon: ="Send"
@@ -241,13 +273,13 @@ Screens:
                             Properties:
                               Text: |-
                                 =If(IsBlank(gblTestCorrelation), "", "Last test correlation id: " & gblTestCorrelation)
-                              FontColor: =PplfMuted
+                              FontColor: =BrandTheme.TextSecondary
                               Height: =24
                               Width: =Parent.Width - 2 * PplfGap
                         - btnViewTest:
                             Control: Button@0.0.45
                             Properties:
-                              BasePaletteColor: =PplfBrand
+                              BasePaletteColor: =BrandTheme.Primary
                               Text: ="Find it in Logs"
                               Appearance: ='ButtonCanvas.Appearance'.Subtle
                               Width: =200
