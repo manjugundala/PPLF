@@ -3,16 +3,39 @@
   * parses as YAML
   * every property value is a Power Fx formula (starts with '=')
   * control names are unique across the app folder
+  * no property that Power Apps Studio rejected on paste (PA2108), and no
+    control version older than the one Studio upgrades to (PA2105)
 Exit code 1 on any problem. Used by CI."""
 import glob, os, sys
 import yaml
 
 problems = []
 
+# Learned from Studio paste errors (Nov 2026). Control family -> properties
+# Studio does not know. Keep this list growing whenever a paste fails.
+REJECTED = {
+    'Rectangle': {'RadiusTopLeft', 'RadiusTopRight', 'RadiusBottomLeft', 'RadiusBottomRight'},
+    'DropDown': {'ItemDisplayText'},
+    'NumberInput': {'Placeholder'},
+    'GroupContainer': {'VerticalOverflow', 'HorizontalOverflow'},
+}
+# Oldest control versions Studio accepts without a PA2105 upgrade warning.
+MIN_VERSION = {'GroupContainer': (1, 5, 0), 'NumberInput': (2, 9, 12)}
+
+def check_control(path, name, ctrl):
+    family, _, ver = str(ctrl.get('Control', '')).partition('@')
+    for k in (ctrl.get('Properties') or {}):
+        if k in REJECTED.get(family, ()):
+            problems.append(f'{path}: {name}.{k} is not a property of {family} (Studio PA2108)')
+    if family in MIN_VERSION and ver:
+        if tuple(int(x) for x in ver.split('.')) < MIN_VERSION[family]:
+            problems.append(f'{path}: {name} uses {family}@{ver}; use {".".join(map(str, MIN_VERSION[family]))} or later')
+
 def walk_controls(children, names, path):
     for child in children or []:
         for name, ctrl in child.items():
             names.append((name, path))
+            check_control(path, name, ctrl)
             for k, v in (ctrl.get('Properties') or {}).items():
                 if not isinstance(v, str) or not v.lstrip().startswith('='):
                     problems.append(f'{path}: {name}.{k} is not a formula (must start with "=")')

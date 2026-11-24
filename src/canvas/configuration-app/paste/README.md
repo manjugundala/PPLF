@@ -38,13 +38,22 @@ Select **App** in the Tree view, choose the property in the dropdown left of the
 
 Paste the screens in this order. Until all four exist, `Navigate(...)` formulas that point at a later screen show an error; they clear by themselves.
 
-3. **App → StartScreen**: [`App.StartScreen.fx`](App.StartScreen.fx).
+3. **App → StartScreen** (optional): [`App.StartScreen.fx`](App.StartScreen.fx). The first screen in Tree view opens by default, so you can skip this if scrHome is first.
 
 ## 5. Save and check
 
 1. **Save** and **Publish**.
 2. Open **App checker** (stethoscope icon). If Studio offers to update a modern control version, accept.
 3. Run the app: **Setup → Send test entry** should report "Accepted 1 entry".
+
+## If a paste fails
+
+Studio rejects the whole paste and adds nothing, so you can fix and paste again.
+
+- **"The clipboard doesn't contain any YAML code to paste"**: you copied a file that starts with `Screens:`. Use the `*.controls.yaml` files here; they start with `- conXxxRoot:`.
+- **`PA2108 Unknown property 'X'`**: the control doesn't have that property in your Studio version. Remove the line in `../Src`, add it to `REJECTED` in `tools/build/lint-payaml.py`, and regenerate.
+- **`PA2105 ... older than the current version`**: only a warning, but raise the version in `../Src` and `MIN_VERSION` so it stays quiet.
+- **Copying the error text replaces your clipboard.** Copy the controls file again before you retry.
 
 ## Afterwards
 

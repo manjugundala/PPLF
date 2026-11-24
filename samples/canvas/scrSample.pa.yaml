@@ -9,7 +9,7 @@ Screens:
       OnVisible: =PplfInfo("scrPplfSample", "Sample screen opened")
     Children:
       - conSample:
-          Control: GroupContainer@1.3.0
+          Control: GroupContainer@1.5.0
           Variant: AutoLayout
           Properties:
             Width: =Parent.Width
