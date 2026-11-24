@@ -1,0 +1,52 @@
+site_name: Power Platform Logging Framework
+site_description: Configurable logging for Power Apps, Power Automate, Power Pages, model-driven apps and plug-ins.
+repo_name: power-platform-logging-framework
+edit_uri: edit/main/docs/
+docs_dir: docs
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - search.highlight
+  palette:
+    - scheme: default
+      primary: blue
+      toggle: { icon: material/brightness-7, name: Dark mode }
+    - scheme: slate
+      primary: blue
+      toggle: { icon: material/brightness-4, name: Light mode }
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Architecture: architecture.md
+  - Configuration: configuration.md
+  - Using PPLF:
+      - Canvas apps: canvas-apps.md
+      - Power Automate: power-automate.md
+      - Power Pages: power-pages.md
+      - Model-driven apps: model-driven-apps.md
+      - Plug-ins and Custom API: plugins.md
+  - Operations:
+      - Licensing: licensing.md
+      - Security and privacy: security.md
+      - Retention and alerts: retention-and-alerts.md
+      - Troubleshooting: troubleshooting.md
+  - Contributing:
+      - ALM and Git: alm-and-git.md
+      - Schema reference: reference/schema.md
+      - Decisions (ADRs): adr/README.md

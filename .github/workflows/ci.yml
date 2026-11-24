@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Schema, flows, tests and lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install YAML linter dependency
+        run: pip install pyyaml
+
+      - name: Generated files are up to date
+        run: npm run check
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Canvas source (pa.yaml) lint
+        run: npm run lint:yaml
+
+      - name: JavaScript syntax
+        run: |
+          node --check src/pages/pplf-pages-logger.js
+          node --check src/webresources/pplf_/scripts/logger.js
+          node --check dist/pplf-deployer.browser.js
+
+      - name: Deployer dry run
+        run: npm run deploy:dry > /dev/null
+
+  plugins:
+    name: Build plug-in assembly
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build
+        run: dotnet build src/plugins/Pplf.Plugins/Pplf.Plugins.csproj -c Release
+
+  solution:
+    name: Pack and check solution
+    runs-on: windows-latest
+    # Runs once the exported solution source exists in src/solution
+    if: ${{ hashFiles('src/solution/**/Solution.xml', 'src/solution/**/solution.yml') != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: microsoft/powerplatform-actions/actions-install@v1
+      - name: Pack unmanaged
+        uses: microsoft/powerplatform-actions/pack-solution@v1
+        with:
+          solution-folder: src/solution
+          solution-file: out/PowerPlatformLoggingFramework.zip
+          solution-type: Unmanaged
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: solution-unmanaged
+          path: out/PowerPlatformLoggingFramework.zip

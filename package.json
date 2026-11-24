@@ -1,0 +1,31 @@
+{
+  "name": "power-platform-logging-framework",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Configurable logging for Power Apps, Power Automate, Power Pages, model-driven apps and plug-ins, with Dataverse or SharePoint storage.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node tools/build/generate.mjs",
+    "check": "node tools/build/generate.mjs --check",
+    "test": "node --test \"tests/*.test.mjs\"",
+    "lint:yaml": "python3 tools/build/lint-payaml.py",
+    "deploy": "node tools/deployer/cli.mjs deploy",
+    "deploy:dry": "node tools/deployer/cli.mjs deploy --env https://example.crm.dynamics.com --dry-run",
+    "provision:sharepoint": "node tools/sharepoint/cli.mjs"
+  },
+  "keywords": [
+    "power-platform",
+    "power-apps",
+    "power-automate",
+    "power-pages",
+    "dataverse",
+    "sharepoint",
+    "logging",
+    "telemetry",
+    "alm"
+  ]
+}
