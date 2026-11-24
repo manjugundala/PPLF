@@ -392,6 +392,23 @@ async function ensureEnvironmentVariables(c, schema) {
   return ids;
 }
 
+/**
+ * Gives every String/Number environment variable a current value (its default) if it has none.
+ * The flow service refuses to save or rename a flow whose environment variables have no
+ * current value ("XrmEnvironmentVariableAttributeNotFound: Attribute 'value' was not found").
+ * Values are created outside the solution, so they stay in this environment.
+ */
+async function ensureEnvironmentValues(c, schema, overrides = {}) {
+  for (const ev of schema.environmentVariables) {
+    if (ev.type === 'DataSource') continue;
+    const def = await c.get(`environmentvariabledefinitions?$select=environmentvariabledefinitionid&$filter=schemaname eq '${ev.schemaName}'&$expand=environmentvariabledefinition_environmentvariablevalue($select=environmentvariablevalueid)`);
+    if (!def.value.length || def.value[0].environmentvariabledefinition_environmentvariablevalue?.length) continue;
+    const value = overrides[ev.schemaName] ?? ev.default ?? '';
+    if (value === '') { c.log(`  (no value for ${ev.schemaName}: set it before turning on flows that use it)`); continue; }
+    await setEnvironmentVariableValue(c, ev.schemaName, value);
+  }
+}
+
 /** Sets the current value of an environment variable in this environment. */
 async function setEnvironmentVariableValue(c, schemaName, value) {
   const def = await c.get(`environmentvariabledefinitions?$select=environmentvariabledefinitionid&$filter=schemaname eq '${schemaName}'&$expand=environmentvariabledefinition_environmentvariablevalue($select=environmentvariablevalueid)`);
@@ -546,11 +563,12 @@ async function deploy({ client, schema, flows = [], seed = true, skipRoles = fal
   await ensureTables(c, schema, choiceIds);
   await publish(c, schema);
   await ensureEnvironmentVariables(c, schema);
+  await ensureEnvironmentValues(c, schema);
   await ensureConnectionReferences(c, schema);
   if (!skipRoles) await ensureSecurityRoles(c, schema);
   if (flows.length) await ensureFlows(c, schema, flows);
   if (seed) await seedConfig(c);
-  c.log('Done. Next: bind connection references, then activate flows (see docs/getting-started.md).');
+  c.log('Done. Next: set pplf_AlertRecipients, bind connection references, then activate flows (see docs/getting-started.md).');
 }
 
 // Power Platform Logging Framework - SharePoint provisioning

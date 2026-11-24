@@ -35,3 +35,15 @@ The visitor isn't in a web role assigned to the flow, or the flow connection los
 ## Plug-in entries disappear
 
 See [the transaction caveat](plugins.md#the-transaction-caveat). Check the plug-in trace log.
+
+## Saving or importing a flow fails with `XrmEnvironmentVariableAttributeNotFound`
+
+The message says *Attribute 'value' was not found for environment variable 'pplf_…'*. The flow service needs every environment variable a flow uses to have a **current value** in the environment, not only a default. Set the values in **Solutions → Default solution → Environment variables** (or with a deployment settings file at import). The deployer does this for you, except for `pplf_AlertRecipients`, which has no sensible default.
+
+## "A connector was imported, however the related connection references need connections created"
+
+A flow that uses SharePoint or Outlook can't be saved or turned on until its connection reference points at a connection. Create the connections (Power Automate → Connections), set them on the three PPLF connection references, then retry.
+
+## SharePoint returns 503 or 429 while lists are created
+
+SharePoint throttles bursts of column creation. The provisioning script and flow back off and retry. Run them again if they stop: they only create what's missing.
