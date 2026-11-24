@@ -104,7 +104,7 @@ test('SharePoint writer sets every log field', () => {
 });
 
 test('environment parameter names follow the Power Automate convention', () => {
-  assert.equal(envParamName(schema, 'pplf_LogTarget'), 'PPLF Log Target (pplf_LogTarget)');
+  assert.equal(envParamName(schema, 'pplf_LogTarget'), 'PPLF | Log Target (pplf_LogTarget)');
 });
 
 test('SharePoint field XML is well formed', () => {
