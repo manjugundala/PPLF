@@ -49,7 +49,7 @@ Pick one of the three ways.
     Add `--dry-run` to see every request without changing anything.
 
 !!! note "What the deployer does not create"
-    The canvas **PPLF - Configuration App** is built from `src/canvas/configuration-app` in Power Apps Studio (or comes with the release zip). The plug-in assembly is optional and built from `src/plugins`.
+    The canvas **PPLF - Configuration App** comes with the release zip. To build it from source, follow [the Studio paste guide](https://github.com/manjugundala/PPLF/blob/main/src/canvas/configuration-app/paste/README.md) (about 10 minutes). The plug-in assembly is optional and built from `src/plugins`.
 
 ## Step 2 - Give people access
 
