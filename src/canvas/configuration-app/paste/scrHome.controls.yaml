@@ -1,0 +1,205 @@
+# Studio paste file for scrHome. Select the screen scrHome in Tree view and press Ctrl+V.
+# Then set these screen properties in the formula bar:
+#   Fill:
+#     =PplfSurface
+#   OnVisible:
+#     =Refresh('PPLF | Logs')
+- conHomeRoot:
+    Control: GroupContainer@1.3.0
+    Variant: AutoLayout
+    Properties:
+      Width: =Parent.Width
+      Height: =Parent.Height
+      LayoutDirection: =LayoutDirection.Vertical
+      DropShadow: =DropShadow.None
+    Children:
+      - hdrHome:
+          Control: Header@0.0.44
+          Properties:
+            Title: ="Power Platform Logging Framework"
+            Width: =Parent.Width
+            LogoTooltip: ="PPLF - Configuration App"
+      - conHomeNav:
+          Control: GroupContainer@1.3.0
+          Variant: AutoLayout
+          Properties:
+            LayoutDirection: =LayoutDirection.Horizontal
+            Height: =56
+            FillPortions: =0
+            PaddingLeft: =PplfGap
+            PaddingTop: =8
+            LayoutGap: =8
+            DropShadow: =DropShadow.None
+          Children:
+            - btnNavHome:
+                Control: Button@0.0.45
+                Properties:
+                  Text: ="Overview"
+                  Appearance: ='ButtonCanvas.Appearance'.Primary
+                  Icon: ="Home"
+                  Width: =140
+            - btnNavLogs:
+                Control: Button@0.0.45
+                Properties:
+                  Text: ="Logs"
+                  Appearance: ='ButtonCanvas.Appearance'.Secondary
+                  Icon: ="TextBulletListLtr"
+                  Width: =140
+                  OnSelect: =Navigate(scrLogs, ScreenTransition.None)
+            - btnNavSettings:
+                Control: Button@0.0.45
+                Properties:
+                  Text: ="Settings"
+                  Appearance: ='ButtonCanvas.Appearance'.Secondary
+                  Icon: ="Settings"
+                  Width: =140
+                  OnSelect: =Navigate(scrSettings, ScreenTransition.None)
+            - btnNavSetup:
+                Control: Button@0.0.45
+                Properties:
+                  Text: ="Setup"
+                  Appearance: ='ButtonCanvas.Appearance'.Secondary
+                  Icon: ="Wrench"
+                  Width: =140
+                  OnSelect: =Navigate(scrSetup, ScreenTransition.None)
+      - conHomeBody:
+          Control: GroupContainer@1.3.0
+          Variant: AutoLayout
+          Properties:
+            LayoutDirection: =LayoutDirection.Vertical
+            PaddingLeft: =PplfGap
+            PaddingRight: =PplfGap
+            PaddingTop: =PplfGap
+            PaddingBottom: =PplfGap
+            LayoutGap: =PplfGap
+            DropShadow: =DropShadow.None
+          Children:
+            - lblTargetBanner:
+                Control: Text@0.0.51
+                Properties:
+                  Text: ="Logs are stored in " & PplfTarget & ". Counts below cover the last 24 hours" & If(PplfTarget = "SharePoint", " of entries in Dataverse only - open the SharePoint list to see SharePoint entries.", ".")
+                  Width: =Parent.Width - 2 * PplfGap
+                  Height: =32
+                  FontColor: =PplfMuted
+            - conKpis:
+                Control: GroupContainer@1.3.0
+                Variant: AutoLayout
+                Properties:
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  Height: =112
+                  FillPortions: =0
+                  LayoutGap: =PplfGap
+                  DropShadow: =DropShadow.None
+                Children:
+                  - galKpis:
+                      Control: Gallery@2.15.0
+                      Variant: Horizontal
+                      Properties:
+                        Items: |-
+                          =With({since: DateAdd(Now(), -1, TimeUnit.Days)},
+                              Table(
+                                  { Label: "Critical", Severity: 5, Count: CountRows(Filter('PPLF | Logs', Severity = 5 && 'Created On' >= since)) },
+                                  { Label: "Errors",   Severity: 4, Count: CountRows(Filter('PPLF | Logs', Severity = 4 && 'Created On' >= since)) },
+                                  { Label: "Warnings", Severity: 3, Count: CountRows(Filter('PPLF | Logs', Severity = 3 && 'Created On' >= since)) },
+                                  { Label: "All entries", Severity: 2, Count: CountRows(Filter('PPLF | Logs', 'Created On' >= since)) }
+                              ))
+                        TemplateSize: =240
+                        TemplatePadding: =0
+                        Height: =112
+                        Width: =Parent.Width
+                        OnSelect: =Set(gblLogLevelFilter, If(ThisItem.Label = "All entries", Blank(), ThisItem.Severity)); Navigate(scrLogs, ScreenTransition.None)
+                      Children:
+                        - recKpiCard:
+                            Control: Rectangle@2.3.0
+                            Properties:
+                              Fill: =PplfCard
+                              BorderColor: =ColorValue("#E0E0E0")
+                              BorderThickness: =1
+                              Width: =Parent.TemplateWidth - PplfGap
+                              Height: =Parent.TemplateHeight
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                        - recKpiAccent:
+                            Control: Rectangle@2.3.0
+                            Properties:
+                              Fill: =PplfLevelColor(ThisItem.Severity)
+                              Width: =4
+                              Height: =Parent.TemplateHeight - 32
+                              X: =0
+                              Y: =16
+                        - lblKpiValue:
+                            Control: Text@0.0.51
+                            Properties:
+                              Text: =Text(ThisItem.Count, "#,##0")
+                              Size: =32
+                              Weight: ='TextCanvas.Weight'.Semibold
+                              X: =20
+                              Y: =16
+                              Width: =Parent.TemplateWidth - 40
+                              Height: =48
+                        - lblKpiLabel:
+                            Control: Text@0.0.51
+                            Properties:
+                              Text: =ThisItem.Label
+                              FontColor: =PplfMuted
+                              X: =20
+                              Y: =64
+                              Width: =Parent.TemplateWidth - 40
+                              Height: =28
+            - lblRecentTitle:
+                Control: Text@0.0.51
+                Properties:
+                  Text: ="Latest errors"
+                  Size: =18
+                  Weight: ='TextCanvas.Weight'.Semibold
+                  Height: =32
+                  Width: =Parent.Width - 2 * PplfGap
+            - galRecentErrors:
+                Control: Gallery@2.15.0
+                Variant: Vertical
+                Properties:
+                  Items: =FirstN(SortByColumns(Filter('PPLF | Logs', Severity >= 4), "createdon", SortOrder.Descending), 50)
+                  TemplateSize: =72
+                  Width: =Parent.Width - 2 * PplfGap
+                  Fill: =PplfCard
+                  BorderColor: =ColorValue("#E0E0E0")
+                  BorderThickness: =1
+                  OnSelect: =Set(gblSelectedLog, ThisItem); Navigate(scrLogs, ScreenTransition.None)
+                Children:
+                  - lblErrSource:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: =ThisItem.'Source Name' & "  ·  " & ThisItem.Component
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        X: =16
+                        Y: =8
+                        Width: =Parent.TemplateWidth - 240
+                        Height: =24
+                  - lblErrMessage:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: =ThisItem.Title
+                        FontColor: =PplfMuted
+                        X: =16
+                        Y: =36
+                        Width: =Parent.TemplateWidth - 240
+                        Height: =24
+                  - bdgErrLevel:
+                      Control: Badge@0.0.24
+                      Properties:
+                        Content: =Text(ThisItem.Level)
+                        ThemeColor: =If(ThisItem.Severity >= 5, 'Badge.ThemeColor'.Danger, 'Badge.ThemeColor'.Severe)
+                        X: =Parent.TemplateWidth - 210
+                        Y: =12
+                  - lblErrWhen:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: =Text(ThisItem.'Created On', DateTimeFormat.ShortDateTime)
+                        FontColor: =PplfMuted
+                        Align: ='TextCanvas.Align'.End
+                        X: =Parent.TemplateWidth - 210
+                        Y: =40
+                        Width: =190
+                        Height: =24

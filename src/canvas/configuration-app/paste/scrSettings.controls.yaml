@@ -1,0 +1,289 @@
+# Studio paste file for scrSettings. Select the screen scrSettings in Tree view and press Ctrl+V.
+# Then set these screen properties in the formula bar:
+#   Fill:
+#     =PplfSurface
+#   OnVisible:
+#     =Refresh('PPLF | Configurations'); Set(gblEditConfig, Blank())
+- conSettingsRoot:
+    Control: GroupContainer@1.3.0
+    Variant: AutoLayout
+    Properties:
+      Width: =Parent.Width
+      Height: =Parent.Height
+      LayoutDirection: =LayoutDirection.Vertical
+      DropShadow: =DropShadow.None
+    Children:
+      - hdrSettings:
+          Control: Header@0.0.44
+          Properties:
+            Title: ="Settings"
+            Width: =Parent.Width
+      - conSettingsNav:
+          Control: GroupContainer@1.3.0
+          Variant: AutoLayout
+          Properties:
+            LayoutDirection: =LayoutDirection.Horizontal
+            Height: =56
+            FillPortions: =0
+            PaddingLeft: =PplfGap
+            PaddingTop: =8
+            DropShadow: =DropShadow.None
+          Children:
+            - btnSettingsBack:
+                Control: Button@0.0.45
+                Properties:
+                  Text: ="Overview"
+                  Appearance: ='ButtonCanvas.Appearance'.Subtle
+                  Icon: ="ArrowLeft"
+                  Width: =140
+                  OnSelect: =Navigate(scrHome, ScreenTransition.None)
+      - conSettingsBody:
+          Control: GroupContainer@1.3.0
+          Variant: AutoLayout
+          Properties:
+            LayoutDirection: =LayoutDirection.Horizontal
+            PaddingLeft: =PplfGap
+            PaddingRight: =PplfGap
+            PaddingBottom: =PplfGap
+            LayoutGap: =PplfGap
+            DropShadow: =DropShadow.None
+          Children:
+            # ---------------- Global settings (environment variables) ----------------
+            - conGlobal:
+                Control: GroupContainer@1.3.0
+                Variant: AutoLayout
+                Properties:
+                  LayoutDirection: =LayoutDirection.Vertical
+                  FillPortions: =2
+                  Fill: =PplfCard
+                  BorderColor: =ColorValue("#E0E0E0")
+                  BorderThickness: =1
+                  PaddingLeft: =PplfGap
+                  PaddingRight: =PplfGap
+                  PaddingTop: =PplfGap
+                  LayoutGap: =8
+                  DropShadow: =DropShadow.None
+                Children:
+                  - lblGlobalTitle:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="Environment settings"
+                        Size: =18
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Height: =32
+                        Width: =Parent.Width - 2 * PplfGap
+                  - lblGlobalHelp:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="Stored as environment variable values in this environment. The log target is changed on the Setup screen."
+                        FontColor: =PplfMuted
+                        Wrap: =true
+                        Height: =48
+                        Width: =Parent.Width - 2 * PplfGap
+                  - lblDefLevel:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="Default minimum level"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Height: =24
+                  - ddDefaultLevel:
+                      Control: DropDown@0.0.45
+                      Properties:
+                        Items: =PplfLevels
+                        ItemDisplayText: =ThisItem.Name
+                        DefaultSelectedItems: =Filter(PplfLevels, Name = PplfEnv("pplf_DefaultMinimumLevel"))
+                        Width: =Parent.Width - 2 * PplfGap
+                        AccessibleLabel: ="Default minimum level"
+                  - lblRetention:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="Default retention (days)"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Height: =24
+                  - numRetention:
+                      Control: NumberInput@0.0.11
+                      Properties:
+                        Value: =Value(PplfEnv("pplf_DefaultRetentionDays"))
+                        Min: =1
+                        Max: =3650
+                        Width: =Parent.Width - 2 * PplfGap
+                        AccessibleLabel: ="Default retention in days"
+                  - lblAlertLevel:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="Email alerts from level"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Height: =24
+                  - ddAlertLevel:
+                      Control: DropDown@0.0.45
+                      Properties:
+                        Items: =["Warning", "Error", "Critical", "None"]
+                        DefaultSelectedItems: =[PplfEnv("pplf_AlertMinimumLevel")]
+                        Width: =Parent.Width - 2 * PplfGap
+                        AccessibleLabel: ="Alert minimum level"
+                  - lblRecipients:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="Alert recipients (separate with ;)"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Height: =24
+                  - txtRecipients:
+                      Control: TextInput@0.0.54
+                      Properties:
+                        Value: =PplfEnv("pplf_AlertRecipients")
+                        Placeholder: ="ops@contoso.com; admin@contoso.com"
+                        Width: =Parent.Width - 2 * PplfGap
+                        AccessibleLabel: ="Alert recipients"
+                  - btnSaveGlobal:
+                      Control: Button@0.0.45
+                      Properties:
+                        Text: ="Save environment settings"
+                        Appearance: ='ButtonCanvas.Appearance'.Primary
+                        Icon: ="Save"
+                        Width: =260
+                        OnSelect: |-
+                          =PplfSetEnv("pplf_DefaultMinimumLevel", ddDefaultLevel.Selected.Name);
+                          PplfSetEnv("pplf_DefaultRetentionDays", Text(numRetention.Value));
+                          PplfSetEnv("pplf_AlertMinimumLevel", ddAlertLevel.Selected.Value);
+                          PplfSetEnv("pplf_AlertRecipients", Trim(txtRecipients.Value));
+                          PplfAdminLog("Information", "scrSettings", "Environment settings changed");
+                          Notify("Saved. Flows pick up new values within a few minutes.", NotificationType.Success)
+            # ---------------- Per-source settings (PPLF Log Configurations) ----------------
+            - conSources:
+                Control: GroupContainer@1.3.0
+                Variant: AutoLayout
+                Properties:
+                  LayoutDirection: =LayoutDirection.Vertical
+                  FillPortions: =3
+                  Fill: =PplfCard
+                  BorderColor: =ColorValue("#E0E0E0")
+                  BorderThickness: =1
+                  PaddingLeft: =PplfGap
+                  PaddingRight: =PplfGap
+                  PaddingTop: =PplfGap
+                  LayoutGap: =8
+                  DropShadow: =DropShadow.None
+                Children:
+                  - lblSourcesTitle:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="Per-source settings (Dataverse)"
+                        Size: =18
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Height: =32
+                        Width: =Parent.Width - 2 * PplfGap
+                  - lblSourcesHelp:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="The * row applies to every source without its own row. Source names must match what the app or flow sends. With the SharePoint target, edit the PPLF Log Config list instead."
+                        FontColor: =PplfMuted
+                        Wrap: =true
+                        Height: =48
+                        Width: =Parent.Width - 2 * PplfGap
+                  - btnNewSource:
+                      Control: Button@0.0.45
+                      Properties:
+                        Text: ="Add source"
+                        Appearance: ='ButtonCanvas.Appearance'.Secondary
+                        Icon: ="Add"
+                        Width: =160
+                        OnSelect: =Set(gblEditConfig, Defaults('PPLF | Configurations')); Set(gblEditIsNew, true)
+                  - galSources:
+                      Control: Gallery@2.15.0
+                      Variant: Vertical
+                      Properties:
+                        Items: =SortByColumns('PPLF | Configurations', "pplf_name", SortOrder.Ascending)
+                        TemplateSize: =56
+                        Width: =Parent.Width - 2 * PplfGap
+                        FillPortions: =1
+                        OnSelect: =Set(gblEditConfig, ThisItem); Set(gblEditIsNew, false)
+                      Children:
+                        - lblSrcName:
+                            Control: Text@0.0.51
+                            Properties:
+                              Text: =ThisItem.'Source Name'
+                              Weight: ='TextCanvas.Weight'.Semibold
+                              X: =8
+                              Y: =4
+                              Width: =Parent.TemplateWidth / 2
+                              Height: =24
+                        - lblSrcMeta:
+                            Control: Text@0.0.51
+                            Properties:
+                              Text: |-
+                                =If(ThisItem.Enabled, "From " & Text(ThisItem.'Minimum Level'), "Off") & If(IsBlank(ThisItem.'Retention (days)'), "", "  ·  keep " & ThisItem.'Retention (days)' & " days")
+                              FontColor: =PplfMuted
+                              Size: =12
+                              X: =8
+                              Y: =28
+                              Width: =Parent.TemplateWidth - 16
+                              Height: =22
+                  - conEditSource:
+                      Control: GroupContainer@1.3.0
+                      Variant: AutoLayout
+                      Properties:
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        Height: =72
+                        FillPortions: =0
+                        LayoutGap: =8
+                        LayoutAlignItems: =LayoutAlignItems.End
+                        Visible: =!IsBlank(gblEditConfig)
+                        DropShadow: =DropShadow.None
+                      Children:
+                        - txtSrcName:
+                            Control: TextInput@0.0.54
+                            Properties:
+                              Value: =gblEditConfig.'Source Name'
+                              Placeholder: ="Source name or *"
+                              Width: =200
+                              AccessibleLabel: ="Source name"
+                        - ddSrcLevel:
+                            Control: DropDown@0.0.45
+                            Properties:
+                              Items: =PplfLevels
+                              ItemDisplayText: =ThisItem.Name
+                              DefaultSelectedItems: =Filter(PplfLevels, Severity = Coalesce(gblEditConfig.'Minimum Severity', 2))
+                              Width: =160
+                              AccessibleLabel: ="Minimum level"
+                        - numSrcRetention:
+                            Control: NumberInput@0.0.11
+                            Properties:
+                              Value: =gblEditConfig.'Retention (days)'
+                              Placeholder: ="Days"
+                              Min: =1
+                              Width: =100
+                              AccessibleLabel: ="Retention days"
+                        - tglSrcEnabled:
+                            Control: Toggle@1.1.5
+                            Properties:
+                              Checked: =Coalesce(gblEditConfig.Enabled, true)
+                              Label: ="On"
+                              Width: =90
+                        - btnSaveSource:
+                            Control: Button@0.0.45
+                            Properties:
+                              Text: ="Save"
+                              Appearance: ='ButtonCanvas.Appearance'.Primary
+                              Width: =90
+                              DisplayMode: =If(IsBlank(Trim(txtSrcName.Value)), DisplayMode.Disabled, DisplayMode.Edit)
+                              OnSelect: |-
+                                =Patch('PPLF | Configurations', If(gblEditIsNew, Defaults('PPLF | Configurations'), gblEditConfig), {
+                                    'Source Name': Trim(txtSrcName.Value),
+                                    'Minimum Level': Switch(ddSrcLevel.Selected.Severity,
+                                        0, 'PPLF | Log Level'.Trace, 1, 'PPLF | Log Level'.Debug, 3, 'PPLF | Log Level'.Warning,
+                                        4, 'PPLF | Log Level'.Error, 5, 'PPLF | Log Level'.Critical, 'PPLF | Log Level'.Information),
+                                    'Minimum Severity': ddSrcLevel.Selected.Severity,
+                                    'Retention (days)': If(IsBlank(numSrcRetention.Value), Blank(), numSrcRetention.Value),
+                                    Enabled: tglSrcEnabled.Checked
+                                });
+                                PplfAdminLog("Information", "scrSettings", "Source settings saved for " & Trim(txtSrcName.Value));
+                                Set(gblEditConfig, Blank());
+                                Notify("Saved", NotificationType.Success)
+                        - btnDeleteSource:
+                            Control: Button@0.0.45
+                            Properties:
+                              Text: ="Delete"
+                              Appearance: ='ButtonCanvas.Appearance'.Subtle
+                              Width: =90
+                              Visible: =!gblEditIsNew && gblEditConfig.'Source Name' <> "*"
+                              OnSelect: =Remove('PPLF | Configurations', gblEditConfig); Set(gblEditConfig, Blank())

@@ -41,7 +41,7 @@ App:
           { Name: "Warning",     Severity: 3, Color: ColorValue("#BC4B09") },
           { Name: "Error",       Severity: 4, Color: ColorValue("#C50F1F") },
           { Name: "Critical",    Severity: 5, Color: ColorValue("#750B1C") });
-      PplfLevelColor(Severity: Number): Color = Coalesce(LookUp(PplfLevels, Severity = Severity).Color, Color.Gray);
+      PplfLevelColor(Sev: Number): Color = Coalesce(LookUp(PplfLevels, Severity = Sev).Color, Color.Gray);
 
       // ---- Layout tokens -----------------------------------------------------
       PplfGap = 16;
@@ -69,7 +69,8 @@ App:
                   User: User().Email,
                   'App Version': PplfAppVersion,
                   'Client Timestamp': Now()
-              }),
+              });
+              true,
               false
           )
       };
