@@ -3,7 +3,7 @@
 #   Fill:
 #     =PplfSurface
 - conLogsRoot:
-    Control: GroupContainer@1.3.0
+    Control: GroupContainer@1.5.0
     Variant: AutoLayout
     Properties:
       Width: =Parent.Width
@@ -17,7 +17,7 @@
             Title: ="Logs"
             Width: =Parent.Width
       - conLogsNav:
-          Control: GroupContainer@1.3.0
+          Control: GroupContainer@1.5.0
           Variant: AutoLayout
           Properties:
             LayoutDirection: =LayoutDirection.Horizontal
@@ -31,6 +31,7 @@
             - btnLogsBack:
                 Control: Button@0.0.45
                 Properties:
+                  BasePaletteColor: =PplfBrand
                   Text: ="Overview"
                   Appearance: ='ButtonCanvas.Appearance'.Subtle
                   Icon: ="ArrowLeft"
@@ -39,6 +40,7 @@
             - btnOpenSharePoint:
                 Control: Button@0.0.45
                 Properties:
+                  BasePaletteColor: =PplfBrand
                   Text: ="Open SharePoint list"
                   Appearance: ='ButtonCanvas.Appearance'.Secondary
                   Icon: ="Open"
@@ -48,13 +50,14 @@
             - btnRefreshLogs:
                 Control: Button@0.0.45
                 Properties:
+                  BasePaletteColor: =PplfBrand
                   Text: ="Refresh"
                   Appearance: ='ButtonCanvas.Appearance'.Secondary
                   Icon: ="ArrowClockwise"
                   Width: =140
                   OnSelect: =Refresh('PPLF | Logs')
       - conFilters:
-          Control: GroupContainer@1.3.0
+          Control: GroupContainer@1.5.0
           Variant: AutoLayout
           Properties:
             LayoutDirection: =LayoutDirection.Horizontal
@@ -71,7 +74,6 @@
                 Properties:
                   Items: |-
                     =Table({Name: "All levels", Severity: -1}, ForAll(PplfLevels, {Name: "≥ " & Name, Severity: Severity}))
-                  ItemDisplayText: =ThisItem.Name
                   DefaultSelectedItems: |-
                     =If(IsBlank(gblLogLevelFilter), Table({Name: "All levels", Severity: -1}), Filter(ForAll(PplfLevels, {Name: "≥ " & Name, Severity: Severity}), Severity = gblLogLevelFilter))
                   Width: =200
@@ -102,7 +104,7 @@
                   Width: =180
                   AccessibleLabel: ="From date"
       - conLogsBody:
-          Control: GroupContainer@1.3.0
+          Control: GroupContainer@1.5.0
           Variant: AutoLayout
           Properties:
             LayoutDirection: =LayoutDirection.Horizontal
@@ -132,7 +134,7 @@
                   BorderColor: =ColorValue("#E0E0E0")
                   BorderThickness: =1
                   OnSelect: =Set(gblSelectedLog, ThisItem)
-                  TemplateFill: =If(ThisItem.'PPLF Log' = gblSelectedLog.'PPLF Log', ColorValue("#EBF3FC"), Color.Transparent)
+                  TemplateFill: =If(ThisItem.'PPLF Log' = gblSelectedLog.'PPLF Log', ColorValue("#E6EAF2"), Color.Transparent)
                 Children:
                   - recLogLevel:
                       Control: Rectangle@2.3.0
@@ -173,7 +175,7 @@
                         Width: =164
                         Height: =22
             - conDetails:
-                Control: GroupContainer@1.3.0
+                Control: GroupContainer@1.5.0
                 Variant: AutoLayout
                 Properties:
                   LayoutDirection: =LayoutDirection.Vertical
@@ -216,6 +218,7 @@
                   - btnTraceCorrelation:
                       Control: Button@0.0.45
                       Properties:
+                        BasePaletteColor: =PplfBrand
                         Text: ="Show everything with this correlation id"
                         Appearance: ='ButtonCanvas.Appearance'.Secondary
                         Icon: ="BranchFork"
@@ -225,6 +228,7 @@
                   - btnOpenRun:
                       Control: Button@0.0.45
                       Properties:
+                        BasePaletteColor: =PplfBrand
                         Text: ="Open flow run"
                         Appearance: ='ButtonCanvas.Appearance'.Secondary
                         Icon: ="Open"

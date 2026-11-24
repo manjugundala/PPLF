@@ -29,7 +29,7 @@ PplfTarget = PplfEnv("pplf_LogTarget");
 PplfLevels = Table(
     { Name: "Trace",       Severity: 0, Color: ColorValue("#8A8886") },
     { Name: "Debug",       Severity: 1, Color: ColorValue("#605E5C") },
-    { Name: "Information", Severity: 2, Color: ColorValue("#0F6CBD") },
+    { Name: "Information", Severity: 2, Color: ColorValue("#002868") },
     { Name: "Warning",     Severity: 3, Color: ColorValue("#BC4B09") },
     { Name: "Error",       Severity: 4, Color: ColorValue("#C50F1F") },
     { Name: "Critical",    Severity: 5, Color: ColorValue("#750B1C") });
@@ -40,7 +40,8 @@ PplfGap = 16;
 PplfSurface = ColorValue("#FAFAFA");
 PplfCard = Color.White;
 PplfMuted = ColorValue("#616161");
-PplfBrand = ColorValue("#0F6CBD");
+PplfBrand = ColorValue("#002868");   // Texas flag navy
+PplfAccent = ColorValue("#BF0A30");  // Texas flag red
 
 // ---- Self-logging (the admin app logs its own actions) -----------------
 PplfSourceName = "PPLF - Configuration App";

@@ -5,7 +5,7 @@
 #   OnVisible:
 #     =Refresh('PPLF | Logs')
 - conHomeRoot:
-    Control: GroupContainer@1.3.0
+    Control: GroupContainer@1.5.0
     Variant: AutoLayout
     Properties:
       Width: =Parent.Width
@@ -20,7 +20,7 @@
             Width: =Parent.Width
             LogoTooltip: ="PPLF - Configuration App"
       - conHomeNav:
-          Control: GroupContainer@1.3.0
+          Control: GroupContainer@1.5.0
           Variant: AutoLayout
           Properties:
             LayoutDirection: =LayoutDirection.Horizontal
@@ -34,6 +34,7 @@
             - btnNavHome:
                 Control: Button@0.0.45
                 Properties:
+                  BasePaletteColor: =PplfBrand
                   Text: ="Overview"
                   Appearance: ='ButtonCanvas.Appearance'.Primary
                   Icon: ="Home"
@@ -41,6 +42,7 @@
             - btnNavLogs:
                 Control: Button@0.0.45
                 Properties:
+                  BasePaletteColor: =PplfBrand
                   Text: ="Logs"
                   Appearance: ='ButtonCanvas.Appearance'.Secondary
                   Icon: ="TextBulletListLtr"
@@ -49,6 +51,7 @@
             - btnNavSettings:
                 Control: Button@0.0.45
                 Properties:
+                  BasePaletteColor: =PplfBrand
                   Text: ="Settings"
                   Appearance: ='ButtonCanvas.Appearance'.Secondary
                   Icon: ="Settings"
@@ -57,13 +60,14 @@
             - btnNavSetup:
                 Control: Button@0.0.45
                 Properties:
+                  BasePaletteColor: =PplfBrand
                   Text: ="Setup"
                   Appearance: ='ButtonCanvas.Appearance'.Secondary
                   Icon: ="Wrench"
                   Width: =140
                   OnSelect: =Navigate(scrSetup, ScreenTransition.None)
       - conHomeBody:
-          Control: GroupContainer@1.3.0
+          Control: GroupContainer@1.5.0
           Variant: AutoLayout
           Properties:
             LayoutDirection: =LayoutDirection.Vertical
@@ -82,7 +86,7 @@
                   Height: =32
                   FontColor: =PplfMuted
             - conKpis:
-                Control: GroupContainer@1.3.0
+                Control: GroupContainer@1.5.0
                 Variant: AutoLayout
                 Properties:
                   LayoutDirection: =LayoutDirection.Horizontal
@@ -117,10 +121,6 @@
                               BorderThickness: =1
                               Width: =Parent.TemplateWidth - PplfGap
                               Height: =Parent.TemplateHeight
-                              RadiusTopLeft: =8
-                              RadiusTopRight: =8
-                              RadiusBottomLeft: =8
-                              RadiusBottomRight: =8
                         - recKpiAccent:
                             Control: Rectangle@2.3.0
                             Properties:

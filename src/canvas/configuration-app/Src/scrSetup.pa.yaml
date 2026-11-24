@@ -7,7 +7,7 @@ Screens:
         Set(gblSiteUrl, PplfEnv("pplf_SharePointSite"))
     Children:
       - conSetupRoot:
-          Control: GroupContainer@1.3.0
+          Control: GroupContainer@1.5.0
           Variant: AutoLayout
           Properties:
             Width: =Parent.Width
@@ -21,7 +21,7 @@ Screens:
                   Title: ="Setup"
                   Width: =Parent.Width
             - conSetupNav:
-                Control: GroupContainer@1.3.0
+                Control: GroupContainer@1.5.0
                 Variant: AutoLayout
                 Properties:
                   LayoutDirection: =LayoutDirection.Horizontal
@@ -34,13 +34,14 @@ Screens:
                   - btnSetupBack:
                       Control: Button@0.0.45
                       Properties:
+                        BasePaletteColor: =PplfBrand
                         Text: ="Overview"
                         Appearance: ='ButtonCanvas.Appearance'.Subtle
                         Icon: ="ArrowLeft"
                         Width: =140
                         OnSelect: =Navigate(scrHome, ScreenTransition.None)
             - conSetupBody:
-                Control: GroupContainer@1.3.0
+                Control: GroupContainer@1.5.0
                 Variant: AutoLayout
                 Properties:
                   LayoutDirection: =LayoutDirection.Vertical
@@ -49,11 +50,11 @@ Screens:
                   PaddingBottom: =PplfGap
                   LayoutGap: =PplfGap
                   DropShadow: =DropShadow.None
-                  VerticalOverflow: =LayoutOverflow.Scroll
+                  LayoutOverflowY: =LayoutOverflow.Scroll
                 Children:
                   # ---------------- Step 1: target ----------------
                   - conStep1:
-                      Control: GroupContainer@1.3.0
+                      Control: GroupContainer@1.5.0
                       Variant: AutoLayout
                       Properties:
                         LayoutDirection: =LayoutDirection.Vertical
@@ -96,6 +97,7 @@ Screens:
                         - btnSaveTarget:
                             Control: Button@0.0.45
                             Properties:
+                              BasePaletteColor: =PplfBrand
                               Text: ="Save log target"
                               Appearance: ='ButtonCanvas.Appearance'.Primary
                               Icon: ="Save"
@@ -116,7 +118,7 @@ Screens:
                               Width: =600
                   # ---------------- Step 2: SharePoint ----------------
                   - conStep2:
-                      Control: GroupContainer@1.3.0
+                      Control: GroupContainer@1.5.0
                       Variant: AutoLayout
                       Properties:
                         LayoutDirection: =LayoutDirection.Vertical
@@ -157,6 +159,7 @@ Screens:
                         - btnProvision:
                             Control: Button@0.0.45
                             Properties:
+                              BasePaletteColor: =PplfBrand
                               Text: =If(gblProvisioning, "Creating lists...", "Create lists")
                               Appearance: ='ButtonCanvas.Appearance'.Primary
                               Icon: ="TableAdd"
@@ -186,7 +189,7 @@ Screens:
                               Width: =Parent.Width - 2 * PplfGap
                   # ---------------- Step 3: test ----------------
                   - conStep3:
-                      Control: GroupContainer@1.3.0
+                      Control: GroupContainer@1.5.0
                       Variant: AutoLayout
                       Properties:
                         LayoutDirection: =LayoutDirection.Vertical
@@ -211,6 +214,7 @@ Screens:
                         - btnTest:
                             Control: Button@0.0.45
                             Properties:
+                              BasePaletteColor: =PplfBrand
                               Text: ="Send test entry"
                               Appearance: ='ButtonCanvas.Appearance'.Secondary
                               Icon: ="Send"
@@ -243,6 +247,7 @@ Screens:
                         - btnViewTest:
                             Control: Button@0.0.45
                             Properties:
+                              BasePaletteColor: =PplfBrand
                               Text: ="Find it in Logs"
                               Appearance: ='ButtonCanvas.Appearance'.Subtle
                               Width: =200
