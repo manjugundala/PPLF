@@ -4,12 +4,12 @@
 
 **One logging framework for Power Apps, Power Automate, Power Pages, model-driven apps and Dataverse plug-ins.<br/>Store logs in Dataverse or SharePoint, and switch with one setting.**
 
-[![CI](https://github.com/manjugundala/power-platform-logging-framework/actions/workflows/ci.yml/badge.svg)](https://github.com/manjugundala/power-platform-logging-framework/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/manjugundala/power-platform-logging-framework?sort=semver)](https://github.com/manjugundala/power-platform-logging-framework/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/manjugundala/power-platform-logging-framework/blob/main/LICENSE)
-[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-0F6CBD)](https://manjugundala.github.io/power-platform-logging-framework/)
+[![CI](https://github.com/manjugundala/PPLF/actions/workflows/ci.yml/badge.svg)](https://github.com/manjugundala/PPLF/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/manjugundala/PPLF?sort=semver)](https://github.com/manjugundala/PPLF/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/manjugundala/PPLF/blob/main/LICENSE)
+[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-0F6CBD)](https://manjugundala.github.io/PPLF/)
 
-[Get started](getting-started.md) · [Architecture](architecture.md) · [Canvas apps](canvas-apps.md) · [Flows](power-automate.md) · [Power Pages](power-pages.md) · [Contribute](https://github.com/manjugundala/power-platform-logging-framework/blob/main/CONTRIBUTING.md)
+[Get started](getting-started.md) · [Architecture](architecture.md) · [Canvas apps](canvas-apps.md) · [Flows](power-automate.md) · [Power Pages](power-pages.md) · [Contribute](https://github.com/manjugundala/PPLF/blob/main/CONTRIBUTING.md)
 
 </div>
 
@@ -55,8 +55,8 @@ Details, sequence diagrams and the data model: **[docs/architecture.md](architec
 
 ## Quick start
 
-1. **Install**: import the managed solution from [Releases](https://github.com/manjugundala/power-platform-logging-framework/releases), or build it from source in your browser:
-   open your environment, paste [`dist/pplf-deployer.browser.js`](https://github.com/manjugundala/power-platform-logging-framework/blob/main/dist/pplf-deployer.browser.js) into the dev tools console, run `await PplfDeployer.deploy()`.
+1. **Install**: import the managed solution from [Releases](https://github.com/manjugundala/PPLF/releases), or build it from source in your browser:
+   open your environment, paste [`dist/pplf-deployer.browser.js`](https://github.com/manjugundala/PPLF/blob/main/dist/pplf-deployer.browser.js) into the dev tools console, run `await PplfDeployer.deploy()`.
 2. **Connect**: set the three connection references and turn on the flows.
 3. **Choose a target**: PPLF - Configuration App → Setup → Dataverse, SharePoint or Both.
 4. **Log**: paste a snippet into your app's `App.Formulas`, and call it.
@@ -85,20 +85,20 @@ Full walkthrough: **[Getting started](getting-started.md)**.
 | User, App Version, Environment, Client Info | megan@contoso.com, 1.4.0, Contoso-Prod, Web; Edge |
 | Run Url, Duration (ms), Error Code, Client Timestamp | link to the flow run, 840, 502, 2026-11-23T18:49:00Z |
 
-Schema: [docs/reference/schema.md](reference/schema.md) · Wire format: [schema/log-entry.schema.json](https://github.com/manjugundala/power-platform-logging-framework/blob/main/schema/log-entry.schema.json)
+Schema: [docs/reference/schema.md](reference/schema.md) · Wire format: [schema/log-entry.schema.json](https://github.com/manjugundala/PPLF/blob/main/schema/log-entry.schema.json)
 
 ## Repository
 
 | Path | Contents |
 |---|---|
-| [`schema/`](https://github.com/manjugundala/power-platform-logging-framework/tree/main/schema) | The single source of truth for tables, lists, choices, environment variables and roles |
-| [`src/flows/`](https://github.com/manjugundala/power-platform-logging-framework/tree/main/src/flows) | Ten cloud flows (generated from the schema) |
-| [`src/canvas/`](https://github.com/manjugundala/power-platform-logging-framework/tree/main/src/canvas) | PPLF - Configuration App source and the Power Fx loggers |
-| [`src/pages/`](https://github.com/manjugundala/power-platform-logging-framework/tree/main/src/pages), [`src/webresources/`](https://github.com/manjugundala/power-platform-logging-framework/tree/main/src/webresources), [`src/plugins/`](https://github.com/manjugundala/power-platform-logging-framework/tree/main/src/plugins) | Power Pages, model-driven and plug-in loggers |
-| [`src/solution/`](https://github.com/manjugundala/power-platform-logging-framework/tree/main/src/solution) | The exported, unpacked solution |
-| [`tools/`](https://github.com/manjugundala/power-platform-logging-framework/tree/main/tools) | Generators, deployer and SharePoint provisioning |
-| [`docs/`](https://github.com/manjugundala/power-platform-logging-framework/tree/main/docs) | Documentation, ADRs and diagrams |
-| [`samples/`](https://github.com/manjugundala/power-platform-logging-framework/tree/main/samples) | A sample canvas screen and a Power Pages snippet |
+| [`schema/`](https://github.com/manjugundala/PPLF/tree/main/schema) | The single source of truth for tables, lists, choices, environment variables and roles |
+| [`src/flows/`](https://github.com/manjugundala/PPLF/tree/main/src/flows) | Ten cloud flows (generated from the schema) |
+| [`src/canvas/`](https://github.com/manjugundala/PPLF/tree/main/src/canvas) | PPLF - Configuration App source and the Power Fx loggers |
+| [`src/pages/`](https://github.com/manjugundala/PPLF/tree/main/src/pages), [`src/webresources/`](https://github.com/manjugundala/PPLF/tree/main/src/webresources), [`src/plugins/`](https://github.com/manjugundala/PPLF/tree/main/src/plugins) | Power Pages, model-driven and plug-in loggers |
+| [`src/solution/`](https://github.com/manjugundala/PPLF/tree/main/src/solution) | The exported, unpacked solution |
+| [`tools/`](https://github.com/manjugundala/PPLF/tree/main/tools) | Generators, deployer and SharePoint provisioning |
+| [`docs/`](https://github.com/manjugundala/PPLF/tree/main/docs) | Documentation, ADRs and diagrams |
+| [`samples/`](https://github.com/manjugundala/PPLF/tree/main/samples) | A sample canvas screen and a Power Pages snippet |
 
 ## Development
 
@@ -120,16 +120,16 @@ No dependencies to install: Node 22+ and Python 3 with PyYAML are all you need. 
 - Teams alerts and adaptive cards
 - Copilot Studio agent logging
 
-Ideas and votes welcome in [Discussions](https://github.com/manjugundala/power-platform-logging-framework/discussions).
+Ideas and votes welcome in [Discussions](https://github.com/manjugundala/PPLF/discussions).
 
 ## Contributing
 
-Contributions are welcome: bug reports, docs, new targets or clients. Read [CONTRIBUTING.md](https://github.com/manjugundala/power-platform-logging-framework/blob/main/CONTRIBUTING.md) and the [code of conduct](https://github.com/manjugundala/power-platform-logging-framework/blob/main/CODE_OF_CONDUCT.md). Security issues: [SECURITY.md](https://github.com/manjugundala/power-platform-logging-framework/blob/main/SECURITY.md).
+Contributions are welcome: bug reports, docs, new targets or clients. Read [CONTRIBUTING.md](https://github.com/manjugundala/PPLF/blob/main/CONTRIBUTING.md) and the [code of conduct](https://github.com/manjugundala/PPLF/blob/main/CODE_OF_CONDUCT.md). Security issues: [SECURITY.md](https://github.com/manjugundala/PPLF/blob/main/SECURITY.md).
 
 ## Citing
 
-If PPLF helps your work or research, please cite it. GitHub shows a **Cite this repository** button from [`CITATION.cff`](https://github.com/manjugundala/power-platform-logging-framework/blob/main/CITATION.cff).
+If PPLF helps your work or research, please cite it. GitHub shows a **Cite this repository** button from [`CITATION.cff`](https://github.com/manjugundala/PPLF/blob/main/CITATION.cff).
 
 ## License
 
-[MIT](https://github.com/manjugundala/power-platform-logging-framework/blob/main/LICENSE). Power Platform, Power Apps, Power Automate, Power Pages, Dataverse and SharePoint are trademarks of Microsoft. This project is community-built and not affiliated with or endorsed by Microsoft.
+[MIT](https://github.com/manjugundala/PPLF/blob/main/LICENSE). Power Platform, Power Apps, Power Automate, Power Pages, Dataverse and SharePoint are trademarks of Microsoft. This project is community-built and not affiliated with or endorsed by Microsoft.

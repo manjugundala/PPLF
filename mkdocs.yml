@@ -1,8 +1,8 @@
 site_name: Power Platform Logging Framework
 site_description: Configurable logging for Power Apps, Power Automate, Power Pages, model-driven apps and plug-ins.
-repo_name: manjugundala/power-platform-logging-framework
-repo_url: https://github.com/manjugundala/power-platform-logging-framework
-site_url: https://manjugundala.github.io/power-platform-logging-framework/
+repo_name: manjugundala/PPLF
+repo_url: https://github.com/manjugundala/PPLF
+site_url: https://manjugundala.github.io/PPLF/
 site_author: Manjunath Gundala
 edit_uri: edit/main/docs/
 docs_dir: docs

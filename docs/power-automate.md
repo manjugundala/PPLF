@@ -59,7 +59,7 @@ See [licensing](licensing.md).
 
 ## Many entries at once
 
-To write a batch, call **PPLF | Router | Route Logs** with `LogsJson` set to a JSON array of entries in the [wire format](https://github.com/manjugundala/power-platform-logging-framework/blob/main/schema/log-entry.schema.json). The writers process up to 20 entries in parallel.
+To write a batch, call **PPLF | Router | Route Logs** with `LogsJson` set to a JSON array of entries in the [wire format](https://github.com/manjugundala/PPLF/blob/main/schema/log-entry.schema.json). The writers process up to 20 entries in parallel.
 
 ## The PPLF flows
 
