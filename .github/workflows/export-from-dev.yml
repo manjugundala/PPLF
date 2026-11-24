@@ -25,7 +25,7 @@ jobs:
   export:
     runs-on: windows-latest
     env:
-      SOLUTION: PowerPlatformLoggingFramework
+      SOLUTION: PPLF
     steps:
       - uses: actions/checkout@v4
 

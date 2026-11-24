@@ -16,7 +16,7 @@ Pick one of the three ways.
 
 === "Import a release (recommended)"
 
-    1. Download `PowerPlatformLoggingFramework_managed.zip` from the latest [release](https://github.com/manjugundala/power-platform-logging-framework/releases).
+    1. Download `PPLF_managed.zip` from the latest [release](https://github.com/manjugundala/power-platform-logging-framework/releases).
     2. Go to [make.powerapps.com](https://make.powerapps.com) → your environment → **Solutions** → **Import solution**.
     3. When asked for connections, create or pick a **Dataverse**, **SharePoint** and **Office 365 Outlook** connection.
     4. When asked for environment variables, keep the defaults. You can leave the SharePoint ones empty for now.
@@ -49,7 +49,7 @@ Pick one of the three ways.
     Add `--dry-run` to see every request without changing anything.
 
 !!! note "What the deployer does not create"
-    The canvas **PPLF Admin** app is built from `src/canvas/admin-app` in Power Apps Studio (or comes with the release zip). The plug-in assembly is optional and built from `src/plugins`.
+    The canvas **PPLF Configuration App** app is built from `src/canvas/admin-app` in Power Apps Studio (or comes with the release zip). The plug-in assembly is optional and built from `src/plugins`.
 
 ## Step 2 - Give people access
 
@@ -57,19 +57,19 @@ Assign the security roles that the solution adds, together with **Basic User**:
 
 | Role | Who |
 |---|---|
-| **PPLF Log Writer** | Everyone who runs an app, page or flow that logs to Dataverse. It allows creating log rows and reading settings, nothing else. |
-| **PPLF Log Administrator** | People who read logs and change settings. |
+| **PPLF | Log Writer** | Everyone who runs an app, page or flow that logs to Dataverse. It allows creating log rows and reading settings, nothing else. |
+| **PPLF | Log Administrator** | People who read logs and change settings. |
 
-Share the **PPLF Admin** app with the administrators.
+Share the **PPLF Configuration App** app with the administrators.
 
 For the SharePoint target, app users need **Contribute** on the `PPLF Logs` list (only if you use canvas Direct mode; Router mode writes with the flow owner's connection).
 
 ## Step 3 - Choose where logs go
 
-Open **PPLF Admin** → **Setup**.
+Open **PPLF Configuration App** → **Setup**.
 
 1. Choose **Dataverse**, **SharePoint** or **Both**.
-2. For SharePoint or Both: enter the site URL and select **Create lists**. The *PPLF - Provision SharePoint* flow creates both lists with indexed columns and stores their ids in the environment variables.
+2. For SharePoint or Both: enter the site URL and select **Create lists**. The *PPLF | Setup | Provision SharePoint* flow creates both lists with indexed columns and stores their ids in the environment variables.
 3. Select **Save log target**.
 4. Select **Send test entry**, then **Find it in Logs**.
 

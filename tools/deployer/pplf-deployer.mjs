@@ -61,8 +61,9 @@ export function createClient({ envUrl, token, solution, log = console.log, fetch
       ...extraHeaders
     };
     if (token) headers.Authorization = `Bearer ${token}`;
-    // Add new components to the solution, except while creating the publisher and the solution itself.
-    if (solution && method !== 'GET' && !/^(publishers|solutions)\b/.test(path)) headers['MSCRM.SolutionUniqueName'] = solution;
+    // Add new components to the solution, except the publisher, the solution itself and environment
+    // variable values (values are per-environment and must never ship inside the solution).
+    if (solution && method !== 'GET' && !/^(publishers|solutions|environmentvariablevalues)\b/.test(path)) headers['MSCRM.SolutionUniqueName'] = solution;
     const res = await doFetch(base + path, {
       method,
       headers,

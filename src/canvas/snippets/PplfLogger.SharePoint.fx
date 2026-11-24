@@ -2,8 +2,8 @@
 // PPLF Logger for canvas apps - DIRECT mode, SharePoint target
 // =============================================================================
 // Paste into App.Formulas. Add the "PPLF Logs" and "PPLF Log Config" SharePoint
-// lists as data sources (created by the PPLF Admin setup wizard, the
-// "PPLF - Provision SharePoint" flow or tools/sharepoint). Standard licence only.
+// lists as data sources (created by the PPLF Configuration App setup wizard, the
+// "PPLF | Setup | Provision SharePoint" flow or tools/sharepoint). Standard licence only.
 //
 // Same function names as the Dataverse variant, so you can switch targets by
 // swapping this block and the data sources. The column display names are the

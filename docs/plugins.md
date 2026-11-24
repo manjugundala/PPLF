@@ -41,7 +41,7 @@ public class AccountVatCheck : PplfPluginBase
 }
 ```
 
-`PplfPluginBase` writes as SYSTEM, so callers don't need the PPLF Log Writer role. It logs a Debug timing entry for every run (set `TimingLevel = null` to turn that off). It also logs any unexpected exception as Error with the stack trace before raising a friendly error that includes the correlation id.
+`PplfPluginBase` writes as SYSTEM, so callers don't need the PPLF | Log Writer role. It logs a Debug timing entry for every run (set `TimingLevel = null` to turn that off). It also logs any unexpected exception as Error with the stack trace before raising a friendly error that includes the correlation id.
 
 ## The transaction caveat
 

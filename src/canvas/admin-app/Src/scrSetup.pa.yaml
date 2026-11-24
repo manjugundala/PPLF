@@ -165,7 +165,7 @@ Screens:
                               OnSelect: |-
                                 =Set(gblProvisioning, true);
                                 IfError(
-                                    Set(gblProvision, PPLFProvisionSharePoint.Run(Trim(txtSiteUrl.Value)));
+                                    Set(gblProvision, 'PPLF|Setup|ProvisionSharePoint'.Run(Trim(txtSiteUrl.Value)));
                                     PplfSetEnv("pplf_SharePointSite", gblProvision.siteurl);
                                     PplfSetEnv("pplf_SharePointLogList", gblProvision.loglistid);
                                     PplfSetEnv("pplf_SharePointConfigList", gblProvision.configlistid);
@@ -218,10 +218,10 @@ Screens:
                               OnSelect: |-
                                 =Set(gblTestCorrelation, GUID());
                                 IfError(
-                                    Set(gblTestResult, PPLFIngestfromPowerApps.Run(JSON(Table({
+                                    Set(gblTestResult, 'PPLF|Ingest|PowerApps'.Run(JSON(Table({
                                         level: "Information",
                                         message: "PPLF setup test from " & User().FullName,
-                                        sourceName: "PPLF Admin",
+                                        sourceName: "PPLF Configuration App",
                                         sourceType: "Canvas App",
                                         component: "scrSetup",
                                         operation: "SendTestEntry",

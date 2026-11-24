@@ -4,13 +4,13 @@
 
 | Check | How |
 |---|---|
-| Is the source enabled and the level high enough? | PPLF Admin → Settings. The `*` row applies when there's no row for the source. Remember the source name must match exactly (case is ignored). |
+| Is the source enabled and the level high enough? | PPLF Configuration App → Settings. The `*` row applies when there's no row for the source. Remember the source name must match exactly (case is ignored). |
 | Are the flows on? | Solutions → PPLF → Cloud flows. Turn on children first: writers, router, then the rest. |
 | Are the connection references set? | Solutions → PPLF → Connection references. Each needs a connection owned by an account that will stay. |
 | Canvas Direct mode | Look at `colPplfFailed` in Studio (Variables → Collections). |
 | Canvas Router mode | Look at `colPplfBuffer`; open the *Ingest from Power Apps* run history. |
 | Power Pages | Browser console shows `[PPLF]` warnings. Check the flow is added to the site and the visitor has one of its web roles. |
-| Model-driven | Browser console shows `[PPLF] could not write log`. The user probably lacks **PPLF Log Writer**. |
+| Model-driven | Browser console shows `[PPLF] could not write log`. The user probably lacks **PPLF | Log Writer**. |
 
 ## The router writes to the wrong place
 

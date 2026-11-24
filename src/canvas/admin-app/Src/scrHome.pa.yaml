@@ -2,7 +2,7 @@ Screens:
   scrHome:
     Properties:
       Fill: =PplfSurface
-      OnVisible: =Refresh('PPLF Logs')
+      OnVisible: =Refresh('PPLF | Logs')
     Children:
       - conHomeRoot:
           Control: GroupContainer@1.3.0
@@ -18,7 +18,7 @@ Screens:
                 Properties:
                   Title: ="Power Platform Logging Framework"
                   Width: =Parent.Width
-                  LogoTooltip: ="PPLF Admin"
+                  LogoTooltip: ="PPLF Configuration App"
             - conHomeNav:
                 Control: GroupContainer@1.3.0
                 Variant: AutoLayout
@@ -98,10 +98,10 @@ Screens:
                               Items: |-
                                 =With({since: DateAdd(Now(), -1, TimeUnit.Days)},
                                     Table(
-                                        { Label: "Critical", Severity: 5, Count: CountRows(Filter('PPLF Logs', Severity = 5 && 'Created On' >= since)) },
-                                        { Label: "Errors",   Severity: 4, Count: CountRows(Filter('PPLF Logs', Severity = 4 && 'Created On' >= since)) },
-                                        { Label: "Warnings", Severity: 3, Count: CountRows(Filter('PPLF Logs', Severity = 3 && 'Created On' >= since)) },
-                                        { Label: "All entries", Severity: 2, Count: CountRows(Filter('PPLF Logs', 'Created On' >= since)) }
+                                        { Label: "Critical", Severity: 5, Count: CountRows(Filter('PPLF | Logs', Severity = 5 && 'Created On' >= since)) },
+                                        { Label: "Errors",   Severity: 4, Count: CountRows(Filter('PPLF | Logs', Severity = 4 && 'Created On' >= since)) },
+                                        { Label: "Warnings", Severity: 3, Count: CountRows(Filter('PPLF | Logs', Severity = 3 && 'Created On' >= since)) },
+                                        { Label: "All entries", Severity: 2, Count: CountRows(Filter('PPLF | Logs', 'Created On' >= since)) }
                                     ))
                               TemplateSize: =240
                               TemplatePadding: =0
@@ -160,7 +160,7 @@ Screens:
                       Control: Gallery@2.15.0
                       Variant: Vertical
                       Properties:
-                        Items: =FirstN(SortByColumns(Filter('PPLF Logs', Severity >= 4), "createdon", SortOrder.Descending), 50)
+                        Items: =FirstN(SortByColumns(Filter('PPLF | Logs', Severity >= 4), "createdon", SortOrder.Descending), 50)
                         TemplateSize: =72
                         Width: =Parent.Width - 2 * PplfGap
                         Fill: =PplfCard

@@ -6,13 +6,13 @@
 
 | Transport | How | Target | Setup |
 |---|---|---|---|
-| `flow` (default) | Site cloud-flow API → **PPLF - Ingest from Power Pages** → router | Follows `pplf_LogTarget` | Add the flow to the site, give it web roles |
+| `flow` (default) | Site cloud-flow API → **PPLF | Ingest | Power Pages** → router | Follows `pplf_LogTarget` | Add the flow to the site, give it web roles |
 | `webapi` | Power Pages Web API → `pplf_log` table | Dataverse only | Site settings and a table permission |
 
 ## Set up (flow transport)
 
 1. **Upload the script.** In the Portal Management app, create a **Web File** at the site root: partial URL `pplf-pages-logger.js`, attach `src/pages/pplf-pages-logger.js`, publishing state *Published*.
-2. **Add the flow to the site.** In Power Pages design studio → **Set up** → **Cloud flows** → **+ Add cloud flow** → *PPLF - Ingest from Power Pages*. Choose the web roles allowed to log (usually *Authenticated Users*). Copy the flow's id from the list.
+2. **Add the flow to the site.** In Power Pages design studio → **Set up** → **Cloud flows** → **+ Add cloud flow** → *PPLF | Ingest | Power Pages*. Choose the web roles allowed to log (usually *Authenticated Users*). Copy the flow's id from the list.
 3. **Initialise the logger** on every page, for example in the *Footer* content snippet. Use [`samples/power-pages/pplf-logger-snippet.html`](https://github.com/manjugundala/power-platform-logging-framework/blob/main/samples/power-pages/pplf-logger-snippet.html) and replace `FLOW_GUID`.
 
 ```html

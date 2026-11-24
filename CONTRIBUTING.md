@@ -27,7 +27,7 @@ For changes that touch Power Platform you also need a **developer environment** 
 | Add or change a column, choice, environment variable or role | `schema/pplf.schema.json` | `npm run build`, update tests if needed |
 | Change flow logic | `tools/build/flows.mjs` | `npm run build`, redeploy to your dev environment, test both targets |
 | Change the canvas loggers | `src/canvas/snippets/*.fx` | Test in a real app; keep the three variants' function signatures identical |
-| Change PPLF Admin | Studio in your dev environment | Export with the workflow, or copy the changed `*.pa.yaml` into `src/canvas/admin-app/Src` |
+| Change PPLF Configuration App | Studio in your dev environment | Export with the workflow, or copy the changed `*.pa.yaml` into `src/canvas/admin-app/Src` |
 | Change Power Pages / model-driven / plug-in loggers | `src/pages`, `src/webresources`, `src/plugins` | Test against a dev site, form or plug-in step |
 | Fix docs | `docs/` | `mkdocs serve` to preview (optional) |
 

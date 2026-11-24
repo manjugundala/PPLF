@@ -2,7 +2,7 @@ Screens:
   scrSettings:
     Properties:
       Fill: =PplfSurface
-      OnVisible: =Refresh('PPLF Log Configurations'); Set(gblEditConfig, Blank())
+      OnVisible: =Refresh('PPLF | Configurations'); Set(gblEditConfig, Blank())
     Children:
       - conSettingsRoot:
           Control: GroupContainer@1.3.0
@@ -187,12 +187,12 @@ Screens:
                               Appearance: ='ButtonCanvas.Appearance'.Secondary
                               Icon: ="Add"
                               Width: =160
-                              OnSelect: =Set(gblEditConfig, Defaults('PPLF Log Configurations')); Set(gblEditIsNew, true)
+                              OnSelect: =Set(gblEditConfig, Defaults('PPLF | Configurations')); Set(gblEditIsNew, true)
                         - galSources:
                             Control: Gallery@2.15.0
                             Variant: Vertical
                             Properties:
-                              Items: =SortByColumns('PPLF Log Configurations', "pplf_name", SortOrder.Ascending)
+                              Items: =SortByColumns('PPLF | Configurations', "pplf_name", SortOrder.Ascending)
                               TemplateSize: =56
                               Width: =Parent.Width - 2 * PplfGap
                               FillPortions: =1
@@ -267,11 +267,11 @@ Screens:
                                     Width: =90
                                     DisplayMode: =If(IsBlank(Trim(txtSrcName.Value)), DisplayMode.Disabled, DisplayMode.Edit)
                                     OnSelect: |-
-                                      =Patch('PPLF Log Configurations', If(gblEditIsNew, Defaults('PPLF Log Configurations'), gblEditConfig), {
+                                      =Patch('PPLF | Configurations', If(gblEditIsNew, Defaults('PPLF | Configurations'), gblEditConfig), {
                                           'Source Name': Trim(txtSrcName.Value),
                                           'Minimum Level': Switch(ddSrcLevel.Selected.Severity,
-                                              0, 'PPLF Log Level'.Trace, 1, 'PPLF Log Level'.Debug, 3, 'PPLF Log Level'.Warning,
-                                              4, 'PPLF Log Level'.Error, 5, 'PPLF Log Level'.Critical, 'PPLF Log Level'.Information),
+                                              0, 'PPLF | Log Level'.Trace, 1, 'PPLF | Log Level'.Debug, 3, 'PPLF | Log Level'.Warning,
+                                              4, 'PPLF | Log Level'.Error, 5, 'PPLF | Log Level'.Critical, 'PPLF | Log Level'.Information),
                                           'Minimum Severity': ddSrcLevel.Selected.Severity,
                                           'Retention (days)': If(IsBlank(numSrcRetention.Value), Blank(), numSrcRetention.Value),
                                           Enabled: tglSrcEnabled.Checked
@@ -286,4 +286,4 @@ Screens:
                                     Appearance: ='ButtonCanvas.Appearance'.Subtle
                                     Width: =90
                                     Visible: =!gblEditIsNew && gblEditConfig.'Source Name' <> "*"
-                                    OnSelect: =Remove('PPLF Log Configurations', gblEditConfig); Set(gblEditConfig, Blank())
+                                    OnSelect: =Remove('PPLF | Configurations', gblEditConfig); Set(gblEditConfig, Blank())

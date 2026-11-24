@@ -17,7 +17,7 @@ The same columns exist in Dataverse and SharePoint, so you can switch the log ta
 | Error | 4 | 917000004 |
 | Critical | 5 | 917000005 |
 
-## PPLF Log (`pplf_log`)
+## PPLF | Log (`pplf_log`)
 
 One row per log entry written by any Power Platform component.
 
@@ -47,7 +47,7 @@ SharePoint list: **PPLF Logs** (URL `/Lists/PPLFLogs`)
 
 \* required
 
-## PPLF Log Configuration (`pplf_logconfig`)
+## PPLF | Configuration (`pplf_logconfig`)
 
 Per-source logging settings. A row named * is the default for every source.
 
@@ -88,12 +88,12 @@ SharePoint list: **PPLF Log Config** (URL `/Lists/PPLFLogConfig`)
 
 ## Security roles
 
-**PPLF Log Writer**: Lets apps, flows and pages run by this user write log entries and read logging settings. Give it to every app user.
+**PPLF | Log Writer**: Lets apps, flows and pages run by this user write log entries and read logging settings. Give it to every app user.
 
 - `pplf_log`: Create (Global)
 - `pplf_logconfig`: Read (Global)
 
-**PPLF Log Administrator**: Read and delete logs, and manage logging settings.
+**PPLF | Log Administrator**: Read and delete logs, and manage logging settings.
 
 - `pplf_log`: Create, Read, Delete (Global)
 - `pplf_logconfig`: Create, Read, Write, Delete (Global)

@@ -1,7 +1,7 @@
 // Power Platform Logging Framework - SharePoint provisioning
 // -----------------------------------------------------------------------------
 // Creates the PPLF Logs and PPLF Log Config lists from src/sharepoint/lists.json.
-// Same steps as the "PPLF - Provision SharePoint" flow, for admins who prefer a
+// Same steps as the "PPLF | Setup | Provision SharePoint" flow, for admins who prefer a
 // script. Idempotent. Zero dependencies.
 //
 //   Browser: open the target site, paste dist/pplf-deployer.browser.js into the
@@ -15,20 +15,30 @@ export function createSpClient({ siteUrl, token, fetchImpl, log = console.log })
   const doFetch = fetchImpl || globalThis.fetch.bind(globalThis);
   let digest = null;
 
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
   async function call(method, uri, body, extra = {}) {
-    const headers = { Accept: 'application/json;odata=nometadata', 'Content-Type': 'application/json;odata=nometadata', ...extra };
-    if (token) headers.Authorization = `Bearer ${token}`;
-    if (method !== 'GET' && !token) {
-      if (!digest) {
-        const r = await doFetch(base + '_api/contextinfo', { method: 'POST', headers: { Accept: 'application/json;odata=nometadata' }, credentials: 'include' });
-        digest = (await r.json()).FormDigestValue;
+    // SharePoint throttles bursts of schema changes with 429/503; back off and retry.
+    for (let attempt = 0; ; attempt++) {
+      const headers = { Accept: 'application/json;odata=nometadata', 'Content-Type': 'application/json;odata=nometadata', ...extra };
+      if (token) headers.Authorization = `Bearer ${token}`;
+      if (method !== 'GET' && !token) {
+        if (!digest) {
+          const r = await doFetch(base + '_api/contextinfo', { method: 'POST', headers: { Accept: 'application/json;odata=nometadata' }, credentials: 'include' });
+          digest = (await r.json()).FormDigestValue;
+        }
+        headers['X-RequestDigest'] = digest;
       }
-      headers['X-RequestDigest'] = digest;
+      const res = await doFetch(base + uri, { method, headers, body: body === undefined ? undefined : JSON.stringify(body), credentials: token ? 'omit' : 'include' });
+      const text = await res.text();
+      if ((res.status === 429 || res.status === 503) && attempt < 6) {
+        const retryAfter = Number(res.headers.get('Retry-After')) || 0;
+        await sleep(Math.max(retryAfter * 1000, 2000 * (attempt + 1)));
+        continue;
+      }
+      if (!res.ok) throw new Error(`${method} ${uri} -> ${res.status}: ${text.slice(0, 300)}`);
+      return text ? JSON.parse(text) : null;
     }
-    const res = await doFetch(base + uri, { method, headers, body: body === undefined ? undefined : JSON.stringify(body), credentials: token ? 'omit' : 'include' });
-    const text = await res.text();
-    if (!res.ok) throw new Error(`${method} ${uri} -> ${res.status}: ${text.slice(0, 300)}`);
-    return text ? JSON.parse(text) : null;
   }
   return { base, log, call };
 }

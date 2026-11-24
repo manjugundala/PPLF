@@ -146,10 +146,10 @@ const SEV = (expr) => `coalesce(outputs('Severity_Map')?[${expr}], 2)`;
 // ---------------------------------------------------------------------------
 // Flow: Log Router
 // ---------------------------------------------------------------------------
-export const ROUTER = 'PPLF - Log Router';
-export const WRITER_DV = 'PPLF - Writer Dataverse';
-export const WRITER_SP = 'PPLF - Writer SharePoint';
-export const WRITE_LOG = 'PPLF - Write Log';
+export const ROUTER = 'PPLF | Router | Route Logs';
+export const WRITER_DV = 'PPLF | Writers | Dataverse';
+export const WRITER_SP = 'PPLF | Writers | SharePoint';
+export const WRITE_LOG = 'PPLF | Logger | Write Log';
 
 function router(schema) {
   const target = p(schema, 'pplf_LogTarget');
@@ -430,7 +430,7 @@ function writeLog(schema) {
   return flow({
     schema,
     name: WRITE_LOG,
-    description: 'Child flow for flow makers. Call it with "Run a Child Flow" to write one log entry with plain inputs. It routes through PPLF - Log Router.',
+    description: 'Child flow for flow makers. Call it with "Run a Child Flow" to write one log entry with plain inputs. It routes through PPLF | Router | Route Logs.',
     triggers: childTrigger(input),
     actions: {
       Build_entry: {
@@ -461,8 +461,8 @@ function writeLog(schema) {
 function fromPowerApps(schema) {
   return flow({
     schema,
-    name: 'PPLF - Ingest from Power Apps',
-    description: 'Called by canvas apps in Router mode: PPLFIngestfromPowerApps.Run(JSON(colPplfBuffer)). Target-agnostic: the Log Target environment variable decides where entries go.',
+    name: 'PPLF | Ingest | Power Apps',
+    description: "Called by canvas apps in Router mode: 'PPLF|Ingest|PowerApps'.Run(JSON(colPplfBuffer)). Target-agnostic: the Log Target environment variable decides where entries go.",
     triggers: powerAppsTrigger(LOGS_INPUT),
     actions: {
       Route: runChild(ROUTER, { text: "@{triggerBody()?['text']}" }),
@@ -474,7 +474,7 @@ function fromPowerApps(schema) {
 function fromPowerPages(schema) {
   return flow({
     schema,
-    name: 'PPLF - Ingest from Power Pages',
+    name: 'PPLF | Ingest | Power Pages',
     description: 'Called by the PPLF Power Pages logger through the site cloud-flow API. Add it to the site under Set up > Cloud flows and secure it with a web role.',
     triggers: { manual: { type: 'Request', kind: 'PowerPages', inputs: { schema: LOGS_INPUT } } },
     actions: {
@@ -543,8 +543,8 @@ function provisionSharePoint(schema) {
 
   return flow({
     schema,
-    name: 'PPLF - Provision SharePoint',
-    description: 'Called by the PPLF Admin app setup wizard. Creates the PPLF Logs and PPLF Log Config lists, their columns and indexes on the given site, and adds the default * config row. Safe to run again.',
+    name: 'PPLF | Setup | Provision SharePoint',
+    description: 'Called by the PPLF Configuration App app setup wizard. Creates the PPLF Logs and PPLF Log Config lists, their columns and indexes on the given site, and adds the default * config row. Safe to run again.',
     apis: [SP],
     triggers: powerAppsTrigger(input),
     actions: {
@@ -633,7 +633,7 @@ function retention(schema) {
   const cutoff = (days) => `@{addDays(utcNow(), mul(-1, ${days}), 'yyyy-MM-ddTHH:mm:ssZ')}`;
   return flow({
     schema,
-    name: 'PPLF - Retention Cleanup',
+    name: 'PPLF | Maintenance | Retention Cleanup',
     description: 'Runs daily. Deletes log entries older than the retention period. The * row (or PPLF Default Retention Days) is the maximum age for all entries; a source row can set a shorter period for that source. Deletes up to 5,000 entries per store per rule per run.',
     apis: [DV, SP],
     env: ['pplf_LogTarget', 'pplf_DefaultRetentionDays', 'pplf_SharePointSite', 'pplf_SharePointLogList', 'pplf_SharePointConfigList'],
@@ -738,7 +738,7 @@ function forwardToSharePoint(schema) {
   const T = (k) => `triggerOutputs()?['body/${k}']`;
   return flow({
     schema,
-    name: 'PPLF - Forward Dataverse Logs to SharePoint',
+    name: 'PPLF | Forwarder | Dataverse to SharePoint',
     description: 'When Log Target is SharePoint, entries that pro-code sources (plug-ins, model-driven JavaScript, Custom API) write straight to the PPLF Log table are copied to the SharePoint list and removed from Dataverse.',
     apis: [DV, SP],
     env: ['pplf_LogTarget', 'pplf_SharePointSite', 'pplf_SharePointLogList'],
@@ -797,7 +797,7 @@ function tryCatchTemplate(schema) {
   });
   return flow({
     schema,
-    name: 'PPLF - Template Try Catch',
+    name: 'PPLF | Templates | Try Catch',
     description: 'Copy this flow to start a new one with PPLF logging built in: Try / Catch / Finally scopes, a correlation id, failure details and a run link.',
     triggers: { manual: { type: 'Request', kind: 'Button', inputs: { schema: textInputSchema([['text', 'CorrelationId', 'Optional. Pass one in to tie this run to the app action that started it.']], []) } } },
     actions: {
@@ -860,5 +860,5 @@ export function buildFlows(schema) {
 }
 
 export function flowFileName(name) {
-  return name.replace(/^PPLF - /, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '.json';
+  return name.replace(/^PPLF \| /, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '.json';
 }
