@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use or build on this framework, please cite it as below."
+title: "Power Platform Logging Framework"
+abstract: "An open-source, configurable logging framework for Microsoft Power Platform (Power Apps, Power Automate, Power Pages, model-driven apps and Dataverse plug-ins) that stores logs in Dataverse or SharePoint from one schema."
+type: software
+license: MIT
+version: 1.0.0
+date-released: 2026-11-23
+keywords:
+  - power-platform
+  - logging
+  - observability
+  - dataverse
+  - sharepoint
+  - low-code
+authors:
+  - name: "Power Platform Logging Framework contributors"

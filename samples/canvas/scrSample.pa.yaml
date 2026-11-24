@@ -1,0 +1,64 @@
+# Sample screen that shows PPLF logging in a canvas app.
+# 1. Paste one of src/canvas/snippets/PplfLogger.*.fx into App.Formulas
+# 2. Paste src/canvas/snippets/App.OnError.fx into App.OnError
+# 3. Router mode only: set the screen's OnHidden to =PplfFlush()
+# 4. Paste this screen (Studio > tree view > right-click > Paste) or copy individual controls.
+Screens:
+  scrPplfSample:
+    Properties:
+      OnVisible: =PplfInfo("scrPplfSample", "Sample screen opened")
+    Children:
+      - conSample:
+          Control: GroupContainer@1.3.0
+          Variant: AutoLayout
+          Properties:
+            Width: =Parent.Width
+            Height: =Parent.Height
+            LayoutDirection: =LayoutDirection.Vertical
+            PaddingLeft: =24
+            PaddingTop: =24
+            LayoutGap: =12
+            DropShadow: =DropShadow.None
+          Children:
+            - lblSampleTitle:
+                Control: Text@0.0.51
+                Properties:
+                  Text: ="PPLF sample"
+                  Size: =24
+                  Weight: ='TextCanvas.Weight'.Semibold
+                  Height: =40
+                  Width: =400
+            - btnSampleInfo:
+                Control: Button@0.0.45
+                Properties:
+                  Text: ="Log information"
+                  Width: =240
+                  OnSelect: =PplfInfo("scrPplfSample", "User clicked the information button")
+            - btnSampleTimed:
+                Control: Button@0.0.45
+                Properties:
+                  Text: ="Timed operation"
+                  Width: =240
+                  OnSelect: |-
+                    =PplfNewCorrelation();
+                    PplfStart("LoadAccounts");
+                    // ... real work here, e.g. ClearCollect(colAccounts, FirstN(Accounts, 100));
+                    PplfStop("scrPplfSample", "LoadAccounts")
+            - btnSampleHandled:
+                Control: Button@0.0.45
+                Properties:
+                  Text: ="Handled error"
+                  Width: =240
+                  OnSelect: |-
+                    =IfError(
+                        Value("not a number"),
+                        PplfError("scrPplfSample", "ParseInput", "Could not parse input: " & FirstError.Message, JSON({ input: "not a number" }));
+                        Notify("Something went wrong. It has been logged.", NotificationType.Error)
+                    )
+            - btnSampleUnhandled:
+                Control: Button@0.0.45
+                Properties:
+                  Text: ="Unhandled error (App.OnError)"
+                  Width: =240
+                  OnSelect: |-
+                    =Patch(Accounts, LookUp(Accounts, false), { name: "x" })

@@ -1,0 +1,164 @@
+{
+  "$comment": "Single source of truth for the Power Platform Logging Framework (PPLF). The deployer, the SharePoint provisioning flow, the docs and the tests are all derived from or validated against this file. Change the schema here first.",
+  "version": "1.0.0",
+  "publisher": {
+    "uniqueName": "pplf",
+    "friendlyName": "Power Platform Logging Framework",
+    "customizationPrefix": "pplf",
+    "customizationOptionValuePrefix": 91700,
+    "description": "Publisher for the open-source Power Platform Logging Framework."
+  },
+  "solution": {
+    "uniqueName": "PowerPlatformLoggingFramework",
+    "friendlyName": "Power Platform Logging Framework",
+    "description": "Configurable logging for Power Apps, Power Automate, Power Pages, model-driven apps and plug-ins. Writes to Dataverse, SharePoint or both."
+  },
+  "levels": [
+    { "name": "Trace",       "severity": 0, "value": 917000000, "color": "#8A8886" },
+    { "name": "Debug",       "severity": 1, "value": 917000001, "color": "#605E5C" },
+    { "name": "Information", "severity": 2, "value": 917000002, "color": "#0F6CBD" },
+    { "name": "Warning",     "severity": 3, "value": 917000003, "color": "#BC4B09" },
+    { "name": "Error",       "severity": 4, "value": 917000004, "color": "#C50F1F" },
+    { "name": "Critical",    "severity": 5, "value": 917000005, "color": "#750B1C" }
+  ],
+  "globalChoices": [
+    {
+      "schemaName": "pplf_loglevel",
+      "displayName": "PPLF Log Level",
+      "description": "Severity of a log entry. Value = 917000000 + severity (0-5).",
+      "fromLevels": true
+    },
+    {
+      "schemaName": "pplf_sourcetype",
+      "displayName": "PPLF Source Type",
+      "description": "Which kind of Power Platform component wrote the log entry.",
+      "options": [
+        { "label": "Canvas App",       "value": 917000000, "spChoice": "Canvas App" },
+        { "label": "Model-driven App", "value": 917000001, "spChoice": "Model-driven App" },
+        { "label": "Cloud Flow",       "value": 917000002, "spChoice": "Cloud Flow" },
+        { "label": "Power Pages",      "value": 917000003, "spChoice": "Power Pages" },
+        { "label": "Plug-in",          "value": 917000004, "spChoice": "Plug-in" },
+        { "label": "Custom",           "value": 917000005, "spChoice": "Custom" }
+      ]
+    },
+    {
+      "schemaName": "pplf_logtarget",
+      "displayName": "PPLF Log Target",
+      "description": "Where log entries are stored.",
+      "options": [
+        { "label": "Dataverse",  "value": 917000000 },
+        { "label": "SharePoint", "value": 917000001 },
+        { "label": "Both",       "value": 917000002 }
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "schemaName": "pplf_Log",
+      "logicalName": "pplf_log",
+      "entitySetName": "pplf_logs",
+      "displayName": "PPLF Log",
+      "displayCollectionName": "PPLF Logs",
+      "description": "One row per log entry written by any Power Platform component.",
+      "ownership": "OrganizationOwned",
+      "primaryName": { "schemaName": "pplf_Name", "displayName": "Title", "maxLength": 200, "description": "First 200 characters of the message." },
+      "sharePointList": { "title": "PPLF Logs", "url": "PPLFLogs", "template": 100 },
+      "columns": [
+        { "schemaName": "pplf_Level",             "displayName": "Level",              "type": "Choice",   "globalChoice": "pplf_loglevel", "required": true, "sp": { "internalName": "PplfLevel", "type": "Choice", "indexed": true } },
+        { "schemaName": "pplf_Severity",          "displayName": "Severity",           "type": "Integer",  "min": 0, "max": 5, "required": true, "description": "0=Trace ... 5=Critical. Duplicates Level as a number so both stores filter the same way.", "sp": { "internalName": "PplfSeverity", "type": "Number", "indexed": true } },
+        { "schemaName": "pplf_SourceType",        "displayName": "Source Type",        "type": "Choice",   "globalChoice": "pplf_sourcetype", "required": true, "sp": { "internalName": "PplfSourceType", "type": "Choice", "indexed": true } },
+        { "schemaName": "pplf_SourceName",        "displayName": "Source Name",        "type": "String",   "maxLength": 200, "required": true, "description": "App, flow, site or plug-in name.", "sp": { "internalName": "PplfSourceName", "type": "Text", "indexed": true } },
+        { "schemaName": "pplf_Component",         "displayName": "Component",          "type": "String",   "maxLength": 200, "description": "Screen, control, flow step, page or class.", "sp": { "internalName": "PplfComponent", "type": "Text" } },
+        { "schemaName": "pplf_Operation",         "displayName": "Operation",          "type": "String",   "maxLength": 200, "description": "What was being attempted, e.g. SubmitExpense.", "sp": { "internalName": "PplfOperation", "type": "Text" } },
+        { "schemaName": "pplf_Message",           "displayName": "Message",            "type": "Memo",     "maxLength": 4000, "required": true, "sp": { "internalName": "PplfMessage", "type": "Note" } },
+        { "schemaName": "pplf_Details",           "displayName": "Details (JSON)",     "type": "Memo",     "maxLength": 100000, "description": "Structured context as JSON. Never put secrets or personal data here.", "sp": { "internalName": "PplfDetails", "type": "Note" } },
+        { "schemaName": "pplf_CorrelationId",     "displayName": "Correlation Id",     "type": "String",   "maxLength": 100, "description": "Shared by every entry that belongs to one user action across apps, flows and plug-ins.", "sp": { "internalName": "PplfCorrelationId", "type": "Text", "indexed": true } },
+        { "schemaName": "pplf_SessionId",         "displayName": "Session Id",         "type": "String",   "maxLength": 100, "sp": { "internalName": "PplfSessionId", "type": "Text" } },
+        { "schemaName": "pplf_UserPrincipalName", "displayName": "User",               "type": "String",   "maxLength": 320, "sp": { "internalName": "PplfUser", "type": "Text" } },
+        { "schemaName": "pplf_Environment",       "displayName": "Environment",        "type": "String",   "maxLength": 100, "sp": { "internalName": "PplfEnvironment", "type": "Text" } },
+        { "schemaName": "pplf_AppVersion",        "displayName": "App Version",        "type": "String",   "maxLength": 50, "sp": { "internalName": "PplfAppVersion", "type": "Text" } },
+        { "schemaName": "pplf_RunUrl",            "displayName": "Run Url",            "type": "String",   "format": "Url", "maxLength": 500, "description": "Link to the flow run or page that produced the entry.", "sp": { "internalName": "PplfRunUrl", "type": "Text" } },
+        { "schemaName": "pplf_DurationMs",        "displayName": "Duration (ms)",      "type": "Integer",  "min": 0, "max": 2147483647, "sp": { "internalName": "PplfDurationMs", "type": "Number" } },
+        { "schemaName": "pplf_ErrorCode",         "displayName": "Error Code",         "type": "String",   "maxLength": 100, "sp": { "internalName": "PplfErrorCode", "type": "Text" } },
+        { "schemaName": "pplf_ClientTimestamp",   "displayName": "Client Timestamp",   "type": "DateTime", "description": "When the event happened on the client (UTC). Created On is when it was stored.", "sp": { "internalName": "PplfClientTimestamp", "type": "DateTime", "indexed": true } },
+        { "schemaName": "pplf_ClientInfo",        "displayName": "Client Info",        "type": "String",   "maxLength": 500, "description": "Device, browser or runtime.", "sp": { "internalName": "PplfClientInfo", "type": "Text" } }
+      ]
+    },
+    {
+      "schemaName": "pplf_LogConfig",
+      "logicalName": "pplf_logconfig",
+      "entitySetName": "pplf_logconfigs",
+      "displayName": "PPLF Log Configuration",
+      "displayCollectionName": "PPLF Log Configurations",
+      "description": "Per-source logging settings. A row named * is the default for every source.",
+      "ownership": "OrganizationOwned",
+      "primaryName": { "schemaName": "pplf_Name", "displayName": "Source Name", "maxLength": 200, "description": "Must match the Source Name sent by the app or flow, or * for the default." },
+      "sharePointList": { "title": "PPLF Log Config", "url": "PPLFLogConfig", "template": 100 },
+      "columns": [
+        { "schemaName": "pplf_SourceType",      "displayName": "Source Type",       "type": "Choice",  "globalChoice": "pplf_sourcetype", "sp": { "internalName": "PplfSourceType", "type": "Choice" } },
+        { "schemaName": "pplf_MinimumLevel",    "displayName": "Minimum Level",     "type": "Choice",  "globalChoice": "pplf_loglevel", "required": true, "sp": { "internalName": "PplfMinimumLevel", "type": "Choice" } },
+        { "schemaName": "pplf_MinimumSeverity", "displayName": "Minimum Severity",  "type": "Integer", "min": 0, "max": 5, "required": true, "description": "Numeric copy of Minimum Level used by flows.", "sp": { "internalName": "PplfMinimumSeverity", "type": "Number" } },
+        { "schemaName": "pplf_Enabled",         "displayName": "Enabled",           "type": "Boolean", "default": true, "sp": { "internalName": "PplfEnabled", "type": "Boolean" } },
+        { "schemaName": "pplf_RetentionDays",   "displayName": "Retention (days)",  "type": "Integer", "min": 1, "max": 3650, "description": "Entries older than this are deleted by the retention flow.", "sp": { "internalName": "PplfRetentionDays", "type": "Number" } },
+        { "schemaName": "pplf_Notes",           "displayName": "Notes",             "type": "Memo",    "maxLength": 2000, "sp": { "internalName": "PplfNotes", "type": "Note" } }
+      ]
+    }
+  ],
+  "environmentVariables": [
+    { "schemaName": "pplf_LogTarget",             "displayName": "PPLF Log Target",               "type": "String",     "default": "Dataverse",   "allowed": ["Dataverse", "SharePoint", "Both"], "description": "Where routed logs are written: Dataverse, SharePoint or Both." },
+    { "schemaName": "pplf_DefaultMinimumLevel",   "displayName": "PPLF Default Minimum Level",    "type": "String",     "default": "Information", "allowed": ["Trace", "Debug", "Information", "Warning", "Error", "Critical"], "description": "Used when no config row matches a source and there is no * row." },
+    { "schemaName": "pplf_DefaultRetentionDays",  "displayName": "PPLF Default Retention Days",   "type": "Number",     "default": "30", "description": "Used by the retention flow when no config row sets retention." },
+    { "schemaName": "pplf_AlertMinimumLevel",     "displayName": "PPLF Alert Minimum Level",      "type": "String",     "default": "Critical",    "allowed": ["Warning", "Error", "Critical", "None"], "description": "Entries at or above this level trigger an email alert. None turns alerts off." },
+    { "schemaName": "pplf_AlertRecipients",       "displayName": "PPLF Alert Recipients",         "type": "String",     "default": "",            "description": "Semicolon-separated email addresses for alerts." },
+    { "schemaName": "pplf_SharePointSite",        "displayName": "PPLF SharePoint Site",          "type": "DataSource", "connector": "shared_sharepointonline", "parameter": "dataset", "description": "Site that holds the PPLF lists. Only needed when Log Target is SharePoint or Both." },
+    { "schemaName": "pplf_SharePointLogList",     "displayName": "PPLF SharePoint Log List",      "type": "DataSource", "connector": "shared_sharepointonline", "parameter": "table", "parentParameter": "pplf_SharePointSite", "description": "The PPLF Logs list (stored as the list id)." },
+    { "schemaName": "pplf_SharePointConfigList",  "displayName": "PPLF SharePoint Config List",   "type": "DataSource", "connector": "shared_sharepointonline", "parameter": "table", "parentParameter": "pplf_SharePointSite", "description": "The PPLF Log Config list (stored as the list id)." }
+  ],
+  "connectionReferences": [
+    { "logicalName": "pplf_sharedcommondataserviceforapps", "displayName": "PPLF Dataverse",           "connectorId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps" },
+    { "logicalName": "pplf_sharedsharepointonline",         "displayName": "PPLF SharePoint",          "connectorId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline" },
+    { "logicalName": "pplf_sharedoffice365",                "displayName": "PPLF Office 365 Outlook",  "connectorId": "/providers/Microsoft.PowerApps/apis/shared_office365" }
+  ],
+  "securityRoles": [
+    {
+      "name": "PPLF Log Writer",
+      "description": "Lets apps, flows and pages run by this user write log entries and read logging settings. Give it to every app user.",
+      "privileges": [
+        { "table": "pplf_log",       "rights": ["Create"],                         "depth": "Global" },
+        { "table": "pplf_logconfig", "rights": ["Read"],                           "depth": "Global" }
+      ]
+    },
+    {
+      "name": "PPLF Log Administrator",
+      "description": "Read and delete logs, and manage logging settings.",
+      "privileges": [
+        { "table": "pplf_log",       "rights": ["Create", "Read", "Delete"],                   "depth": "Global" },
+        { "table": "pplf_logconfig", "rights": ["Create", "Read", "Write", "Delete"],          "depth": "Global" }
+      ]
+    }
+  ],
+  "customApis": [
+    {
+      "uniqueName": "pplf_WriteLog",
+      "displayName": "PPLF Write Log",
+      "description": "Unbound action that writes a log entry. Callable from JavaScript, Power Fx, flows and other plug-ins. Requires the Pplf.Plugins assembly.",
+      "bindingType": "Global",
+      "isFunction": false,
+      "pluginType": "Pplf.Plugins.WriteLogApi",
+      "requestParameters": [
+        { "uniqueName": "Level",         "type": "String", "optional": false },
+        { "uniqueName": "Message",       "type": "String", "optional": false },
+        { "uniqueName": "SourceName",    "type": "String", "optional": false },
+        { "uniqueName": "SourceType",    "type": "String", "optional": true },
+        { "uniqueName": "Component",     "type": "String", "optional": true },
+        { "uniqueName": "Operation",     "type": "String", "optional": true },
+        { "uniqueName": "Details",       "type": "String", "optional": true },
+        { "uniqueName": "CorrelationId", "type": "String", "optional": true }
+      ],
+      "responseProperties": [
+        { "uniqueName": "LogId",   "type": "Guid" },
+        { "uniqueName": "Written", "type": "Boolean" }
+      ]
+    }
+  ]
+}

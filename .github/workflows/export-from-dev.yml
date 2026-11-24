@@ -1,0 +1,91 @@
+name: Export solution from dev
+
+# Manually run this after changing the solution in the dev environment.
+# It exports the unmanaged and managed solution, unpacks it into src/solution
+# and opens a pull request so every change is reviewed as source.
+#
+# Repository secrets (Settings > Secrets and variables > Actions):
+#   PPLF_DEV_URL        https://<org>.crm.dynamics.com
+#   PPLF_APP_ID         Entra app registration (client) id, added as an application user in dev
+#   PPLF_CLIENT_SECRET  its client secret
+#   PPLF_TENANT_ID      Entra tenant id
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Solution version to stamp before export (e.g. 1.0.1.0). Leave blank to keep.'
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  export:
+    runs-on: windows-latest
+    env:
+      SOLUTION: PowerPlatformLoggingFramework
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: microsoft/powerplatform-actions/actions-install@v1
+
+      - name: Set version
+        if: ${{ inputs.version != '' }}
+        uses: microsoft/powerplatform-actions/set-online-solution-version@v1
+        with:
+          environment-url: ${{ secrets.PPLF_DEV_URL }}
+          app-id: ${{ secrets.PPLF_APP_ID }}
+          client-secret: ${{ secrets.PPLF_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PPLF_TENANT_ID }}
+          name: ${{ env.SOLUTION }}
+          version: ${{ inputs.version }}
+
+      - name: Publish customizations
+        uses: microsoft/powerplatform-actions/publish-solution@v1
+        with:
+          environment-url: ${{ secrets.PPLF_DEV_URL }}
+          app-id: ${{ secrets.PPLF_APP_ID }}
+          client-secret: ${{ secrets.PPLF_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PPLF_TENANT_ID }}
+
+      - name: Export unmanaged
+        uses: microsoft/powerplatform-actions/export-solution@v1
+        with:
+          environment-url: ${{ secrets.PPLF_DEV_URL }}
+          app-id: ${{ secrets.PPLF_APP_ID }}
+          client-secret: ${{ secrets.PPLF_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PPLF_TENANT_ID }}
+          solution-name: ${{ env.SOLUTION }}
+          solution-output-file: out/${{ env.SOLUTION }}.zip
+
+      - name: Export managed
+        uses: microsoft/powerplatform-actions/export-solution@v1
+        with:
+          environment-url: ${{ secrets.PPLF_DEV_URL }}
+          app-id: ${{ secrets.PPLF_APP_ID }}
+          client-secret: ${{ secrets.PPLF_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PPLF_TENANT_ID }}
+          solution-name: ${{ env.SOLUTION }}
+          managed: true
+          solution-output-file: out/${{ env.SOLUTION }}_managed.zip
+
+      - name: Unpack (both, so the source can pack either flavour)
+        uses: microsoft/powerplatform-actions/unpack-solution@v1
+        with:
+          solution-file: out/${{ env.SOLUTION }}.zip
+          solution-folder: src/solution
+          solution-type: Both
+          overwrite-files: true
+
+      - name: Open pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: export/${{ github.run_number }}
+          title: 'Solution export from dev (${{ inputs.version || github.run_number }})'
+          body: |
+            Automated export of `${{ env.SOLUTION }}` from the dev environment.
+            Review the diff, then merge. Tag a release (`vX.Y.Z`) to publish managed and unmanaged zips.
+          commit-message: 'chore(solution): export from dev'
+          add-paths: src/solution

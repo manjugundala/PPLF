@@ -1,0 +1,22 @@
+# Build output
+out/
+site/
+bin/
+obj/
+*.zip
+!samples/**/*.zip
+
+# Local tooling
+node_modules/
+.vs/
+.vscode/*
+!.vscode/extensions.json
+*.user
+.DS_Store
+Thumbs.db
+
+# Secrets and environment-specific settings - never commit
+.env
+*.pfx
+*.publishsettings
+deployment-settings.local.json

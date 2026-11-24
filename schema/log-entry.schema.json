@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/pplf/power-platform-logging-framework/schema/log-entry.schema.json",
+  "title": "PPLF log entry (wire format)",
+  "description": "The JSON shape every PPLF client sends. The ingestion flows accept a JSON array of these as the LogsJson input. Writers map it to Dataverse columns or SharePoint fields.",
+  "type": "object",
+  "required": ["level", "message", "sourceName"],
+  "additionalProperties": false,
+  "properties": {
+    "level":             { "type": "string", "enum": ["Trace", "Debug", "Information", "Warning", "Error", "Critical"] },
+    "message":           { "type": "string", "minLength": 1, "maxLength": 4000 },
+    "sourceName":        { "type": "string", "minLength": 1, "maxLength": 200 },
+    "sourceType":        { "type": "string", "enum": ["Canvas App", "Model-driven App", "Cloud Flow", "Power Pages", "Plug-in", "Custom"], "default": "Custom" },
+    "component":         { "type": "string", "maxLength": 200 },
+    "operation":         { "type": "string", "maxLength": 200 },
+    "details":           { "type": "string", "maxLength": 100000, "description": "JSON text. Never include secrets or unnecessary personal data." },
+    "correlationId":     { "type": "string", "maxLength": 100 },
+    "sessionId":         { "type": "string", "maxLength": 100 },
+    "userPrincipalName": { "type": "string", "maxLength": 320 },
+    "environment":       { "type": "string", "maxLength": 100 },
+    "appVersion":        { "type": "string", "maxLength": 50 },
+    "runUrl":            { "type": "string", "maxLength": 500 },
+    "durationMs":        { "type": "integer", "minimum": 0 },
+    "errorCode":         { "type": "string", "maxLength": 100 },
+    "clientTimestamp":   { "type": "string", "format": "date-time" },
+    "clientInfo":        { "type": "string", "maxLength": 500 }
+  },
+  "examples": [
+    {
+      "level": "Error",
+      "message": "Patch to Expenses failed: network error",
+      "sourceName": "Contoso Expenses",
+      "sourceType": "Canvas App",
+      "component": "scrSubmit",
+      "operation": "SubmitExpense",
+      "details": "{\"expenseId\":\"E-1042\",\"amount\":125.4}",
+      "correlationId": "6f1c2a9e-8f7b-4b0e-9a47-0f3d1c5b2e11",
+      "sessionId": "b2d0c6c4-3f1a-4a39-a1f9-1b6f5f0d7a22",
+      "userPrincipalName": "megan@contoso.com",
+      "clientTimestamp": "2026-11-23T18:49:00Z",
+      "clientInfo": "Web; Edge"
+    }
+  ]
+}

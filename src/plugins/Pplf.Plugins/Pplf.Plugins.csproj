@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Dataverse plug-in assembly for the Power Platform Logging Framework.
+    Build:  dotnet build -c Release
+    Sign:   plug-in assemblies must be strong-named. Create a key once with
+            `sn -k Pplf.Plugins.snk` (or the Power Platform Tools for VS) in this folder.
+    Deploy: pac plugin push, or the Plug-in Registration Tool. See docs/plugins.md.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <RootNamespace>Pplf.Plugins</RootNamespace>
+    <AssemblyName>Pplf.Plugins</AssemblyName>
+    <LangVersion>latest</LangVersion>
+    <Version>1.0.0</Version>
+    <Authors>Power Platform Logging Framework contributors</Authors>
+    <SignAssembly Condition="Exists('Pplf.Plugins.snk')">true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Pplf.Plugins.snk</AssemblyOriginatorKeyFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.*" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+</Project>

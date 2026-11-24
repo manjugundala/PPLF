@@ -1,0 +1,37 @@
+name: Bug report
+description: Something does not work as documented
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: PPLF version
+      placeholder: "1.0.0"
+    validations: { required: true }
+  - type: dropdown
+    id: target
+    attributes:
+      label: Log target
+      options: [Dataverse, SharePoint, Both]
+    validations: { required: true }
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options: [Canvas app logger, Admin app, Flows, Power Pages, Model-driven, Plug-ins / Custom API, Deployer / scripts, Docs]
+    validations: { required: true }
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations: { required: true }
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error message or flow run details
+      description: Remove any personal data, URLs with tokens or tenant names first.
+      render: text
