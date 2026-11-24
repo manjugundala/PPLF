@@ -4,7 +4,7 @@
 
 | Check | How |
 |---|---|
-| Is the source enabled and the level high enough? | PPLF Configuration App → Settings. The `*` row applies when there's no row for the source. Remember the source name must match exactly (case is ignored). |
+| Is the source enabled and the level high enough? | PPLF - Configuration App → Settings. The `*` row applies when there's no row for the source. Remember the source name must match exactly (case is ignored). |
 | Are the flows on? | Solutions → PPLF → Cloud flows. Turn on children first: writers, router, then the rest. |
 | Are the connection references set? | Solutions → PPLF → Connection references. Each needs a connection owned by an account that will stay. |
 | Canvas Direct mode | Look at `colPplfFailed` in Studio (Variables → Collections). |

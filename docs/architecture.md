@@ -57,7 +57,7 @@ flowchart LR
 | **Writers** | One per store. Apply the per-source minimum level, then write | `src/flows/writer-*.json` |
 | **Entry points** | Flows that Power Apps, Power Pages and other flows call | `src/flows/ingest-*.json`, `write-log.json` |
 | **Client loggers** | Power Fx functions, Power Pages script, model-driven web resource, C# logger | `src/canvas`, `src/pages`, `src/webresources`, `src/plugins` |
-| **Admin app** | Canvas app to set the target, provision SharePoint, manage settings and read logs | `src/canvas/admin-app` |
+| **Admin app** | Canvas app to set the target, provision SharePoint, manage settings and read logs | `src/canvas/configuration-app` |
 | **Deployer** | Builds everything above in an environment from the schema | `tools/deployer`, `dist/pplf-deployer.browser.js` |
 
 ## Two ways for canvas apps to log

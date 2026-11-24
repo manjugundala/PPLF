@@ -114,3 +114,14 @@ test('SharePoint field XML is well formed', () => {
     assert.ok(xml.endsWith('/>') || xml.endsWith('</Field>'), xml);
   }
 });
+
+test('no SetVariable reads the variable it sets (Power Automate rejects self reference)', () => {
+  for (const f of flows) {
+    for (const [path, map] of actionMaps(f.clientdata.properties.definition.actions)) {
+      for (const [name, a] of Object.entries(map)) {
+        if (a.type !== 'SetVariable') continue;
+        assert.ok(!JSON.stringify(a.inputs.value).includes(`variables('${a.inputs.name}')`), `${f.name} ${path}/${name} sets ${a.inputs.name} from itself`);
+      }
+    }
+  }
+});

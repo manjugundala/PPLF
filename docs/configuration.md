@@ -15,7 +15,7 @@ PPLF has two layers of settings. **Environment variables** apply to the whole en
 | `pplf_SharePointLogList` | *(empty)* | Data source variable: the `PPLF Logs` list id. |
 | `pplf_SharePointConfigList` | *(empty)* | Data source variable: the `PPLF Log Config` list id. |
 
-Change them in **PPLF Configuration App → Settings / Setup**, in **Solutions → Default solution → Environment variables**, or when importing into a new environment (use a [deployment settings file](https://learn.microsoft.com/power-platform/alm/conn-ref-env-variables-build-tools) in pipelines).
+Change them in **PPLF - Configuration App → Settings / Setup**, in **Solutions → Default solution → Environment variables**, or when importing into a new environment (use a [deployment settings file](https://learn.microsoft.com/power-platform/alm/conn-ref-env-variables-build-tools) in pipelines).
 
 !!! info "When do changes apply?"
     Cloud flows read environment variable values when a run starts, but the platform caches them for a short time. Expect a few minutes before every run uses a new value. Canvas apps in Direct mode are not affected by `pplf_LogTarget`, because they write to the data source they were built with.

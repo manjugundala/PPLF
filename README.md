@@ -29,7 +29,7 @@ PPLF gives every Power Platform component **the same log entry**, **the same lev
 - **Configuration as data**: minimum level, on/off and retention per app or flow, with a `*` default row. No redeploy to turn on Debug for one app.
 - **Correlation ids** across app → flow → plug-in, run links, durations, error codes and automatic capture of unhandled errors (`App.OnError`, `window.onerror`).
 - **Alerts** by email for entries at or above a level, and **retention** cleanup every day.
-- **PPLF Configuration App**: a modern Fluent canvas app to choose the target, create SharePoint lists, manage settings and read logs.
+- **PPLF - Configuration App**: a modern Fluent canvas app to choose the target, create SharePoint lists, manage settings and read logs.
 - **Built for Git**: schema-as-code, generated flows, unit tests, CI, an export-to-pull-request workflow and tagged releases with managed and unmanaged solutions.
 
 ## How it works
@@ -58,7 +58,7 @@ Details, sequence diagrams and the data model: **[docs/architecture.md](docs/arc
 1. **Install**: import the managed solution from [Releases](https://github.com/manjugundala/power-platform-logging-framework/releases), or build it from source in your browser:
    open your environment, paste [`dist/pplf-deployer.browser.js`](dist/pplf-deployer.browser.js) into the dev tools console, run `await PplfDeployer.deploy()`.
 2. **Connect**: set the three connection references and turn on the flows.
-3. **Choose a target**: PPLF Configuration App → Setup → Dataverse, SharePoint or Both.
+3. **Choose a target**: PPLF - Configuration App → Setup → Dataverse, SharePoint or Both.
 4. **Log**: paste a snippet into your app's `App.Formulas`, and call it.
 
 ```powerfx
@@ -93,7 +93,7 @@ Schema: [docs/reference/schema.md](docs/reference/schema.md) · Wire format: [sc
 |---|---|
 | [`schema/`](schema) | The single source of truth for tables, lists, choices, environment variables and roles |
 | [`src/flows/`](src/flows) | Ten cloud flows (generated from the schema) |
-| [`src/canvas/`](src/canvas) | PPLF Configuration App app source and the Power Fx loggers |
+| [`src/canvas/`](src/canvas) | PPLF - Configuration App source and the Power Fx loggers |
 | [`src/pages/`](src/pages), [`src/webresources/`](src/webresources), [`src/plugins/`](src/plugins) | Power Pages, model-driven and plug-in loggers |
 | [`src/solution/`](src/solution) | The exported, unpacked solution |
 | [`tools/`](tools) | Generators, deployer and SharePoint provisioning |

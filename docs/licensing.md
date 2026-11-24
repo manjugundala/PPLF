@@ -23,7 +23,7 @@
 | Power Pages (flow transport) | Router chain | Power Pages capacity, plus a Power Automate licence for the flow ([Power Pages docs](https://learn.microsoft.com/power-pages/configure/cloud-flow-integration)) |
 | Model-driven apps, plug-ins | Dataverse | Already premium |
 | Retention, forwarder flows | Dataverse and SharePoint, scheduled/automated | The flow owner (a service account) needs premium |
-| PPLF Configuration App app | Dataverse | Premium, admins only |
+| PPLF - Configuration App | Dataverse | Premium, admins only |
 
 ## The standard-licence path, in one line
 

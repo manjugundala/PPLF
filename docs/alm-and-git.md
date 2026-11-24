@@ -12,7 +12,7 @@ src/
   flows/                   GENERATED cloud flow definitions (from tools/build/flows.mjs)
   sharepoint/lists.json    GENERATED SharePoint list and field definitions
   canvas/
-    admin-app/Src/         PPLF Configuration App source (*.pa.yaml)
+    configuration-app/Src/         PPLF - Configuration App source (*.pa.yaml)
     snippets/              Power Fx loggers to paste into App.Formulas / App.OnError
   pages/                   Power Pages logger
   webresources/pplf_/      model-driven web resource

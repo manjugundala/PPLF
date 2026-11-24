@@ -544,12 +544,13 @@ function provisionSharePoint(schema) {
   return flow({
     schema,
     name: 'PPLF | Setup | Provision SharePoint',
-    description: 'Called by the PPLF Configuration App app setup wizard. Creates the PPLF Logs and PPLF Log Config lists, their columns and indexes on the given site, and adds the default * config row. Safe to run again.',
+    description: 'Called by the PPLF - Configuration App setup wizard. Creates the PPLF Logs and PPLF Log Config lists, their columns and indexes on the given site, and adds the default * config row. Safe to run again.',
     apis: [SP],
     triggers: powerAppsTrigger(input),
     actions: {
       List_definitions: { type: 'Compose', inputs: spListDefinitions(schema), runAfter: {} },
-      List_ids: { type: 'InitializeVariable', inputs: { variables: [{ name: 'ListIds', type: 'object', value: {} }] }, runAfter: { List_definitions: ['Succeeded'] } },
+      Log_list_id: { type: 'InitializeVariable', inputs: { variables: [{ name: 'LogListId', type: 'string', value: '' }] }, runAfter: { List_definitions: ['Succeeded'] } },
+      Config_list_id: { type: 'InitializeVariable', inputs: { variables: [{ name: 'ConfigListId', type: 'string', value: '' }] }, runAfter: { Log_list_id: ['Succeeded'] } },
       For_each_list: {
         type: 'Foreach',
         foreach: "@outputs('List_definitions')",
@@ -592,20 +593,26 @@ function provisionSharePoint(schema) {
             runAfter: { List_id: ['Succeeded'] }
           },
           Index_Created: spHttp('POST', "_api/web/lists(guid'@{outputs('List_id')}')/fields/getbyinternalnameortitle('Created')", { Indexed: true }, { For_each_field: ['Succeeded'] }, { ...json, 'X-HTTP-Method': 'MERGE', 'IF-MATCH': '*' }),
+          // A variable can't be set from its own value, so keep one string variable per list.
           Remember_list_id: {
-            type: 'SetVariable',
-            inputs: { name: 'ListIds', value: `@setProperty(variables('ListIds'), ${L('key')}, outputs('List_id'))` },
+            type: 'Switch',
+            expression: `@${L('key')}`,
+            cases: {
+              Log: { case: 'pplf_log', actions: { Set_log_list_id: { type: 'SetVariable', inputs: { name: 'LogListId', value: "@{outputs('List_id')}" }, runAfter: {} } } },
+              Config: { case: 'pplf_logconfig', actions: { Set_config_list_id: { type: 'SetVariable', inputs: { name: 'ConfigListId', value: "@{outputs('List_id')}" }, runAfter: {} } } }
+            },
+            default: { actions: {} },
             runAfter: { Index_Created: ['Succeeded', 'Failed'] }
           }
         },
-        runAfter: { List_ids: ['Succeeded'] }
+        runAfter: { Config_list_id: ['Succeeded'] }
       },
-      Find_default_config: spHttp('GET', "_api/web/lists(guid'@{variables('ListIds')?['pplf_logconfig']}')/items?$select=Id&$filter=Title eq '*'", undefined, { For_each_list: ['Succeeded'] }),
+      Find_default_config: spHttp('GET', "_api/web/lists(guid'@{variables('ConfigListId')}')/items?$select=Id&$filter=Title eq '*'", undefined, { For_each_list: ['Succeeded'] }),
       Seed_default_config: {
         type: 'If',
         expression: { equals: ["@length(body('Find_default_config')?['value'])", 0] },
         actions: {
-          Add_default_config: spHttp('POST', "_api/web/lists(guid'@{variables('ListIds')?['pplf_logconfig']}')/items", {
+          Add_default_config: spHttp('POST', "_api/web/lists(guid'@{variables('ConfigListId')}')/items", {
             Title: '*', PplfMinimumLevel: 'Information', PplfMinimumSeverity: 2, PplfEnabled: true, PplfRetentionDays: 30,
             PplfNotes: 'Default settings for every source without its own row.'
           })
@@ -615,8 +622,8 @@ function provisionSharePoint(schema) {
       },
       Respond: respond({
         siteUrl: "@{triggerBody()?['text']}",
-        logListId: "@{variables('ListIds')?['pplf_log']}",
-        configListId: "@{variables('ListIds')?['pplf_logconfig']}"
+        logListId: "@{variables('LogListId')}",
+        configListId: "@{variables('ConfigListId')}"
       }, { Seed_default_config: ['Succeeded'] })
     }
   });
