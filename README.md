@@ -1,5 +1,7 @@
 <div align="center">
 
+<p align="center"><img src="brand/logging-icon-128.png" width="96" alt="PPLF logo"></p>
+
 # Power Platform Logging Framework
 
 **One logging framework for Power Apps, Power Automate, Power Pages, model-driven apps and Dataverse plug-ins.<br/>Store logs in Dataverse or SharePoint, and switch with one setting.**

@@ -27,21 +27,26 @@ PplfTarget = PplfEnv("pplf_LogTarget");
 
 // ---- Levels ------------------------------------------------------------
 PplfLevels = Table(
-    { Name: "Trace",       Severity: 0, Color: ColorValue("#8A8886") },
-    { Name: "Debug",       Severity: 1, Color: ColorValue("#605E5C") },
-    { Name: "Information", Severity: 2, Color: ColorValue("#002868") },
-    { Name: "Warning",     Severity: 3, Color: ColorValue("#BC4B09") },
-    { Name: "Error",       Severity: 4, Color: ColorValue("#C50F1F") },
-    { Name: "Critical",    Severity: 5, Color: ColorValue("#750B1C") });
-PplfLevelColor(Sev: Number): Color = Coalesce(LookUp(PplfLevels, Severity = Sev).Color, Color.Gray);
+    { Name: "Trace",       Severity: 0 },
+    { Name: "Debug",       Severity: 1 },
+    { Name: "Information", Severity: 2 },
+    { Name: "Warning",     Severity: 3 },
+    { Name: "Error",       Severity: 4 },
+    { Name: "Critical",    Severity: 5 });
+// Level colors follow the PPMF BrandTheme palette. Kept as a function, not a
+// table of colors, because color records in named formulas can render blank
+// in the published player (see PPMF power-apps/theme/README.md).
+PplfLevelColor(Sev: Number): Color =
+    Switch(Sev,
+        5, RGBA(154, 10, 50, 1),    // Critical  #9A0A32 (BrandTheme.AccentDark)
+        4, RGBA(191, 13, 62, 1),    // Error     #BF0D3E (BrandTheme.Error)
+        3, RGBA(138, 90, 0, 1),     // Warning   #8A5A00 (BrandTheme.Warning)
+        2, RGBA(0, 40, 104, 1),     // Information #002868 (BrandTheme.Primary)
+        RGBA(100, 100, 100, 1));    // Trace/Debug #646464 (BrandTheme.TextSecondary)
 
-// ---- Layout tokens -----------------------------------------------------
+// ---- Layout ------------------------------------------------------------
+// Colors live in the BrandTheme global set in App.OnStart (shared with PPMF).
 PplfGap = 16;
-PplfSurface = ColorValue("#FAFAFA");
-PplfCard = Color.White;
-PplfMuted = ColorValue("#616161");
-PplfBrand = ColorValue("#002868");   // Texas flag navy
-PplfAccent = ColorValue("#BF0A30");  // Texas flag red
 
 // ---- Self-logging (the admin app logs its own actions) -----------------
 PplfSourceName = "PPLF - Configuration App";

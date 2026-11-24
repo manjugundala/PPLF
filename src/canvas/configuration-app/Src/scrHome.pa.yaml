@@ -1,7 +1,7 @@
 Screens:
   scrHome:
     Properties:
-      Fill: =PplfSurface
+      Fill: =BrandTheme.Background
       OnVisible: =Refresh('PPLF | Logs')
     Children:
       - conHomeRoot:
@@ -13,12 +13,43 @@ Screens:
             LayoutDirection: =LayoutDirection.Vertical
             DropShadow: =DropShadow.None
           Children:
-            - hdrHome:
-                Control: Header@0.0.44
+            - conHdrHome:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
                 Properties:
-                  Title: ="Power Platform Logging Framework"
+                  LayoutDirection: =LayoutDirection.Vertical
                   Width: =Parent.Width
-                  LogoTooltip: ="PPLF - Configuration App"
+                  Height: =76
+                  FillPortions: =0
+                  Fill: =BrandTheme.Primary
+                  PaddingLeft: =24
+                  PaddingTop: =12
+                  LayoutGap: =2
+                  DropShadow: =DropShadow.None
+                Children:
+                  - lblHdrTitleHome:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="Power Platform Logging | Configuration"
+                        FontColor: =BrandTheme.TextOnPrimary
+                        Size: =20
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Height: =32
+                        Width: =Parent.Width - 48
+                  - lblHdrSubHome:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="Settings and logs for administrators. Changes apply to every PPLF app, flow and page."
+                        FontColor: =BrandTheme.TextOnPrimary
+                        Size: =12
+                        Height: =22
+                        Width: =Parent.Width - 48
+            - recHdrLineHome:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =BrandTheme.Accent
+                  Width: =Parent.Width
+                  Height: =4
             - conHomeNav:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
@@ -34,7 +65,7 @@ Screens:
                   - btnNavHome:
                       Control: Button@0.0.45
                       Properties:
-                        BasePaletteColor: =PplfBrand
+                        BasePaletteColor: =BrandTheme.Primary
                         Text: ="Overview"
                         Appearance: ='ButtonCanvas.Appearance'.Primary
                         Icon: ="Home"
@@ -42,7 +73,7 @@ Screens:
                   - btnNavLogs:
                       Control: Button@0.0.45
                       Properties:
-                        BasePaletteColor: =PplfBrand
+                        BasePaletteColor: =BrandTheme.Primary
                         Text: ="Logs"
                         Appearance: ='ButtonCanvas.Appearance'.Secondary
                         Icon: ="TextBulletListLtr"
@@ -51,7 +82,7 @@ Screens:
                   - btnNavSettings:
                       Control: Button@0.0.45
                       Properties:
-                        BasePaletteColor: =PplfBrand
+                        BasePaletteColor: =BrandTheme.Primary
                         Text: ="Settings"
                         Appearance: ='ButtonCanvas.Appearance'.Secondary
                         Icon: ="Settings"
@@ -60,7 +91,7 @@ Screens:
                   - btnNavSetup:
                       Control: Button@0.0.45
                       Properties:
-                        BasePaletteColor: =PplfBrand
+                        BasePaletteColor: =BrandTheme.Primary
                         Text: ="Setup"
                         Appearance: ='ButtonCanvas.Appearance'.Secondary
                         Icon: ="Wrench"
@@ -84,7 +115,7 @@ Screens:
                         Text: ="Logs are stored in " & PplfTarget & ". Counts below cover the last 24 hours" & If(PplfTarget = "SharePoint", " of entries in Dataverse only - open the SharePoint list to see SharePoint entries.", ".")
                         Width: =Parent.Width - 2 * PplfGap
                         Height: =32
-                        FontColor: =PplfMuted
+                        FontColor: =BrandTheme.TextSecondary
                   - conKpis:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -116,8 +147,8 @@ Screens:
                               - recKpiCard:
                                   Control: Rectangle@2.3.0
                                   Properties:
-                                    Fill: =PplfCard
-                                    BorderColor: =ColorValue("#E0E0E0")
+                                    Fill: =BrandTheme.Surface
+                                    BorderColor: =BrandTheme.Border
                                     BorderThickness: =1
                                     Width: =Parent.TemplateWidth - PplfGap
                                     Height: =Parent.TemplateHeight
@@ -136,18 +167,18 @@ Screens:
                                     Size: =32
                                     Weight: ='TextCanvas.Weight'.Semibold
                                     X: =20
-                                    Y: =16
+                                    Y: =40
                                     Width: =Parent.TemplateWidth - 40
-                                    Height: =48
+                                    Height: =56
                               - lblKpiLabel:
                                   Control: Text@0.0.51
                                   Properties:
                                     Text: =ThisItem.Label
-                                    FontColor: =PplfMuted
+                                    FontColor: =BrandTheme.TextSecondary
                                     X: =20
-                                    Y: =64
+                                    Y: =10
                                     Width: =Parent.TemplateWidth - 40
-                                    Height: =28
+                                    Height: =24
                   - lblRecentTitle:
                       Control: Text@0.0.51
                       Properties:
@@ -163,8 +194,8 @@ Screens:
                         Items: =FirstN(SortByColumns(Filter('PPLF | Logs', Severity >= 4), "createdon", SortOrder.Descending), 50)
                         TemplateSize: =72
                         Width: =Parent.Width - 2 * PplfGap
-                        Fill: =PplfCard
-                        BorderColor: =ColorValue("#E0E0E0")
+                        Fill: =BrandTheme.Surface
+                        BorderColor: =BrandTheme.Border
                         BorderThickness: =1
                         OnSelect: =Set(gblSelectedLog, ThisItem); Navigate(scrLogs, ScreenTransition.None)
                       Children:
@@ -181,7 +212,7 @@ Screens:
                             Control: Text@0.0.51
                             Properties:
                               Text: =ThisItem.Title
-                              FontColor: =PplfMuted
+                              FontColor: =BrandTheme.TextSecondary
                               X: =16
                               Y: =36
                               Width: =Parent.TemplateWidth - 240
@@ -197,7 +228,7 @@ Screens:
                             Control: Text@0.0.51
                             Properties:
                               Text: =Text(ThisItem.'Created On', DateTimeFormat.ShortDateTime)
-                              FontColor: =PplfMuted
+                              FontColor: =BrandTheme.TextSecondary
                               Align: ='TextCanvas.Align'.End
                               X: =Parent.TemplateWidth - 210
                               Y: =40

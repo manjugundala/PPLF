@@ -24,3 +24,9 @@ for scr in ['scrHome', 'scrLogs', 'scrSettings', 'scrSetup']:
     assert isinstance(yaml.safe_load(content), list)
     open(f'{OUT}/{scr}.controls.yaml', 'w', encoding='utf-8').write(content)
     print(f'{scr}: {len(content)} chars')
+
+# App properties: one .fx file per property, without the leading "=".
+app = yaml.safe_load(open(f'{SRC}/App.pa.yaml', encoding='utf-8'))['App']['Properties']
+for prop in ['Formulas', 'OnStart', 'OnError', 'StartScreen']:
+    open(f'{OUT}/App.{prop}.fx', 'w', encoding='utf-8').write(str(app[prop]).lstrip()[1:].rstrip() + '\n')
+    print(f'App.{prop}: written')

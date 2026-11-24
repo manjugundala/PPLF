@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Logging icon">
+  <title>Power Platform Logging</title>
+  <defs>
+    <clipPath id="tile"><rect width="512" height="512" rx="112"/></clipPath>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A3A8C"/><stop offset="1" stop-color="#002868"/>
+    </linearGradient>
+  </defs>
+  <g clip-path="url(#tile)">
+    <rect width="512" height="512" fill="url(#bg)"/>
+    <!-- red stripe (Texas flag), same as the PPMF monitoring icon -->
+    <rect x="0" y="448" width="512" height="64" fill="#BF0D3E"/>
+    <rect x="0" y="440" width="512" height="8" fill="#FFFFFF"/>
+  </g>
+  <!-- Texas star -->
+  <polygon points="104.0,64.0 113.0,91.6 142.0,91.6 118.5,108.7 127.5,136.4 104.0,119.3 80.5,136.4 89.5,108.7 66.0,91.6 95.0,91.6" fill="#FFFFFF"/>
+  <!-- log entries: level marker + message line -->
+  <g stroke-linecap="round">
+    <circle cx="112" cy="196" r="17" fill="#FFFFFF" fill-opacity="0.55"/>
+    <line x1="164" y1="196" x2="440" y2="196" stroke="#FFFFFF" stroke-opacity="0.55" stroke-width="26"/>
+    <circle cx="112" cy="276" r="17" fill="#FFFFFF"/>
+    <line x1="164" y1="276" x2="376" y2="276" stroke="#FFFFFF" stroke-width="26"/>
+    <circle cx="112" cy="356" r="26" fill="#BF0D3E" stroke="#FFFFFF" stroke-width="10"/>
+    <line x1="164" y1="356" x2="412" y2="356" stroke="#FFFFFF" stroke-width="26"/>
+  </g>
+</svg>

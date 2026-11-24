@@ -1,7 +1,7 @@
 Screens:
   scrLogs:
     Properties:
-      Fill: =PplfSurface
+      Fill: =BrandTheme.Background
     Children:
       - conLogsRoot:
           Control: GroupContainer@1.5.0
@@ -12,11 +12,43 @@ Screens:
             LayoutDirection: =LayoutDirection.Vertical
             DropShadow: =DropShadow.None
           Children:
-            - hdrLogs:
-                Control: Header@0.0.44
+            - conHdrLogs:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
                 Properties:
-                  Title: ="Logs"
+                  LayoutDirection: =LayoutDirection.Vertical
                   Width: =Parent.Width
+                  Height: =76
+                  FillPortions: =0
+                  Fill: =BrandTheme.Primary
+                  PaddingLeft: =24
+                  PaddingTop: =12
+                  LayoutGap: =2
+                  DropShadow: =DropShadow.None
+                Children:
+                  - lblHdrTitleLogs:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="Power Platform Logging | Logs"
+                        FontColor: =BrandTheme.TextOnPrimary
+                        Size: =20
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Height: =32
+                        Width: =Parent.Width - 48
+                  - lblHdrSubLogs:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="Search and trace log entries from apps, flows and pages."
+                        FontColor: =BrandTheme.TextOnPrimary
+                        Size: =12
+                        Height: =22
+                        Width: =Parent.Width - 48
+            - recHdrLineLogs:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =BrandTheme.Accent
+                  Width: =Parent.Width
+                  Height: =4
             - conLogsNav:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
@@ -32,7 +64,7 @@ Screens:
                   - btnLogsBack:
                       Control: Button@0.0.45
                       Properties:
-                        BasePaletteColor: =PplfBrand
+                        BasePaletteColor: =BrandTheme.Primary
                         Text: ="Overview"
                         Appearance: ='ButtonCanvas.Appearance'.Subtle
                         Icon: ="ArrowLeft"
@@ -41,7 +73,7 @@ Screens:
                   - btnOpenSharePoint:
                       Control: Button@0.0.45
                       Properties:
-                        BasePaletteColor: =PplfBrand
+                        BasePaletteColor: =BrandTheme.Primary
                         Text: ="Open SharePoint list"
                         Appearance: ='ButtonCanvas.Appearance'.Secondary
                         Icon: ="Open"
@@ -51,7 +83,7 @@ Screens:
                   - btnRefreshLogs:
                       Control: Button@0.0.45
                       Properties:
-                        BasePaletteColor: =PplfBrand
+                        BasePaletteColor: =BrandTheme.Primary
                         Text: ="Refresh"
                         Appearance: ='ButtonCanvas.Appearance'.Secondary
                         Icon: ="ArrowClockwise"
@@ -74,9 +106,9 @@ Screens:
                       Control: DropDown@0.0.45
                       Properties:
                         Items: |-
-                          =Table({Name: "All levels", Severity: -1}, ForAll(PplfLevels, {Name: "≥ " & Name, Severity: Severity}))
+                          =Table({Value: "All levels"}, ForAll(PplfLevels, {Value: "≥ " & Name}))
                         DefaultSelectedItems: |-
-                          =If(IsBlank(gblLogLevelFilter), Table({Name: "All levels", Severity: -1}), Filter(ForAll(PplfLevels, {Name: "≥ " & Name, Severity: Severity}), Severity = gblLogLevelFilter))
+                          =[If(IsBlank(gblLogLevelFilter), "All levels", "≥ " & LookUp(PplfLevels, Severity = gblLogLevelFilter).Name)]
                         Width: =200
                         AccessibleLabel: ="Minimum level"
                   - txtSource:
@@ -123,7 +155,7 @@ Screens:
                           =SortByColumns(
                               Filter('PPLF | Logs',
                                   'Created On' >= dpSince.SelectedDate,
-                                  Severity >= Coalesce(ddLevel.Selected.Severity, -1),
+                                  Severity >= Coalesce(LookUp(PplfLevels, "≥ " & Name = ddLevel.Selected.Value).Severity, -1),
                                   IsBlank(txtSource.Value) || StartsWith('Source Name', txtSource.Value),
                                   IsBlank(txtCorrelation.Value) || 'Correlation Id' = txtCorrelation.Value,
                                   IsBlank(txtSearch.Value) || StartsWith(Title, txtSearch.Value)
@@ -131,11 +163,11 @@ Screens:
                               "createdon", SortOrder.Descending)
                         TemplateSize: =64
                         FillPortions: =3
-                        Fill: =PplfCard
-                        BorderColor: =ColorValue("#E0E0E0")
+                        Fill: =BrandTheme.Surface
+                        BorderColor: =BrandTheme.Border
                         BorderThickness: =1
                         OnSelect: =Set(gblSelectedLog, ThisItem)
-                        TemplateFill: =If(ThisItem.'PPLF Log' = gblSelectedLog.'PPLF Log', ColorValue("#E6EAF2"), Color.Transparent)
+                        TemplateFill: =If(ThisItem.'PPLF Log' = gblSelectedLog.'PPLF Log', BrandTheme.PrimaryLight, Color.Transparent)
                       Children:
                         - recLogLevel:
                             Control: Rectangle@2.3.0
@@ -158,7 +190,7 @@ Screens:
                             Control: Text@0.0.51
                             Properties:
                               Text: =Text(ThisItem.Level) & "  ·  " & ThisItem.'Source Name' & If(IsBlank(ThisItem.Component), "", "  ·  " & ThisItem.Component)
-                              FontColor: =PplfMuted
+                              FontColor: =BrandTheme.TextSecondary
                               Size: =12
                               X: =16
                               Y: =34
@@ -168,7 +200,7 @@ Screens:
                             Control: Text@0.0.51
                             Properties:
                               Text: =Text(ThisItem.'Created On', DateTimeFormat.ShortDateTime24)
-                              FontColor: =PplfMuted
+                              FontColor: =BrandTheme.TextSecondary
                               Size: =12
                               Align: ='TextCanvas.Align'.End
                               X: =Parent.TemplateWidth - 180
@@ -181,8 +213,8 @@ Screens:
                       Properties:
                         LayoutDirection: =LayoutDirection.Vertical
                         FillPortions: =2
-                        Fill: =PplfCard
-                        BorderColor: =ColorValue("#E0E0E0")
+                        Fill: =BrandTheme.Surface
+                        BorderColor: =BrandTheme.Border
                         BorderThickness: =1
                         PaddingLeft: =PplfGap
                         PaddingRight: =PplfGap
@@ -219,7 +251,7 @@ Screens:
                         - btnTraceCorrelation:
                             Control: Button@0.0.45
                             Properties:
-                              BasePaletteColor: =PplfBrand
+                              BasePaletteColor: =BrandTheme.Primary
                               Text: ="Show everything with this correlation id"
                               Appearance: ='ButtonCanvas.Appearance'.Secondary
                               Icon: ="BranchFork"
@@ -229,7 +261,7 @@ Screens:
                         - btnOpenRun:
                             Control: Button@0.0.45
                             Properties:
-                              BasePaletteColor: =PplfBrand
+                              BasePaletteColor: =BrandTheme.Primary
                               Text: ="Open flow run"
                               Appearance: ='ButtonCanvas.Appearance'.Secondary
                               Icon: ="Open"
