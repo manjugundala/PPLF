@@ -57,7 +57,7 @@ PplfInfo("scrSubmit", "Submitting expense");
 SubmitExpenseFlow.Run(ThisItem.ID, gblPplfCorrelationId)
 ```
 
-In the flow, pass the correlation id to **PPLF | Logger | Write Log** (`CorrelationId` input). In **PPLF Configuration App → Logs**, select any entry and **Show everything with this correlation id**.
+In the flow, pass the correlation id to **PPLF | Logger | Write Log** (`CorrelationId` input). In **PPLF - Configuration App → Logs**, select any entry and **Show everything with this correlation id**.
 
 ### Time something slow
 

@@ -18,7 +18,7 @@ Screens:
                 Properties:
                   Title: ="Power Platform Logging Framework"
                   Width: =Parent.Width
-                  LogoTooltip: ="PPLF Configuration App"
+                  LogoTooltip: ="PPLF - Configuration App"
             - conHomeNav:
                 Control: GroupContainer@1.3.0
                 Variant: AutoLayout

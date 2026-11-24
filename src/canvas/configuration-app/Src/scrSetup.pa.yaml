@@ -221,7 +221,7 @@ Screens:
                                     Set(gblTestResult, 'PPLF|Ingest|PowerApps'.Run(JSON(Table({
                                         level: "Information",
                                         message: "PPLF setup test from " & User().FullName,
-                                        sourceName: "PPLF Configuration App",
+                                        sourceName: "PPLF - Configuration App",
                                         sourceType: "Canvas App",
                                         component: "scrSetup",
                                         operation: "SendTestEntry",
