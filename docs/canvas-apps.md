@@ -6,9 +6,9 @@ Canvas logging is a block of [user-defined functions](https://learn.microsoft.co
 
 | File | Writes to | Data sources to add | Licence |
 |---|---|---|---|
-| [`PplfLogger.Dataverse.fx`](https://github.com/manjugundala/power-platform-logging-framework/blob/main/src/canvas/snippets/PplfLogger.Dataverse.fx) | Dataverse, directly | `PPLF Logs`, `PPLF Log Configurations` | Premium |
-| [`PplfLogger.SharePoint.fx`](https://github.com/manjugundala/power-platform-logging-framework/blob/main/src/canvas/snippets/PplfLogger.SharePoint.fx) | SharePoint, directly | `PPLF Logs`, `PPLF Log Config` lists | Standard |
-| [`PplfLogger.Router.fx`](https://github.com/manjugundala/power-platform-logging-framework/blob/main/src/canvas/snippets/PplfLogger.Router.fx) | Wherever `pplf_LogTarget` says, through a flow | Flow `PPLF | Ingest | Power Apps` | Standard |
+| [`PplfLogger.Dataverse.fx`](https://github.com/manjugundala/PPLF/blob/main/src/canvas/snippets/PplfLogger.Dataverse.fx) | Dataverse, directly | `PPLF Logs`, `PPLF Log Configurations` | Premium |
+| [`PplfLogger.SharePoint.fx`](https://github.com/manjugundala/PPLF/blob/main/src/canvas/snippets/PplfLogger.SharePoint.fx) | SharePoint, directly | `PPLF Logs`, `PPLF Log Config` lists | Standard |
+| [`PplfLogger.Router.fx`](https://github.com/manjugundala/PPLF/blob/main/src/canvas/snippets/PplfLogger.Router.fx) | Wherever `pplf_LogTarget` says, through a flow | Flow `PPLF | Ingest | Power Apps` | Standard |
 
 All three expose the same functions, so you can switch variants without touching the rest of the app. [Architecture](architecture.md#two-ways-for-canvas-apps-to-log) compares them.
 
@@ -16,7 +16,7 @@ All three expose the same functions, so you can switch variants without touching
 
 1. **App → Formulas**: paste the variant. Set `PplfSourceName` (must match the configuration row, if you add one) and `PplfAppVersion`.
 2. Add the data sources or the flow named in the table above.
-3. **App → OnError**: paste [`App.OnError.fx`](https://github.com/manjugundala/power-platform-logging-framework/blob/main/src/canvas/snippets/App.OnError.fx). Every unhandled error is now logged and still shown to the user.
+3. **App → OnError**: paste [`App.OnError.fx`](https://github.com/manjugundala/PPLF/blob/main/src/canvas/snippets/App.OnError.fx). Every unhandled error is now logged and still shown to the user.
 4. Router variant only: in each screen's **OnHidden**, add `PplfFlush()`.
 
 ## Functions
