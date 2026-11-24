@@ -16,7 +16,7 @@ Pick one of the three ways.
 
 === "Import a release (recommended)"
 
-    1. Download `PowerPlatformLoggingFramework_managed.zip` from the latest [release](https://github.com/OWNER/power-platform-logging-framework/releases).
+    1. Download `PowerPlatformLoggingFramework_managed.zip` from the latest [release](https://github.com/manjugundala/power-platform-logging-framework/releases).
     2. Go to [make.powerapps.com](https://make.powerapps.com) → your environment → **Solutions** → **Import solution**.
     3. When asked for connections, create or pick a **Dataverse**, **SharePoint** and **Office 365 Outlook** connection.
     4. When asked for environment variables, keep the defaults. You can leave the SharePoint ones empty for now.
@@ -30,7 +30,7 @@ Pick one of the three ways.
 
     1. Open your environment, e.g. `https://yourorg.crm.dynamics.com/main.aspx`, and sign in.
     2. Open the browser developer tools (F12) → **Console**.
-    3. Paste the contents of [`dist/pplf-deployer.browser.js`](https://github.com/OWNER/power-platform-logging-framework/blob/main/dist/pplf-deployer.browser.js) and press Enter.
+    3. Paste the contents of [`dist/pplf-deployer.browser.js`](https://github.com/manjugundala/power-platform-logging-framework/blob/main/dist/pplf-deployer.browser.js) and press Enter.
     4. Run `await PplfDeployer.deploy()`. It prints every component it creates; running it again only adds what is missing.
     5. In **Solutions → Power Platform Logging Framework → Connection references**, set a connection on each of the three references.
     6. Run `await PplfDeployer.activate()` to turn on the flows.
@@ -38,7 +38,7 @@ Pick one of the three ways.
 === "Node CLI"
 
     ```bash
-    git clone https://github.com/OWNER/power-platform-logging-framework.git
+    git clone https://github.com/manjugundala/power-platform-logging-framework.git
     cd power-platform-logging-framework
     export PPLF_TOKEN=$(az account get-access-token --resource https://yourorg.crm.dynamics.com --query accessToken -o tsv)
     node tools/deployer/cli.mjs deploy --env https://yourorg.crm.dynamics.com
@@ -78,9 +78,9 @@ Without the admin app you can do the same from the console with `await PplfDeplo
 ## Step 4 - Log from your first app
 
 1. Open a canvas app in Studio, go to **App** → **Formulas**.
-2. Paste [`PplfLogger.Dataverse.fx`](https://github.com/OWNER/power-platform-logging-framework/blob/main/src/canvas/snippets/PplfLogger.Dataverse.fx) (or the SharePoint or Router variant) and change `PplfSourceName`.
+2. Paste [`PplfLogger.Dataverse.fx`](https://github.com/manjugundala/power-platform-logging-framework/blob/main/src/canvas/snippets/PplfLogger.Dataverse.fx) (or the SharePoint or Router variant) and change `PplfSourceName`.
 3. Add the data sources the snippet names.
-4. Paste [`App.OnError.fx`](https://github.com/OWNER/power-platform-logging-framework/blob/main/src/canvas/snippets/App.OnError.fx) into **App** → **OnError**.
+4. Paste [`App.OnError.fx`](https://github.com/manjugundala/power-platform-logging-framework/blob/main/src/canvas/snippets/App.OnError.fx) into **App** → **OnError**.
 5. Call it anywhere:
 
 ```powerfx

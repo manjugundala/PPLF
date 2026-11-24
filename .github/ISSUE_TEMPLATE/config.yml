@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
   - name: Questions and ideas
-    url: https://github.com/OWNER/power-platform-logging-framework/discussions
+    url: https://github.com/manjugundala/power-platform-logging-framework/discussions
     about: Ask how to use PPLF or share how you use it.
