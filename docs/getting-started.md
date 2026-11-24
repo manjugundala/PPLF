@@ -39,7 +39,7 @@ Pick one of the three ways.
 
     ```bash
     git clone https://github.com/manjugundala/PPLF.git
-    cd power-platform-logging-framework
+    cd PPLF
     export PPLF_TOKEN=$(az account get-access-token --resource https://yourorg.crm.dynamics.com --query accessToken -o tsv)
     node tools/deployer/cli.mjs deploy --env https://yourorg.crm.dynamics.com
     # bind connection references in the maker portal, then:

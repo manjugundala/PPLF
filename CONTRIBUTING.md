@@ -12,7 +12,7 @@ Thanks for helping. Bug reports, docs fixes, new clients and new targets are all
 
 ```bash
 git clone https://github.com/manjugundala/PPLF.git
-cd power-platform-logging-framework
+cd PPLF
 npm test
 ```
 
