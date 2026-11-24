@@ -35,6 +35,11 @@ jobs:
       - name: Canvas source (pa.yaml) lint
         run: npm run lint:yaml
 
+      - name: Studio paste files are up to date
+        run: |
+          npm run build:paste
+          git diff --exit-code -- src/canvas/configuration-app/paste
+
       - name: JavaScript syntax
         run: |
           node --check src/pages/pplf-pages-logger.js

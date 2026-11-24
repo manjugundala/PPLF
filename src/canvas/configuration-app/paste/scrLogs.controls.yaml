@@ -1,0 +1,250 @@
+# Studio paste file for scrLogs. Select the screen scrLogs in Tree view and press Ctrl+V.
+# Then set these screen properties in the formula bar:
+#   Fill:
+#     =PplfSurface
+- conLogsRoot:
+    Control: GroupContainer@1.3.0
+    Variant: AutoLayout
+    Properties:
+      Width: =Parent.Width
+      Height: =Parent.Height
+      LayoutDirection: =LayoutDirection.Vertical
+      DropShadow: =DropShadow.None
+    Children:
+      - hdrLogs:
+          Control: Header@0.0.44
+          Properties:
+            Title: ="Logs"
+            Width: =Parent.Width
+      - conLogsNav:
+          Control: GroupContainer@1.3.0
+          Variant: AutoLayout
+          Properties:
+            LayoutDirection: =LayoutDirection.Horizontal
+            Height: =56
+            FillPortions: =0
+            PaddingLeft: =PplfGap
+            PaddingTop: =8
+            LayoutGap: =8
+            DropShadow: =DropShadow.None
+          Children:
+            - btnLogsBack:
+                Control: Button@0.0.45
+                Properties:
+                  Text: ="Overview"
+                  Appearance: ='ButtonCanvas.Appearance'.Subtle
+                  Icon: ="ArrowLeft"
+                  Width: =140
+                  OnSelect: =Navigate(scrHome, ScreenTransition.None)
+            - btnOpenSharePoint:
+                Control: Button@0.0.45
+                Properties:
+                  Text: ="Open SharePoint list"
+                  Appearance: ='ButtonCanvas.Appearance'.Secondary
+                  Icon: ="Open"
+                  Width: =200
+                  Visible: =PplfTarget <> "Dataverse"
+                  OnSelect: =Launch(PplfEnv("pplf_SharePointSite") & "/Lists/PPLFLogs")
+            - btnRefreshLogs:
+                Control: Button@0.0.45
+                Properties:
+                  Text: ="Refresh"
+                  Appearance: ='ButtonCanvas.Appearance'.Secondary
+                  Icon: ="ArrowClockwise"
+                  Width: =140
+                  OnSelect: =Refresh('PPLF | Logs')
+      - conFilters:
+          Control: GroupContainer@1.3.0
+          Variant: AutoLayout
+          Properties:
+            LayoutDirection: =LayoutDirection.Horizontal
+            Height: =72
+            FillPortions: =0
+            PaddingLeft: =PplfGap
+            PaddingRight: =PplfGap
+            LayoutGap: =12
+            DropShadow: =DropShadow.None
+            LayoutAlignItems: =LayoutAlignItems.End
+          Children:
+            - ddLevel:
+                Control: DropDown@0.0.45
+                Properties:
+                  Items: |-
+                    =Table({Name: "All levels", Severity: -1}, ForAll(PplfLevels, {Name: "≥ " & Name, Severity: Severity}))
+                  ItemDisplayText: =ThisItem.Name
+                  DefaultSelectedItems: |-
+                    =If(IsBlank(gblLogLevelFilter), Table({Name: "All levels", Severity: -1}), Filter(ForAll(PplfLevels, {Name: "≥ " & Name, Severity: Severity}), Severity = gblLogLevelFilter))
+                  Width: =200
+                  AccessibleLabel: ="Minimum level"
+            - txtSource:
+                Control: TextInput@0.0.54
+                Properties:
+                  Placeholder: ="Source name"
+                  Width: =220
+                  AccessibleLabel: ="Source name"
+            - txtCorrelation:
+                Control: TextInput@0.0.54
+                Properties:
+                  Placeholder: ="Correlation id"
+                  Value: =gblCorrelation
+                  Width: =300
+                  AccessibleLabel: ="Correlation id"
+            - txtSearch:
+                Control: TextInput@0.0.54
+                Properties:
+                  Placeholder: ="Search title"
+                  Width: =260
+                  AccessibleLabel: ="Search title"
+            - dpSince:
+                Control: DatePicker@0.0.46
+                Properties:
+                  SelectedDate: =DateAdd(Today(), -7, TimeUnit.Days)
+                  Width: =180
+                  AccessibleLabel: ="From date"
+      - conLogsBody:
+          Control: GroupContainer@1.3.0
+          Variant: AutoLayout
+          Properties:
+            LayoutDirection: =LayoutDirection.Horizontal
+            PaddingLeft: =PplfGap
+            PaddingRight: =PplfGap
+            PaddingBottom: =PplfGap
+            LayoutGap: =PplfGap
+            DropShadow: =DropShadow.None
+          Children:
+            - galLogs:
+                Control: Gallery@2.15.0
+                Variant: Vertical
+                Properties:
+                  Items: |-
+                    =SortByColumns(
+                        Filter('PPLF | Logs',
+                            'Created On' >= dpSince.SelectedDate,
+                            Severity >= Coalesce(ddLevel.Selected.Severity, -1),
+                            IsBlank(txtSource.Value) || StartsWith('Source Name', txtSource.Value),
+                            IsBlank(txtCorrelation.Value) || 'Correlation Id' = txtCorrelation.Value,
+                            IsBlank(txtSearch.Value) || StartsWith(Title, txtSearch.Value)
+                        ),
+                        "createdon", SortOrder.Descending)
+                  TemplateSize: =64
+                  FillPortions: =3
+                  Fill: =PplfCard
+                  BorderColor: =ColorValue("#E0E0E0")
+                  BorderThickness: =1
+                  OnSelect: =Set(gblSelectedLog, ThisItem)
+                  TemplateFill: =If(ThisItem.'PPLF Log' = gblSelectedLog.'PPLF Log', ColorValue("#EBF3FC"), Color.Transparent)
+                Children:
+                  - recLogLevel:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        Fill: =PplfLevelColor(ThisItem.Severity)
+                        Width: =4
+                        Height: =Parent.TemplateHeight - 16
+                        X: =0
+                        Y: =8
+                  - lblLogTitle:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: =ThisItem.Title
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        X: =16
+                        Y: =6
+                        Width: =Parent.TemplateWidth - 200
+                        Height: =26
+                  - lblLogMeta:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: =Text(ThisItem.Level) & "  ·  " & ThisItem.'Source Name' & If(IsBlank(ThisItem.Component), "", "  ·  " & ThisItem.Component)
+                        FontColor: =PplfMuted
+                        Size: =12
+                        X: =16
+                        Y: =34
+                        Width: =Parent.TemplateWidth - 200
+                        Height: =22
+                  - lblLogTime:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: =Text(ThisItem.'Created On', DateTimeFormat.ShortDateTime24)
+                        FontColor: =PplfMuted
+                        Size: =12
+                        Align: ='TextCanvas.Align'.End
+                        X: =Parent.TemplateWidth - 180
+                        Y: =6
+                        Width: =164
+                        Height: =22
+            - conDetails:
+                Control: GroupContainer@1.3.0
+                Variant: AutoLayout
+                Properties:
+                  LayoutDirection: =LayoutDirection.Vertical
+                  FillPortions: =2
+                  Fill: =PplfCard
+                  BorderColor: =ColorValue("#E0E0E0")
+                  BorderThickness: =1
+                  PaddingLeft: =PplfGap
+                  PaddingRight: =PplfGap
+                  PaddingTop: =PplfGap
+                  LayoutGap: =8
+                  DropShadow: =DropShadow.None
+                  Visible: =!IsBlank(gblSelectedLog)
+                Children:
+                  - lblDetTitle:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: =gblSelectedLog.Title
+                        Size: =18
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 2 * PplfGap
+                        Height: =56
+                        Wrap: =true
+                  - lblDetFacts:
+                      Control: Text@0.0.51
+                      Properties:
+                        Width: =Parent.Width - 2 * PplfGap
+                        Height: =200
+                        Wrap: =true
+                        Text: |-
+                          ="Level: " & Text(gblSelectedLog.Level) &
+                          Char(10) & "Source: " & gblSelectedLog.'Source Name' & " (" & Text(gblSelectedLog.'Source Type') & ")" &
+                          Char(10) & "Component / operation: " & gblSelectedLog.Component & " / " & gblSelectedLog.Operation &
+                          Char(10) & "User: " & gblSelectedLog.User &
+                          Char(10) & "When: " & Text(gblSelectedLog.'Client Timestamp', DateTimeFormat.LongDateTime24) &
+                          Char(10) & "Correlation: " & gblSelectedLog.'Correlation Id' &
+                          Char(10) & "Session: " & gblSelectedLog.'Session Id' &
+                          Char(10) & "Error code: " & gblSelectedLog.'Error Code' &
+                          Char(10) & "App version: " & gblSelectedLog.'App Version'
+                  - btnTraceCorrelation:
+                      Control: Button@0.0.45
+                      Properties:
+                        Text: ="Show everything with this correlation id"
+                        Appearance: ='ButtonCanvas.Appearance'.Secondary
+                        Icon: ="BranchFork"
+                        Width: =340
+                        Visible: =!IsBlank(gblSelectedLog.'Correlation Id')
+                        OnSelect: =Set(gblCorrelation, gblSelectedLog.'Correlation Id'); Reset(txtCorrelation)
+                  - btnOpenRun:
+                      Control: Button@0.0.45
+                      Properties:
+                        Text: ="Open flow run"
+                        Appearance: ='ButtonCanvas.Appearance'.Secondary
+                        Icon: ="Open"
+                        Width: =180
+                        Visible: =!IsBlank(gblSelectedLog.'Run Url')
+                        OnSelect: =Launch(gblSelectedLog.'Run Url')
+                  - lblDetMessage:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: =gblSelectedLog.Message
+                        Width: =Parent.Width - 2 * PplfGap
+                        Height: =120
+                        Wrap: =true
+                        VerticalAlign: =VerticalAlign.Top
+                  - txtDetDetails:
+                      Control: TextInput@0.0.54
+                      Properties:
+                        Mode: ='TextInputCanvas.Mode'.Multiline
+                        Value: =gblSelectedLog.'Details (JSON)'
+                        DisplayMode: =DisplayMode.View
+                        Width: =Parent.Width - 2 * PplfGap
+                        FillPortions: =1
+                        AccessibleLabel: ="Details JSON"

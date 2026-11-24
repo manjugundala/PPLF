@@ -1,0 +1,249 @@
+# Studio paste file for scrSetup. Select the screen scrSetup in Tree view and press Ctrl+V.
+# Then set these screen properties in the formula bar:
+#   Fill:
+#     =PplfSurface
+#   OnVisible:
+#     =Set(gblSetupTarget, PplfTarget);
+#     Set(gblSiteUrl, PplfEnv("pplf_SharePointSite"))
+- conSetupRoot:
+    Control: GroupContainer@1.3.0
+    Variant: AutoLayout
+    Properties:
+      Width: =Parent.Width
+      Height: =Parent.Height
+      LayoutDirection: =LayoutDirection.Vertical
+      DropShadow: =DropShadow.None
+    Children:
+      - hdrSetup:
+          Control: Header@0.0.44
+          Properties:
+            Title: ="Setup"
+            Width: =Parent.Width
+      - conSetupNav:
+          Control: GroupContainer@1.3.0
+          Variant: AutoLayout
+          Properties:
+            LayoutDirection: =LayoutDirection.Horizontal
+            Height: =56
+            FillPortions: =0
+            PaddingLeft: =PplfGap
+            PaddingTop: =8
+            DropShadow: =DropShadow.None
+          Children:
+            - btnSetupBack:
+                Control: Button@0.0.45
+                Properties:
+                  Text: ="Overview"
+                  Appearance: ='ButtonCanvas.Appearance'.Subtle
+                  Icon: ="ArrowLeft"
+                  Width: =140
+                  OnSelect: =Navigate(scrHome, ScreenTransition.None)
+      - conSetupBody:
+          Control: GroupContainer@1.3.0
+          Variant: AutoLayout
+          Properties:
+            LayoutDirection: =LayoutDirection.Vertical
+            PaddingLeft: =PplfGap
+            PaddingRight: =PplfGap
+            PaddingBottom: =PplfGap
+            LayoutGap: =PplfGap
+            DropShadow: =DropShadow.None
+            VerticalOverflow: =LayoutOverflow.Scroll
+          Children:
+            # ---------------- Step 1: target ----------------
+            - conStep1:
+                Control: GroupContainer@1.3.0
+                Variant: AutoLayout
+                Properties:
+                  LayoutDirection: =LayoutDirection.Vertical
+                  Height: =250
+                  FillPortions: =0
+                  Fill: =PplfCard
+                  BorderColor: =ColorValue("#E0E0E0")
+                  BorderThickness: =1
+                  PaddingLeft: =PplfGap
+                  PaddingTop: =PplfGap
+                  LayoutGap: =8
+                  DropShadow: =DropShadow.None
+                Children:
+                  - lblStep1:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="1. Where should logs be stored?"
+                        Size: =18
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Height: =32
+                        Width: =600
+                  - lblStep1Help:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: |-
+                          ="Dataverse: best for querying and security, needs premium licences. SharePoint: standard licences only. Both: write to both, useful while you move from one to the other."
+                        FontColor: =PplfMuted
+                        Wrap: =true
+                        Height: =48
+                        Width: =Parent.Width - 2 * PplfGap
+                  - rdTarget:
+                      Control: Radio@0.0.25
+                      Properties:
+                        Items: =["Dataverse", "SharePoint", "Both"]
+                        DefaultSelectedItems: =[gblSetupTarget]
+                        Layout: ='RadioGroupCanvas.Layout'.Horizontal
+                        OnChange: =Set(gblSetupTarget, Self.Selected.Value)
+                        Width: =500
+                        AccessibleLabel: ="Log target"
+                  - btnSaveTarget:
+                      Control: Button@0.0.45
+                      Properties:
+                        Text: ="Save log target"
+                        Appearance: ='ButtonCanvas.Appearance'.Primary
+                        Icon: ="Save"
+                        Width: =200
+                        DisplayMode: |-
+                          =If(gblSetupTarget <> "Dataverse" && (IsBlank(PplfEnv("pplf_SharePointSite")) || IsBlank(PplfEnv("pplf_SharePointLogList"))), DisplayMode.Disabled, DisplayMode.Edit)
+                        OnSelect: |-
+                          =PplfSetEnv("pplf_LogTarget", gblSetupTarget);
+                          PplfAdminLog("Warning", "scrSetup", "Log target changed to " & gblSetupTarget);
+                          Notify("Log target is now " & gblSetupTarget & ". Flows use it from their next run.", NotificationType.Success)
+                  - lblTargetHint:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="Create the SharePoint lists in step 2 before choosing SharePoint or Both."
+                        FontColor: =ColorValue("#BC4B09")
+                        Visible: =gblSetupTarget <> "Dataverse" && IsBlank(PplfEnv("pplf_SharePointLogList"))
+                        Height: =24
+                        Width: =600
+            # ---------------- Step 2: SharePoint ----------------
+            - conStep2:
+                Control: GroupContainer@1.3.0
+                Variant: AutoLayout
+                Properties:
+                  LayoutDirection: =LayoutDirection.Vertical
+                  Height: =260
+                  FillPortions: =0
+                  Fill: =PplfCard
+                  BorderColor: =ColorValue("#E0E0E0")
+                  BorderThickness: =1
+                  PaddingLeft: =PplfGap
+                  PaddingTop: =PplfGap
+                  LayoutGap: =8
+                  DropShadow: =DropShadow.None
+                  Visible: =gblSetupTarget <> "Dataverse"
+                Children:
+                  - lblStep2:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="2. Create the SharePoint lists"
+                        Size: =18
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Height: =32
+                        Width: =600
+                  - lblStep2Help:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="Creates the PPLF Logs and PPLF Log Config lists with indexed columns on the site. You need Manage Lists permission there. Safe to run again."
+                        FontColor: =PplfMuted
+                        Wrap: =true
+                        Height: =48
+                        Width: =Parent.Width - 2 * PplfGap
+                  - txtSiteUrl:
+                      Control: TextInput@0.0.54
+                      Properties:
+                        Value: =gblSiteUrl
+                        Placeholder: ="https://contoso.sharepoint.com/sites/operations"
+                        Width: =560
+                        AccessibleLabel: ="SharePoint site URL"
+                  - btnProvision:
+                      Control: Button@0.0.45
+                      Properties:
+                        Text: =If(gblProvisioning, "Creating lists...", "Create lists")
+                        Appearance: ='ButtonCanvas.Appearance'.Primary
+                        Icon: ="TableAdd"
+                        Width: =200
+                        DisplayMode: =If(gblProvisioning || !StartsWith(txtSiteUrl.Value, "https://"), DisplayMode.Disabled, DisplayMode.Edit)
+                        OnSelect: |-
+                          =Set(gblProvisioning, true);
+                          IfError(
+                              Set(gblProvision, 'PPLF|Setup|ProvisionSharePoint'.Run(Trim(txtSiteUrl.Value)));
+                              PplfSetEnv("pplf_SharePointSite", gblProvision.siteurl);
+                              PplfSetEnv("pplf_SharePointLogList", gblProvision.loglistid);
+                              PplfSetEnv("pplf_SharePointConfigList", gblProvision.configlistid);
+                              PplfAdminLog("Information", "scrSetup", "SharePoint lists provisioned on " & gblProvision.siteurl);
+                              Notify("Lists are ready. Now save the log target.", NotificationType.Success),
+                              PplfAdminLog("Error", "scrSetup", "SharePoint provisioning failed: " & FirstError.Message);
+                              Notify("Could not create the lists: " & FirstError.Message, NotificationType.Error)
+                          );
+                          Set(gblProvisioning, false)
+                  - lblProvisionResult:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: |-
+                          ="Site: " & PplfEnv("pplf_SharePointSite") & "   ·   Log list: " & Coalesce(PplfEnv("pplf_SharePointLogList"), "not set") & "   ·   Config list: " & Coalesce(PplfEnv("pplf_SharePointConfigList"), "not set")
+                        FontColor: =PplfMuted
+                        Size: =12
+                        Height: =24
+                        Width: =Parent.Width - 2 * PplfGap
+            # ---------------- Step 3: test ----------------
+            - conStep3:
+                Control: GroupContainer@1.3.0
+                Variant: AutoLayout
+                Properties:
+                  LayoutDirection: =LayoutDirection.Vertical
+                  Height: =200
+                  FillPortions: =0
+                  Fill: =PplfCard
+                  BorderColor: =ColorValue("#E0E0E0")
+                  BorderThickness: =1
+                  PaddingLeft: =PplfGap
+                  PaddingTop: =PplfGap
+                  LayoutGap: =8
+                  DropShadow: =DropShadow.None
+                Children:
+                  - lblStep3:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: ="3. Send a test entry through the router"
+                        Size: =18
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Height: =32
+                        Width: =600
+                  - btnTest:
+                      Control: Button@0.0.45
+                      Properties:
+                        Text: ="Send test entry"
+                        Appearance: ='ButtonCanvas.Appearance'.Secondary
+                        Icon: ="Send"
+                        Width: =200
+                        OnSelect: |-
+                          =Set(gblTestCorrelation, GUID());
+                          IfError(
+                              Set(gblTestResult, 'PPLF|Ingest|PowerApps'.Run(JSON(Table({
+                                  level: "Information",
+                                  message: "PPLF setup test from " & User().FullName,
+                                  sourceName: "PPLF - Configuration App",
+                                  sourceType: "Canvas App",
+                                  component: "scrSetup",
+                                  operation: "SendTestEntry",
+                                  correlationId: gblTestCorrelation,
+                                  userPrincipalName: User().Email,
+                                  clientTimestamp: Text(Now(), DateTimeFormat.UTC)
+                              }))));
+                              Notify("Accepted " & gblTestResult.accepted & " entry. Look for correlation id " & gblTestCorrelation & " in " & PplfTarget & ".", NotificationType.Success),
+                              Notify("Test failed: " & FirstError.Message, NotificationType.Error)
+                          )
+                  - lblTestResult:
+                      Control: Text@0.0.51
+                      Properties:
+                        Text: |-
+                          =If(IsBlank(gblTestCorrelation), "", "Last test correlation id: " & gblTestCorrelation)
+                        FontColor: =PplfMuted
+                        Height: =24
+                        Width: =Parent.Width - 2 * PplfGap
+                  - btnViewTest:
+                      Control: Button@0.0.45
+                      Properties:
+                        Text: ="Find it in Logs"
+                        Appearance: ='ButtonCanvas.Appearance'.Subtle
+                        Width: =200
+                        Visible: =!IsBlank(gblTestCorrelation) && PplfTarget <> "SharePoint"
+                        OnSelect: =Set(gblCorrelation, gblTestCorrelation); Navigate(scrLogs, ScreenTransition.None)
