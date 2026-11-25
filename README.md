@@ -39,8 +39,7 @@ PPLF gives every Power Platform component **the same log entry**, **the same lev
 ![PPLF - Configuration App](docs/images/configuration-app.png)
 
 The **PPLF - Configuration App** (canvas, modern controls) chooses the log target, creates the SharePoint lists,
-sets levels, retention and alerts, and browses logs by level, source and correlation id. It uses the same
-Texas flag theme as the [Power Platform Monitoring Framework](https://github.com/manjugundala/PPMF).
+sets levels, retention and alerts, and browses logs by level, source and correlation id. 
 
 ## How it works
 
