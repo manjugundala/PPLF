@@ -66,7 +66,22 @@ flowchart LR
     DV
     SP
   end
+  classDef apps fill:#742774,stroke:#4B144B,color:#fff
+  classDef automate fill:#0066FF,stroke:#0047B3,color:#fff
+  classDef pages fill:#A33D84,stroke:#6E2458,color:#fff
+  classDef dataverse fill:#088142,stroke:#05582D,color:#fff
+  classDef sharepoint fill:#038387,stroke:#025A5D,color:#fff
+  classDef code fill:#3B3A39,stroke:#201F1E,color:#fff
+  class CA,MD apps
+  class PF,R,WDV,WSP automate
+  class PP pages
+  class DV dataverse
+  class SP sharepoint
+  class PL code
+  style ST fill:#F3F2F1,stroke:#8A8886,color:#201F1E
 ```
+
+<sub>Colours follow the product: Power Apps purple, Power Automate blue, Power Pages magenta, Dataverse green, SharePoint teal, custom code grey.</sub>
 
 Details, sequence diagrams and the data model: **[docs/architecture.md](docs/architecture.md)**.
 
