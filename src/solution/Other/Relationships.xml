@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityRelationships xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityRelationship Name="lk_pplf_log_createdby" />
+  <EntityRelationship Name="lk_pplf_log_modifiedby" />
+  <EntityRelationship Name="lk_pplf_logconfig_createdby" />
+  <EntityRelationship Name="lk_pplf_logconfig_modifiedby" />
+  <EntityRelationship Name="organization_pplf_log" />
+  <EntityRelationship Name="organization_pplf_logconfig" />
+</EntityRelationships>

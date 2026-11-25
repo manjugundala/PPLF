@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<optionset Name="pplf_sourcetype" localizedName="PPLF | Source Type" description="Which kind of Power Platform component wrote the log entry." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <OptionSetType>picklist</OptionSetType>
+  <IsGlobal>1</IsGlobal>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <displaynames>
+    <displayname description="PPLF | Source Type" languagecode="1033" />
+  </displaynames>
+  <Descriptions>
+    <Description description="Which kind of Power Platform component wrote the log entry." languagecode="1033" />
+  </Descriptions>
+  <options>
+    <option value="917000000" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Canvas App" languagecode="1033" />
+      </labels>
+    </option>
+    <option value="917000001" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Model-driven App" languagecode="1033" />
+      </labels>
+    </option>
+    <option value="917000002" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Cloud Flow" languagecode="1033" />
+      </labels>
+    </option>
+    <option value="917000003" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Power Pages" languagecode="1033" />
+      </labels>
+    </option>
+    <option value="917000004" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Plug-in" languagecode="1033" />
+      </labels>
+    </option>
+    <option value="917000005" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Custom" languagecode="1033" />
+      </labels>
+    </option>
+  </options>
+</optionset>

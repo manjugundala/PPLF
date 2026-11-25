@@ -1,0 +1,13 @@
+<environmentvariabledefinition schemaname="pplf_AlertMinimumLevel">
+  <description default="Entries at or above this level trigger an email alert. None turns alerts off.">
+    <label description="Entries at or above this level trigger an email alert. None turns alerts off." languagecode="1033" />
+  </description>
+  <displayname default="PPLF | Alert Minimum Level">
+    <label description="PPLF | Alert Minimum Level" languagecode="1033" />
+  </displayname>
+  <introducedversion>1.0.0.0</introducedversion>
+  <iscustomizable>1</iscustomizable>
+  <isrequired>0</isrequired>
+  <secretstore>0</secretstore>
+  <type>100000000</type>
+</environmentvariabledefinition>

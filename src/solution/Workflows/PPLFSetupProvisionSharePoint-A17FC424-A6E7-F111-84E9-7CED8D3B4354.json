@@ -1,0 +1,595 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_sharepointonline": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "pplf_sharedsharepointonline"
+        },
+        "api": {
+          "name": "shared_sharepointonline"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "PowerAppV2",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "title": "SiteUrl",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Absolute URL of the SharePoint site, e.g. https://contoso.sharepoint.com/sites/ops",
+                  "x-ms-content-hint": "TEXT"
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "List_definitions": {
+          "type": "Compose",
+          "inputs": [
+            {
+              "key": "pplf_log",
+              "title": "PPLF Logs",
+              "url": "PPLFLogs",
+              "description": "One row per log entry written by any Power Platform component.",
+              "fields": [
+                {
+                  "internalName": "PplfLevel",
+                  "schemaXml": "<Field Type=\"Choice\" Name=\"PplfLevel\" StaticName=\"PplfLevel\" DisplayName=\"Level\" Required=\"FALSE\" Indexed=\"TRUE\" Format=\"Dropdown\"><CHOICES><CHOICE>Trace</CHOICE><CHOICE>Debug</CHOICE><CHOICE>Information</CHOICE><CHOICE>Warning</CHOICE><CHOICE>Error</CHOICE><CHOICE>Critical</CHOICE></CHOICES></Field>"
+                },
+                {
+                  "internalName": "PplfSeverity",
+                  "schemaXml": "<Field Type=\"Number\" Name=\"PplfSeverity\" StaticName=\"PplfSeverity\" DisplayName=\"Severity\" Required=\"FALSE\" Indexed=\"TRUE\" Decimals=\"0\" Min=\"0\" Max=\"5\" />"
+                },
+                {
+                  "internalName": "PplfSourceType",
+                  "schemaXml": "<Field Type=\"Choice\" Name=\"PplfSourceType\" StaticName=\"PplfSourceType\" DisplayName=\"Source Type\" Required=\"FALSE\" Indexed=\"TRUE\" Format=\"Dropdown\"><CHOICES><CHOICE>Canvas App</CHOICE><CHOICE>Model-driven App</CHOICE><CHOICE>Cloud Flow</CHOICE><CHOICE>Power Pages</CHOICE><CHOICE>Plug-in</CHOICE><CHOICE>Custom</CHOICE></CHOICES></Field>"
+                },
+                {
+                  "internalName": "PplfSourceName",
+                  "schemaXml": "<Field Type=\"Text\" Name=\"PplfSourceName\" StaticName=\"PplfSourceName\" DisplayName=\"Source Name\" Required=\"FALSE\" Indexed=\"TRUE\" MaxLength=\"255\" />"
+                },
+                {
+                  "internalName": "PplfComponent",
+                  "schemaXml": "<Field Type=\"Text\" Name=\"PplfComponent\" StaticName=\"PplfComponent\" DisplayName=\"Component\" MaxLength=\"255\" />"
+                },
+                {
+                  "internalName": "PplfOperation",
+                  "schemaXml": "<Field Type=\"Text\" Name=\"PplfOperation\" StaticName=\"PplfOperation\" DisplayName=\"Operation\" MaxLength=\"255\" />"
+                },
+                {
+                  "internalName": "PplfMessage",
+                  "schemaXml": "<Field Type=\"Note\" Name=\"PplfMessage\" StaticName=\"PplfMessage\" DisplayName=\"Message\" Required=\"FALSE\" NumLines=\"6\" RichText=\"FALSE\" UnlimitedLengthInDocumentLibrary=\"TRUE\" />"
+                },
+                {
+                  "internalName": "PplfDetails",
+                  "schemaXml": "<Field Type=\"Note\" Name=\"PplfDetails\" StaticName=\"PplfDetails\" DisplayName=\"Details (JSON)\" NumLines=\"6\" RichText=\"FALSE\" UnlimitedLengthInDocumentLibrary=\"TRUE\" />"
+                },
+                {
+                  "internalName": "PplfCorrelationId",
+                  "schemaXml": "<Field Type=\"Text\" Name=\"PplfCorrelationId\" StaticName=\"PplfCorrelationId\" DisplayName=\"Correlation Id\" Indexed=\"TRUE\" MaxLength=\"255\" />"
+                },
+                {
+                  "internalName": "PplfSessionId",
+                  "schemaXml": "<Field Type=\"Text\" Name=\"PplfSessionId\" StaticName=\"PplfSessionId\" DisplayName=\"Session Id\" MaxLength=\"255\" />"
+                },
+                {
+                  "internalName": "PplfUser",
+                  "schemaXml": "<Field Type=\"Text\" Name=\"PplfUser\" StaticName=\"PplfUser\" DisplayName=\"User\" MaxLength=\"255\" />"
+                },
+                {
+                  "internalName": "PplfEnvironment",
+                  "schemaXml": "<Field Type=\"Text\" Name=\"PplfEnvironment\" StaticName=\"PplfEnvironment\" DisplayName=\"Environment\" MaxLength=\"255\" />"
+                },
+                {
+                  "internalName": "PplfAppVersion",
+                  "schemaXml": "<Field Type=\"Text\" Name=\"PplfAppVersion\" StaticName=\"PplfAppVersion\" DisplayName=\"App Version\" MaxLength=\"255\" />"
+                },
+                {
+                  "internalName": "PplfRunUrl",
+                  "schemaXml": "<Field Type=\"Text\" Name=\"PplfRunUrl\" StaticName=\"PplfRunUrl\" DisplayName=\"Run Url\" MaxLength=\"255\" />"
+                },
+                {
+                  "internalName": "PplfDurationMs",
+                  "schemaXml": "<Field Type=\"Number\" Name=\"PplfDurationMs\" StaticName=\"PplfDurationMs\" DisplayName=\"Duration (ms)\" Decimals=\"0\" Min=\"0\" />"
+                },
+                {
+                  "internalName": "PplfErrorCode",
+                  "schemaXml": "<Field Type=\"Text\" Name=\"PplfErrorCode\" StaticName=\"PplfErrorCode\" DisplayName=\"Error Code\" MaxLength=\"255\" />"
+                },
+                {
+                  "internalName": "PplfClientTimestamp",
+                  "schemaXml": "<Field Type=\"DateTime\" Name=\"PplfClientTimestamp\" StaticName=\"PplfClientTimestamp\" DisplayName=\"Client Timestamp\" Indexed=\"TRUE\" Format=\"DateTime\" />"
+                },
+                {
+                  "internalName": "PplfClientInfo",
+                  "schemaXml": "<Field Type=\"Text\" Name=\"PplfClientInfo\" StaticName=\"PplfClientInfo\" DisplayName=\"Client Info\" MaxLength=\"255\" />"
+                }
+              ]
+            },
+            {
+              "key": "pplf_logconfig",
+              "title": "PPLF Log Config",
+              "url": "PPLFLogConfig",
+              "description": "Per-source logging settings. A row named * is the default for every source.",
+              "fields": [
+                {
+                  "internalName": "PplfSourceType",
+                  "schemaXml": "<Field Type=\"Choice\" Name=\"PplfSourceType\" StaticName=\"PplfSourceType\" DisplayName=\"Source Type\" Format=\"Dropdown\"><CHOICES><CHOICE>Canvas App</CHOICE><CHOICE>Model-driven App</CHOICE><CHOICE>Cloud Flow</CHOICE><CHOICE>Power Pages</CHOICE><CHOICE>Plug-in</CHOICE><CHOICE>Custom</CHOICE></CHOICES></Field>"
+                },
+                {
+                  "internalName": "PplfMinimumLevel",
+                  "schemaXml": "<Field Type=\"Choice\" Name=\"PplfMinimumLevel\" StaticName=\"PplfMinimumLevel\" DisplayName=\"Minimum Level\" Required=\"FALSE\" Format=\"Dropdown\"><CHOICES><CHOICE>Trace</CHOICE><CHOICE>Debug</CHOICE><CHOICE>Information</CHOICE><CHOICE>Warning</CHOICE><CHOICE>Error</CHOICE><CHOICE>Critical</CHOICE></CHOICES></Field>"
+                },
+                {
+                  "internalName": "PplfMinimumSeverity",
+                  "schemaXml": "<Field Type=\"Number\" Name=\"PplfMinimumSeverity\" StaticName=\"PplfMinimumSeverity\" DisplayName=\"Minimum Severity\" Required=\"FALSE\" Decimals=\"0\" Min=\"0\" Max=\"5\" />"
+                },
+                {
+                  "internalName": "PplfEnabled",
+                  "schemaXml": "<Field Type=\"Boolean\" Name=\"PplfEnabled\" StaticName=\"PplfEnabled\" DisplayName=\"Enabled\"><Default>1</Default></Field>"
+                },
+                {
+                  "internalName": "PplfRetentionDays",
+                  "schemaXml": "<Field Type=\"Number\" Name=\"PplfRetentionDays\" StaticName=\"PplfRetentionDays\" DisplayName=\"Retention (days)\" Decimals=\"0\" Min=\"1\" Max=\"3650\" />"
+                },
+                {
+                  "internalName": "PplfNotes",
+                  "schemaXml": "<Field Type=\"Note\" Name=\"PplfNotes\" StaticName=\"PplfNotes\" DisplayName=\"Notes\" NumLines=\"6\" RichText=\"FALSE\" UnlimitedLengthInDocumentLibrary=\"TRUE\" />"
+                }
+              ]
+            }
+          ],
+          "runAfter": {}
+        },
+        "Log_list_id": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "LogListId",
+                "type": "string",
+                "value": ""
+              }
+            ]
+          },
+          "runAfter": {
+            "List_definitions": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Config_list_id": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "ConfigListId",
+                "type": "string",
+                "value": ""
+              }
+            ]
+          },
+          "runAfter": {
+            "Log_list_id": [
+              "Succeeded"
+            ]
+          }
+        },
+        "For_each_list": {
+          "type": "Foreach",
+          "foreach": "@outputs('List_definitions')",
+          "runtimeConfiguration": {
+            "concurrency": {
+              "repetitions": 1
+            }
+          },
+          "actions": {
+            "Find_list": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_sharepointonline",
+                  "operationId": "HttpRequest",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                },
+                "parameters": {
+                  "dataset": "@triggerBody()?['text']",
+                  "parameters/method": "GET",
+                  "parameters/uri": "_api/web/lists?$select=Id,Title&$filter=RootFolder/Name eq '@{items('For_each_list')?['url']}'",
+                  "parameters/headers": {
+                    "Accept": "application/json;odata=nometadata",
+                    "Content-Type": "application/json;odata=nometadata"
+                  }
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            },
+            "Create_list_if_missing": {
+              "type": "If",
+              "expression": {
+                "equals": [
+                  "@length(body('Find_list')?['value'])",
+                  0
+                ]
+              },
+              "actions": {
+                "Create_list": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_sharepointonline",
+                      "operationId": "HttpRequest",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                    },
+                    "parameters": {
+                      "dataset": "@triggerBody()?['text']",
+                      "parameters/method": "POST",
+                      "parameters/uri": "_api/web/lists",
+                      "parameters/headers": {
+                        "Accept": "application/json;odata=nometadata",
+                        "Content-Type": "application/json;odata=nometadata"
+                      },
+                      "parameters/body": {
+                        "Title": "@{items('For_each_list')?['url']}",
+                        "Description": "@{items('For_each_list')?['description']}",
+                        "BaseTemplate": 100,
+                        "AllowContentTypes": false
+                      }
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {}
+                },
+                "Rename_list": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_sharepointonline",
+                      "operationId": "HttpRequest",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                    },
+                    "parameters": {
+                      "dataset": "@triggerBody()?['text']",
+                      "parameters/method": "POST",
+                      "parameters/uri": "_api/web/lists(guid'@{body('Create_list')?['Id']}')",
+                      "parameters/headers": {
+                        "Accept": "application/json;odata=nometadata",
+                        "Content-Type": "application/json;odata=nometadata",
+                        "X-HTTP-Method": "MERGE",
+                        "IF-MATCH": "*"
+                      },
+                      "parameters/body": {
+                        "Title": "@{items('For_each_list')?['title']}"
+                      }
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {
+                    "Create_list": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              },
+              "else": {
+                "actions": {}
+              },
+              "runAfter": {
+                "Find_list": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "List_id": {
+              "type": "Compose",
+              "inputs": "@if(equals(length(body('Find_list')?['value']), 0), body('Create_list')?['Id'], first(body('Find_list')?['value'])?['Id'])",
+              "runAfter": {
+                "Create_list_if_missing": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "For_each_field": {
+              "type": "Foreach",
+              "foreach": "@items('For_each_list')?['fields']",
+              "runtimeConfiguration": {
+                "concurrency": {
+                  "repetitions": 1
+                }
+              },
+              "actions": {
+                "Find_field": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_sharepointonline",
+                      "operationId": "HttpRequest",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                    },
+                    "parameters": {
+                      "dataset": "@triggerBody()?['text']",
+                      "parameters/method": "GET",
+                      "parameters/uri": "_api/web/lists(guid'@{outputs('List_id')}')/fields?$select=Id&$filter=InternalName eq '@{items('For_each_field')?['internalName']}'",
+                      "parameters/headers": {
+                        "Accept": "application/json;odata=nometadata",
+                        "Content-Type": "application/json;odata=nometadata"
+                      }
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {}
+                },
+                "Create_field_if_missing": {
+                  "type": "If",
+                  "expression": {
+                    "equals": [
+                      "@length(body('Find_field')?['value'])",
+                      0
+                    ]
+                  },
+                  "actions": {
+                    "Create_field": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connectionName": "shared_sharepointonline",
+                          "operationId": "HttpRequest",
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                        },
+                        "parameters": {
+                          "dataset": "@triggerBody()?['text']",
+                          "parameters/method": "POST",
+                          "parameters/uri": "_api/web/lists(guid'@{outputs('List_id')}')/fields/createfieldasxml",
+                          "parameters/headers": {
+                            "Accept": "application/json;odata=nometadata",
+                            "Content-Type": "application/json;odata=nometadata"
+                          },
+                          "parameters/body": {
+                            "parameters": {
+                              "SchemaXml": "@{items('For_each_field')?['schemaXml']}",
+                              "Options": 24
+                            }
+                          }
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      },
+                      "runAfter": {}
+                    }
+                  },
+                  "else": {
+                    "actions": {}
+                  },
+                  "runAfter": {
+                    "Find_field": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              },
+              "runAfter": {
+                "List_id": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Index_Created": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_sharepointonline",
+                  "operationId": "HttpRequest",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                },
+                "parameters": {
+                  "dataset": "@triggerBody()?['text']",
+                  "parameters/method": "POST",
+                  "parameters/uri": "_api/web/lists(guid'@{outputs('List_id')}')/fields/getbyinternalnameortitle('Created')",
+                  "parameters/headers": {
+                    "Accept": "application/json;odata=nometadata",
+                    "Content-Type": "application/json;odata=nometadata",
+                    "X-HTTP-Method": "MERGE",
+                    "IF-MATCH": "*"
+                  },
+                  "parameters/body": {
+                    "Indexed": true
+                  }
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "For_each_field": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Remember_list_id": {
+              "type": "Switch",
+              "expression": "@items('For_each_list')?['key']",
+              "cases": {
+                "Log": {
+                  "case": "pplf_log",
+                  "actions": {
+                    "Set_log_list_id": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "LogListId",
+                        "value": "@{outputs('List_id')}"
+                      },
+                      "runAfter": {}
+                    }
+                  }
+                },
+                "Config": {
+                  "case": "pplf_logconfig",
+                  "actions": {
+                    "Set_config_list_id": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "ConfigListId",
+                        "value": "@{outputs('List_id')}"
+                      },
+                      "runAfter": {}
+                    }
+                  }
+                }
+              },
+              "default": {
+                "actions": {}
+              },
+              "runAfter": {
+                "Index_Created": [
+                  "Succeeded",
+                  "Failed"
+                ]
+              }
+            }
+          },
+          "runAfter": {
+            "Config_list_id": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Find_default_config": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_sharepointonline",
+              "operationId": "HttpRequest",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+            },
+            "parameters": {
+              "dataset": "@triggerBody()?['text']",
+              "parameters/method": "GET",
+              "parameters/uri": "_api/web/lists(guid'@{variables('ConfigListId')}')/items?$select=Id&$filter=Title eq '*'",
+              "parameters/headers": {
+                "Accept": "application/json;odata=nometadata",
+                "Content-Type": "application/json;odata=nometadata"
+              }
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "runAfter": {
+            "For_each_list": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Seed_default_config": {
+          "type": "If",
+          "expression": {
+            "equals": [
+              "@length(body('Find_default_config')?['value'])",
+              0
+            ]
+          },
+          "actions": {
+            "Add_default_config": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_sharepointonline",
+                  "operationId": "HttpRequest",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                },
+                "parameters": {
+                  "dataset": "@triggerBody()?['text']",
+                  "parameters/method": "POST",
+                  "parameters/uri": "_api/web/lists(guid'@{variables('ConfigListId')}')/items",
+                  "parameters/headers": {
+                    "Accept": "application/json;odata=nometadata",
+                    "Content-Type": "application/json;odata=nometadata"
+                  },
+                  "parameters/body": {
+                    "Title": "*",
+                    "PplfMinimumLevel": "Information",
+                    "PplfMinimumSeverity": 2,
+                    "PplfEnabled": true,
+                    "PplfRetentionDays": 30,
+                    "PplfNotes": "Default settings for every source without its own row."
+                  }
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {}
+            }
+          },
+          "else": {
+            "actions": {}
+          },
+          "runAfter": {
+            "Find_default_config": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Respond": {
+          "type": "Response",
+          "kind": "PowerApp",
+          "inputs": {
+            "statusCode": 200,
+            "body": {
+              "siteUrl": "@{triggerBody()?['text']}",
+              "logListId": "@{variables('LogListId')}",
+              "configListId": "@{variables('ConfigListId')}"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "siteUrl": {
+                  "title": "siteUrl",
+                  "x-ms-dynamically-added": true,
+                  "type": "string"
+                },
+                "logListId": {
+                  "title": "logListId",
+                  "x-ms-dynamically-added": true,
+                  "type": "string"
+                },
+                "configListId": {
+                  "title": "configListId",
+                  "x-ms-dynamically-added": true,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Seed_default_config": [
+              "Succeeded"
+            ]
+          }
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

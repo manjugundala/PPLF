@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<optionset Name="pplf_loglevel" localizedName="PPLF | Log Level" description="Severity of a log entry. Value = 917000000 + severity (0-5)." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <OptionSetType>picklist</OptionSetType>
+  <IsGlobal>1</IsGlobal>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <displaynames>
+    <displayname description="PPLF | Log Level" languagecode="1033" />
+  </displaynames>
+  <Descriptions>
+    <Description description="Severity of a log entry. Value = 917000000 + severity (0-5)." languagecode="1033" />
+  </Descriptions>
+  <options>
+    <option value="917000000" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Trace" languagecode="1033" />
+      </labels>
+    </option>
+    <option value="917000001" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Debug" languagecode="1033" />
+      </labels>
+    </option>
+    <option value="917000002" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Information" languagecode="1033" />
+      </labels>
+    </option>
+    <option value="917000003" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Warning" languagecode="1033" />
+      </labels>
+    </option>
+    <option value="917000004" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Error" languagecode="1033" />
+      </labels>
+    </option>
+    <option value="917000005" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Critical" languagecode="1033" />
+      </labels>
+    </option>
+  </options>
+</optionset>

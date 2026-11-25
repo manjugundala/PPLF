@@ -1,0 +1,15 @@
+<environmentvariabledefinition schemaname="pplf_SharePointSite">
+  <apiid>/providers/Microsoft.PowerApps/apis/shared_sharepointonline</apiid>
+  <description default="Site that holds the PPLF lists. Only needed when Log Target is SharePoint or Both.">
+    <label description="Site that holds the PPLF lists. Only needed when Log Target is SharePoint or Both." languagecode="1033" />
+  </description>
+  <displayname default="PPLF | SharePoint Site">
+    <label description="PPLF | SharePoint Site" languagecode="1033" />
+  </displayname>
+  <introducedversion>1.0.0.0</introducedversion>
+  <iscustomizable>1</iscustomizable>
+  <isrequired>0</isrequired>
+  <parameterkey>dataset</parameterkey>
+  <secretstore>0</secretstore>
+  <type>100000004</type>
+</environmentvariabledefinition>
