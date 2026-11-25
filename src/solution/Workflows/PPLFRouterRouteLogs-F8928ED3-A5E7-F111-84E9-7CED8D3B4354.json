@@ -1,0 +1,328 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_office365": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "pplf_sharedoffice365"
+        },
+        "api": {
+          "name": "shared_office365"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "PPLF | Log Target (pplf_LogTarget)": {
+          "defaultValue": "Dataverse",
+          "type": "String",
+          "metadata": {
+            "schemaName": "pplf_LogTarget",
+            "description": "Where routed logs are written: Dataverse, SharePoint or Both."
+          }
+        },
+        "PPLF | Alert Minimum Level (pplf_AlertMinimumLevel)": {
+          "defaultValue": "Critical",
+          "type": "String",
+          "metadata": {
+            "schemaName": "pplf_AlertMinimumLevel",
+            "description": "Entries at or above this level trigger an email alert. None turns alerts off."
+          }
+        },
+        "PPLF | Alert Recipients (pplf_AlertRecipients)": {
+          "defaultValue": "",
+          "type": "String",
+          "metadata": {
+            "schemaName": "pplf_AlertRecipients",
+            "description": "Semicolon-separated email addresses for alerts."
+          }
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Button",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "title": "LogsJson",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "JSON array of PPLF log entries (see schema/log-entry.schema.json)",
+                  "x-ms-content-hint": "TEXT"
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Severity_Map": {
+          "type": "Compose",
+          "inputs": {
+            "Trace": 0,
+            "Debug": 1,
+            "Information": 2,
+            "Warning": 3,
+            "Error": 4,
+            "Critical": 5,
+            "None": 99
+          },
+          "runAfter": {}
+        },
+        "SourceType_Map": {
+          "type": "Compose",
+          "inputs": {
+            "Canvas App": 917000000,
+            "Model-driven App": 917000001,
+            "Cloud Flow": 917000002,
+            "Power Pages": 917000003,
+            "Plug-in": 917000004,
+            "Custom": 917000005
+          },
+          "runAfter": {}
+        },
+        "Entries": {
+          "type": "Compose",
+          "inputs": "@json(triggerBody()?['text'])",
+          "runAfter": {
+            "Severity_Map": [
+              "Succeeded"
+            ],
+            "SourceType_Map": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Route_by_target": {
+          "type": "Switch",
+          "expression": "@parameters('PPLF | Log Target (pplf_LogTarget)')",
+          "cases": {
+            "SharePoint": {
+              "case": "SharePoint",
+              "actions": {
+                "Write_to_SharePoint": {
+                  "type": "Workflow",
+                  "inputs": {
+                    "host": {
+                      "workflowReferenceName": "ea928ed3-a5e7-f111-84e9-7ced8d3b4354"
+                    },
+                    "body": {
+                      "text": "@{triggerBody()?['text']}"
+                    }
+                  },
+                  "runAfter": {}
+                }
+              }
+            },
+            "Both": {
+              "case": "Both",
+              "actions": {
+                "Write_to_Dataverse_both": {
+                  "type": "Workflow",
+                  "inputs": {
+                    "host": {
+                      "workflowReferenceName": "dc928ed3-a5e7-f111-84e9-7ced8d3b4354"
+                    },
+                    "body": {
+                      "text": "@{triggerBody()?['text']}"
+                    }
+                  },
+                  "runAfter": {}
+                },
+                "Write_to_SharePoint_both": {
+                  "type": "Workflow",
+                  "inputs": {
+                    "host": {
+                      "workflowReferenceName": "ea928ed3-a5e7-f111-84e9-7ced8d3b4354"
+                    },
+                    "body": {
+                      "text": "@{triggerBody()?['text']}"
+                    }
+                  },
+                  "runAfter": {}
+                }
+              }
+            }
+          },
+          "default": {
+            "actions": {
+              "Write_to_Dataverse": {
+                "type": "Workflow",
+                "inputs": {
+                  "host": {
+                    "workflowReferenceName": "dc928ed3-a5e7-f111-84e9-7ced8d3b4354"
+                  },
+                  "body": {
+                    "text": "@{triggerBody()?['text']}"
+                  }
+                },
+                "runAfter": {}
+              }
+            }
+          },
+          "runAfter": {
+            "Entries": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Alert_entries": {
+          "type": "Query",
+          "inputs": {
+            "from": "@outputs('Entries')",
+            "where": "@and(not(equals(parameters('PPLF | Alert Minimum Level (pplf_AlertMinimumLevel)'), 'None')), greaterOrEquals(coalesce(outputs('Severity_Map')?[item()?['level']], 2), coalesce(outputs('Severity_Map')?[parameters('PPLF | Alert Minimum Level (pplf_AlertMinimumLevel)')], 2)))"
+          },
+          "runAfter": {
+            "Entries": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Send_alert_if_needed": {
+          "type": "If",
+          "expression": {
+            "and": [
+              {
+                "greater": [
+                  "@length(body('Alert_entries'))",
+                  0
+                ]
+              },
+              {
+                "not": {
+                  "equals": [
+                    "@trim(parameters('PPLF | Alert Recipients (pplf_AlertRecipients)'))",
+                    ""
+                  ]
+                }
+              }
+            ]
+          },
+          "actions": {
+            "Alert_table": {
+              "type": "Table",
+              "inputs": {
+                "from": "@body('Alert_entries')",
+                "format": "HTML",
+                "columns": [
+                  {
+                    "header": "Level",
+                    "value": "@item()?['level']"
+                  },
+                  {
+                    "header": "Source",
+                    "value": "@item()?['sourceName']"
+                  },
+                  {
+                    "header": "Component",
+                    "value": "@item()?['component']"
+                  },
+                  {
+                    "header": "Message",
+                    "value": "@item()?['message']"
+                  },
+                  {
+                    "header": "Correlation Id",
+                    "value": "@item()?['correlationId']"
+                  },
+                  {
+                    "header": "When (UTC)",
+                    "value": "@coalesce(item()?['clientTimestamp'], utcNow())"
+                  }
+                ]
+              },
+              "runAfter": {}
+            },
+            "Send_alert_email": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_office365",
+                  "operationId": "SendEmailV2",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365"
+                },
+                "parameters": {
+                  "emailMessage/To": "@parameters('PPLF | Alert Recipients (pplf_AlertRecipients)')",
+                  "emailMessage/Subject": "[PPLF] @{length(body('Alert_entries'))} alert(s) from @{first(body('Alert_entries'))?['sourceName']}",
+                  "emailMessage/Body": "<p>The Power Platform Logging Framework recorded entries at or above the alert level.</p>@{body('Alert_table')}",
+                  "emailMessage/Importance": "High"
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "runAfter": {
+                "Alert_table": [
+                  "Succeeded"
+                ]
+              }
+            }
+          },
+          "else": {
+            "actions": {}
+          },
+          "runAfter": {
+            "Alert_entries": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Respond": {
+          "type": "Response",
+          "kind": "PowerApp",
+          "inputs": {
+            "statusCode": 200,
+            "body": {
+              "accepted": "@{length(outputs('Entries'))}",
+              "target": "@{parameters('PPLF | Log Target (pplf_LogTarget)')}"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accepted": {
+                  "title": "accepted",
+                  "x-ms-dynamically-added": true,
+                  "type": "string"
+                },
+                "target": {
+                  "title": "target",
+                  "x-ms-dynamically-added": true,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Route_by_target": [
+              "Succeeded",
+              "Failed",
+              "Skipped"
+            ],
+            "Send_alert_if_needed": [
+              "Succeeded",
+              "Failed",
+              "Skipped"
+            ]
+          }
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

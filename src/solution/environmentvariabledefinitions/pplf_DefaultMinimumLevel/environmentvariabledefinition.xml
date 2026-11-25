@@ -1,0 +1,13 @@
+<environmentvariabledefinition schemaname="pplf_DefaultMinimumLevel">
+  <description default="Used when no config row matches a source and there is no * row.">
+    <label description="Used when no config row matches a source and there is no * row." languagecode="1033" />
+  </description>
+  <displayname default="PPLF | Default Minimum Level">
+    <label description="PPLF | Default Minimum Level" languagecode="1033" />
+  </displayname>
+  <introducedversion>1.0.0.0</introducedversion>
+  <iscustomizable>1</iscustomizable>
+  <isrequired>0</isrequired>
+  <secretstore>0</secretstore>
+  <type>100000000</type>
+</environmentvariabledefinition>

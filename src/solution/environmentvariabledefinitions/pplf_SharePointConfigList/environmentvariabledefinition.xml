@@ -1,0 +1,18 @@
+<environmentvariabledefinition schemaname="pplf_SharePointConfigList">
+  <apiid>/providers/Microsoft.PowerApps/apis/shared_sharepointonline</apiid>
+  <description default="The PPLF Log Config list (stored as the list id).">
+    <label description="The PPLF Log Config list (stored as the list id)." languagecode="1033" />
+  </description>
+  <displayname default="PPLF | SharePoint Config List">
+    <label description="PPLF | SharePoint Config List" languagecode="1033" />
+  </displayname>
+  <introducedversion>1.0.0.0</introducedversion>
+  <iscustomizable>1</iscustomizable>
+  <isrequired>0</isrequired>
+  <parameterkey>table</parameterkey>
+  <parentdefinitionid>
+    <schemaname>pplf_SharePointSite</schemaname>
+  </parentdefinitionid>
+  <secretstore>0</secretstore>
+  <type>100000004</type>
+</environmentvariabledefinition>

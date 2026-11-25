@@ -1,0 +1,326 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_sharepointonline": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "pplf_sharedsharepointonline"
+        },
+        "api": {
+          "name": "shared_sharepointonline"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "PPLF | Default Minimum Level (pplf_DefaultMinimumLevel)": {
+          "defaultValue": "Information",
+          "type": "String",
+          "metadata": {
+            "schemaName": "pplf_DefaultMinimumLevel",
+            "description": "Used when no config row matches a source and there is no * row."
+          }
+        },
+        "PPLF | SharePoint Site (pplf_SharePointSite)": {
+          "defaultValue": "",
+          "type": "String",
+          "metadata": {
+            "schemaName": "pplf_SharePointSite",
+            "description": "Site that holds the PPLF lists. Only needed when Log Target is SharePoint or Both."
+          }
+        },
+        "PPLF | SharePoint Log List (pplf_SharePointLogList)": {
+          "defaultValue": "",
+          "type": "String",
+          "metadata": {
+            "schemaName": "pplf_SharePointLogList",
+            "description": "The PPLF Logs list (stored as the list id)."
+          }
+        },
+        "PPLF | SharePoint Config List (pplf_SharePointConfigList)": {
+          "defaultValue": "",
+          "type": "String",
+          "metadata": {
+            "schemaName": "pplf_SharePointConfigList",
+            "description": "The PPLF Log Config list (stored as the list id)."
+          }
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Button",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "title": "LogsJson",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "JSON array of PPLF log entries (see schema/log-entry.schema.json)",
+                  "x-ms-content-hint": "TEXT"
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Severity_Map": {
+          "type": "Compose",
+          "inputs": {
+            "Trace": 0,
+            "Debug": 1,
+            "Information": 2,
+            "Warning": 3,
+            "Error": 4,
+            "Critical": 5,
+            "None": 99
+          },
+          "runAfter": {}
+        },
+        "SourceType_Map": {
+          "type": "Compose",
+          "inputs": {
+            "Canvas App": 917000000,
+            "Model-driven App": 917000001,
+            "Cloud Flow": 917000002,
+            "Power Pages": 917000003,
+            "Plug-in": 917000004,
+            "Custom": 917000005
+          },
+          "runAfter": {}
+        },
+        "Written": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Written",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {}
+        },
+        "Entries": {
+          "type": "Compose",
+          "inputs": "@json(triggerBody()?['text'])",
+          "runAfter": {
+            "Severity_Map": [
+              "Succeeded"
+            ],
+            "SourceType_Map": [
+              "Succeeded"
+            ],
+            "Written": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Get_config": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_sharepointonline",
+              "operationId": "GetItems",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+            },
+            "parameters": {
+              "dataset": "@parameters('PPLF | SharePoint Site (pplf_SharePointSite)')",
+              "table": "@parameters('PPLF | SharePoint Config List (pplf_SharePointConfigList)')",
+              "$top": 500
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "runAfter": {
+            "Entries": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Config_rows": {
+          "type": "Select",
+          "inputs": {
+            "from": "@outputs('Get_config')?['body/value']",
+            "select": {
+              "name": "@item()?['Title']",
+              "enabled": "@item()?['PplfEnabled']",
+              "minSeverity": "@coalesce(item()?['PplfMinimumSeverity'], 2)"
+            }
+          },
+          "runAfter": {
+            "Get_config": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Default_config": {
+          "type": "Query",
+          "inputs": {
+            "from": "@body('Config_rows')",
+            "where": "@equals(item()?['name'], '*')"
+          },
+          "runAfter": {
+            "Config_rows": [
+              "Succeeded"
+            ]
+          }
+        },
+        "For_each_entry": {
+          "type": "Foreach",
+          "foreach": "@outputs('Entries')",
+          "runtimeConfiguration": {
+            "concurrency": {
+              "repetitions": 20
+            }
+          },
+          "actions": {
+            "Source_config": {
+              "type": "Query",
+              "inputs": {
+                "from": "@body('Config_rows')",
+                "where": "@equals(toLower(item()?['name']), toLower(items('For_each_entry')?['sourceName']))"
+              },
+              "runAfter": {}
+            },
+            "Effective_config": {
+              "type": "Compose",
+              "inputs": "@if(greater(length(body('Source_config')), 0), first(body('Source_config')), if(greater(length(body('Default_config')), 0), first(body('Default_config')), json(concat('{\"enabled\":true,\"minSeverity\":', string(coalesce(outputs('Severity_Map')?[parameters('PPLF | Default Minimum Level (pplf_DefaultMinimumLevel)')], 2)), '}'))))",
+              "runAfter": {
+                "Source_config": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Should_write": {
+              "type": "If",
+              "expression": {
+                "and": [
+                  {
+                    "equals": [
+                      "@outputs('Effective_config')?['enabled']",
+                      true
+                    ]
+                  },
+                  {
+                    "greaterOrEquals": [
+                      "@coalesce(outputs('Severity_Map')?[items('For_each_entry')?['level']], 2)",
+                      "@int(outputs('Effective_config')?['minSeverity'])"
+                    ]
+                  }
+                ]
+              },
+              "actions": {
+                "Add_log_item": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_sharepointonline",
+                      "operationId": "PostItem",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                    },
+                    "parameters": {
+                      "dataset": "@parameters('PPLF | SharePoint Site (pplf_SharePointSite)')",
+                      "table": "@parameters('PPLF | SharePoint Log List (pplf_SharePointLogList)')",
+                      "item/Title": "@take(coalesce(items('For_each_entry')?['message'], '(no message)'), 200)",
+                      "item/PplfLevel/Value": "@items('For_each_entry')?['level']",
+                      "item/PplfSeverity": "@coalesce(outputs('Severity_Map')?[items('For_each_entry')?['level']], 2)",
+                      "item/PplfSourceType/Value": "@coalesce(items('For_each_entry')?['sourceType'], 'Custom')",
+                      "item/PplfSourceName": "@take(items('For_each_entry')?['sourceName'], 200)",
+                      "item/PplfComponent": "@take(coalesce(items('For_each_entry')?['component'], ''), 200)",
+                      "item/PplfOperation": "@take(coalesce(items('For_each_entry')?['operation'], ''), 200)",
+                      "item/PplfMessage": "@take(coalesce(items('For_each_entry')?['message'], '(no message)'), 4000)",
+                      "item/PplfDetails": "@take(coalesce(items('For_each_entry')?['details'], ''), 60000)",
+                      "item/PplfCorrelationId": "@coalesce(items('For_each_entry')?['correlationId'], '')",
+                      "item/PplfSessionId": "@coalesce(items('For_each_entry')?['sessionId'], '')",
+                      "item/PplfUser": "@coalesce(items('For_each_entry')?['userPrincipalName'], '')",
+                      "item/PplfEnvironment": "@coalesce(items('For_each_entry')?['environment'], workflow()?['tags']?['environmentName'])",
+                      "item/PplfAppVersion": "@coalesce(items('For_each_entry')?['appVersion'], '')",
+                      "item/PplfRunUrl": "@coalesce(items('For_each_entry')?['runUrl'], '')",
+                      "item/PplfDurationMs": "@items('For_each_entry')?['durationMs']",
+                      "item/PplfErrorCode": "@coalesce(items('For_each_entry')?['errorCode'], '')",
+                      "item/PplfClientTimestamp": "@coalesce(items('For_each_entry')?['clientTimestamp'], utcNow())",
+                      "item/PplfClientInfo": "@take(coalesce(items('For_each_entry')?['clientInfo'], ''), 255)"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "runAfter": {}
+                },
+                "Count_written": {
+                  "type": "IncrementVariable",
+                  "inputs": {
+                    "name": "Written",
+                    "value": 1
+                  },
+                  "runAfter": {
+                    "Add_log_item": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              },
+              "else": {
+                "actions": {}
+              },
+              "runAfter": {
+                "Effective_config": [
+                  "Succeeded"
+                ]
+              }
+            }
+          },
+          "runAfter": {
+            "Default_config": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Respond": {
+          "type": "Response",
+          "kind": "PowerApp",
+          "inputs": {
+            "statusCode": 200,
+            "body": {
+              "written": "@{variables('Written')}"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "written": {
+                  "title": "written",
+                  "x-ms-dynamically-added": true,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "For_each_entry": [
+              "Succeeded",
+              "Failed"
+            ]
+          }
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

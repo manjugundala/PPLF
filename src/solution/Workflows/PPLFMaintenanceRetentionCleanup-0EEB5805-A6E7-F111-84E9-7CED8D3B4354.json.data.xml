@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Workflow WorkflowId="{0eeb5805-a6e7-f111-84e9-7ced8d3b4354}" Name="PPLF | Maintenance | Retention Cleanup" Description="Runs daily. Deletes log entries older than the retention period. The * row (or PPLF Default Retention Days) is the maximum age for all entries; a source row can set a shorter period for that source. Deletes up to 5,000 entries per store per rule per run." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <JsonFileName>/Workflows/PPLFMaintenanceRetentionCleanup-0EEB5805-A6E7-F111-84E9-7CED8D3B4354.json</JsonFileName>
+  <Type>1</Type>
+  <Subprocess>0</Subprocess>
+  <Category>5</Category>
+  <Mode>0</Mode>
+  <Scope>4</Scope>
+  <OnDemand>0</OnDemand>
+  <TriggerOnCreate>0</TriggerOnCreate>
+  <TriggerOnDelete>0</TriggerOnDelete>
+  <AsyncAutodelete>0</AsyncAutodelete>
+  <SyncWorkflowLogOnFailure>0</SyncWorkflowLogOnFailure>
+  <StateCode>1</StateCode>
+  <StatusCode>2</StatusCode>
+  <RunAs>1</RunAs>
+  <IsTransacted>1</IsTransacted>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <BusinessProcessType>0</BusinessProcessType>
+  <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
+  <ModernFlowType>0</ModernFlowType>
+  <PrimaryEntity>none</PrimaryEntity>
+  <LocalizedNames>
+    <LocalizedName languagecode="1033" description="PPLF | Maintenance | Retention Cleanup" />
+  </LocalizedNames>
+  <Descriptions>
+    <Description languagecode="1033" description="Runs daily. Deletes log entries older than the retention period. The * row (or PPLF Default Retention Days) is the maximum age for all entries; a source row can set a shorter period for that source. Deletes up to 5,000 entries per store per rule per run." />
+  </Descriptions>
+</Workflow>

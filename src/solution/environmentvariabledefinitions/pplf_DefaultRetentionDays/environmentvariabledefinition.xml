@@ -1,0 +1,13 @@
+<environmentvariabledefinition schemaname="pplf_DefaultRetentionDays">
+  <description default="Used by the retention flow when no config row sets retention.">
+    <label description="Used by the retention flow when no config row sets retention." languagecode="1033" />
+  </description>
+  <displayname default="PPLF | Default Retention Days">
+    <label description="PPLF | Default Retention Days" languagecode="1033" />
+  </displayname>
+  <introducedversion>1.0.0.0</introducedversion>
+  <iscustomizable>1</iscustomizable>
+  <isrequired>0</isrequired>
+  <secretstore>0</secretstore>
+  <type>100000001</type>
+</environmentvariabledefinition>

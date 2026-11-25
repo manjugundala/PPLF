@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<optionset Name="pplf_logtarget" localizedName="PPLF | Log Target" description="Where log entries are stored." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <OptionSetType>picklist</OptionSetType>
+  <IsGlobal>1</IsGlobal>
+  <IntroducedVersion>1.0.0.0</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <displaynames>
+    <displayname description="PPLF | Log Target" languagecode="1033" />
+  </displaynames>
+  <Descriptions>
+    <Description description="Where log entries are stored." languagecode="1033" />
+  </Descriptions>
+  <options>
+    <option value="917000000" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Dataverse" languagecode="1033" />
+      </labels>
+    </option>
+    <option value="917000001" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="SharePoint" languagecode="1033" />
+      </labels>
+    </option>
+    <option value="917000002" ExternalValue="" IsHidden="0">
+      <labels>
+        <label description="Both" languagecode="1033" />
+      </labels>
+    </option>
+  </options>
+</optionset>

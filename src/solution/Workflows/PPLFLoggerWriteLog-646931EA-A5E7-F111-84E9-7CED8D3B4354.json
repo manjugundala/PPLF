@@ -1,0 +1,174 @@
+{
+  "properties": {
+    "connectionReferences": {},
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Button",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "title": "Level",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Trace, Debug, Information, Warning, Error or Critical",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_1": {
+                  "title": "Message",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "What happened",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_2": {
+                  "title": "SourceName",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Name of the calling flow, e.g. workflow()?['tags']?['flowDisplayName']",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_3": {
+                  "title": "Component",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Step or scope name (optional)",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_4": {
+                  "title": "Operation",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "What was being attempted (optional)",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_5": {
+                  "title": "Details",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "JSON text with extra context (optional)",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_6": {
+                  "title": "CorrelationId",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Pass through from the app that started the work (optional)",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_7": {
+                  "title": "RunUrl",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Link to the calling run (optional)",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "text_8": {
+                  "title": "ErrorCode",
+                  "type": "string",
+                  "x-ms-dynamically-added": true,
+                  "description": "Error code (optional)",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "number": {
+                  "title": "DurationMs",
+                  "type": "number",
+                  "x-ms-dynamically-added": true,
+                  "description": "Duration in milliseconds (optional)",
+                  "x-ms-content-hint": "NUMBER"
+                }
+              },
+              "required": [
+                "text",
+                "text_1",
+                "text_2"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Build_entry": {
+          "type": "Compose",
+          "inputs": [
+            {
+              "level": "@{triggerBody()?['text']}",
+              "message": "@{triggerBody()?['text_1']}",
+              "sourceName": "@{triggerBody()?['text_2']}",
+              "sourceType": "Cloud Flow",
+              "component": "@{triggerBody()?['text_3']}",
+              "operation": "@{triggerBody()?['text_4']}",
+              "details": "@{triggerBody()?['text_5']}",
+              "correlationId": "@{coalesce(triggerBody()?['text_6'], guid())}",
+              "runUrl": "@{triggerBody()?['text_7']}",
+              "errorCode": "@{triggerBody()?['text_8']}",
+              "durationMs": "@if(empty(triggerBody()?['number']), null, int(triggerBody()?['number']))",
+              "clientTimestamp": "@{utcNow()}",
+              "clientInfo": "Power Automate"
+            }
+          ],
+          "runAfter": {}
+        },
+        "Route": {
+          "type": "Workflow",
+          "inputs": {
+            "host": {
+              "workflowReferenceName": "f8928ed3-a5e7-f111-84e9-7ced8d3b4354"
+            },
+            "body": {
+              "text": "@{string(outputs('Build_entry'))}"
+            }
+          },
+          "runAfter": {
+            "Build_entry": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Respond": {
+          "type": "Response",
+          "kind": "PowerApp",
+          "inputs": {
+            "statusCode": 200,
+            "body": {
+              "accepted": "@{body('Route')?['accepted']}"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accepted": {
+                  "title": "accepted",
+                  "x-ms-dynamically-added": true,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Route": [
+              "Succeeded"
+            ]
+          }
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

@@ -1,0 +1,161 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "pplf_sharedcommondataserviceforapps"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      },
+      "shared_sharepointonline": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "pplf_sharedsharepointonline"
+        },
+        "api": {
+          "name": "shared_sharepointonline"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "PPLF | Log Target (pplf_LogTarget)": {
+          "defaultValue": "Dataverse",
+          "type": "String",
+          "metadata": {
+            "schemaName": "pplf_LogTarget",
+            "description": "Where routed logs are written: Dataverse, SharePoint or Both."
+          }
+        },
+        "PPLF | SharePoint Site (pplf_SharePointSite)": {
+          "defaultValue": "",
+          "type": "String",
+          "metadata": {
+            "schemaName": "pplf_SharePointSite",
+            "description": "Site that holds the PPLF lists. Only needed when Log Target is SharePoint or Both."
+          }
+        },
+        "PPLF | SharePoint Log List (pplf_SharePointLogList)": {
+          "defaultValue": "",
+          "type": "String",
+          "metadata": {
+            "schemaName": "pplf_SharePointLogList",
+            "description": "The PPLF Logs list (stored as the list id)."
+          }
+        }
+      },
+      "triggers": {
+        "When_a_log_row_is_added": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 1,
+              "subscriptionRequest/entityname": "pplf_log",
+              "subscriptionRequest/scope": 4
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "conditions": [
+            {
+              "expression": "@equals(parameters('PPLF | Log Target (pplf_LogTarget)'), 'SharePoint')"
+            }
+          ]
+        }
+      },
+      "actions": {
+        "Severity_Names": {
+          "type": "Compose",
+          "inputs": [
+            "Trace",
+            "Debug",
+            "Information",
+            "Warning",
+            "Error",
+            "Critical"
+          ],
+          "runAfter": {}
+        },
+        "Copy_to_SharePoint": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_sharepointonline",
+              "operationId": "PostItem",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+            },
+            "parameters": {
+              "dataset": "@parameters('PPLF | SharePoint Site (pplf_SharePointSite)')",
+              "table": "@parameters('PPLF | SharePoint Log List (pplf_SharePointLogList)')",
+              "item/Title": "@triggerOutputs()?['body/pplf_name']",
+              "item/PplfLevel/Value": "@outputs('Severity_Names')[triggerOutputs()?['body/pplf_severity']]",
+              "item/PplfSeverity": "@triggerOutputs()?['body/pplf_severity']",
+              "item/PplfSourceType/Value": "@coalesce(triggerOutputs()?['body/_pplf_sourcetype_label'], 'Custom')",
+              "item/PplfSourceName": "@triggerOutputs()?['body/pplf_sourcename']",
+              "item/PplfComponent": "@triggerOutputs()?['body/pplf_component']",
+              "item/PplfOperation": "@triggerOutputs()?['body/pplf_operation']",
+              "item/PplfMessage": "@triggerOutputs()?['body/pplf_message']",
+              "item/PplfDetails": "@take(coalesce(triggerOutputs()?['body/pplf_details'], ''), 60000)",
+              "item/PplfCorrelationId": "@triggerOutputs()?['body/pplf_correlationid']",
+              "item/PplfSessionId": "@triggerOutputs()?['body/pplf_sessionid']",
+              "item/PplfUser": "@triggerOutputs()?['body/pplf_userprincipalname']",
+              "item/PplfEnvironment": "@triggerOutputs()?['body/pplf_environment']",
+              "item/PplfAppVersion": "@triggerOutputs()?['body/pplf_appversion']",
+              "item/PplfRunUrl": "@triggerOutputs()?['body/pplf_runurl']",
+              "item/PplfDurationMs": "@triggerOutputs()?['body/pplf_durationms']",
+              "item/PplfErrorCode": "@triggerOutputs()?['body/pplf_errorcode']",
+              "item/PplfClientTimestamp": "@coalesce(triggerOutputs()?['body/pplf_clienttimestamp'], triggerOutputs()?['body/createdon'])",
+              "item/PplfClientInfo": "@take(coalesce(triggerOutputs()?['body/pplf_clientinfo'], ''), 255)"
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "runAfter": {
+            "Severity_Names": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Remove_from_Dataverse": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "DeleteRecord",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "pplf_logs",
+              "recordId": "@triggerOutputs()?['body/pplf_logid']"
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "runAfter": {
+            "Copy_to_SharePoint": [
+              "Succeeded"
+            ]
+          }
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}
