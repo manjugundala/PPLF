@@ -7,9 +7,9 @@
 [![CI](https://github.com/manjugundala/PPLF/actions/workflows/ci.yml/badge.svg)](https://github.com/manjugundala/PPLF/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/manjugundala/PPLF?sort=semver)](https://github.com/manjugundala/PPLF/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/manjugundala/PPLF/blob/main/LICENSE)
-[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-0F6CBD)](https://manjugundala.github.io/PPLF/)
+[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-002868)](https://manjugundala.github.io/PPLF/)
 
-[Get started](getting-started.md) · [Architecture](architecture.md) · [Canvas apps](canvas-apps.md) · [Flows](power-automate.md) · [Power Pages](power-pages.md) · [Contribute](https://github.com/manjugundala/PPLF/blob/main/CONTRIBUTING.md)
+[Prerequisites](prerequisites.md) · [Get started](getting-started.md) · [Architecture](architecture.md) · [Canvas apps](canvas-apps.md) · [Flows](power-automate.md) · [Power Pages](power-pages.md) · [Contribute](https://github.com/manjugundala/PPLF/blob/main/CONTRIBUTING.md)
 
 </div>
 
@@ -32,6 +32,13 @@ PPLF gives every Power Platform component **the same log entry**, **the same lev
 - **PPLF - Configuration App**: a modern Fluent canvas app to choose the target, create SharePoint lists, manage settings and read logs.
 - **Built for Git**: schema-as-code, generated flows, unit tests, CI, an export-to-pull-request workflow and tagged releases with managed and unmanaged solutions.
 
+## Configuration App
+
+![PPLF - Configuration App](images/configuration-app.png)
+
+Choose the log target, create the SharePoint lists, set levels, retention and alerts, and browse logs.
+See [Configuration App](configuration-app.md).
+
 ## How it works
 
 ```mermaid
@@ -53,6 +60,15 @@ flowchart LR
 
 Details, sequence diagrams and the data model: **[docs/architecture.md](architecture.md)**.
 
+## Prerequisites
+
+- A Power Platform environment **with Dataverse**, and **System Administrator** or **System Customizer** in it
+- Connections for **Dataverse**, plus **SharePoint** (SharePoint target) and **Office 365 Outlook** (alerts), in the same DLP group
+- For the SharePoint target: a site where you can create lists
+- Licences that match your target: see [Licensing](licensing.md)
+
+Full list, including tools for contributors: **[Prerequisites](prerequisites.md)**.
+
 ## Quick start
 
 1. **Install**: import the managed solution from [Releases](https://github.com/manjugundala/PPLF/releases), or build it from source in your browser:
@@ -71,6 +87,16 @@ IfError(
 ```
 
 Full walkthrough: **[Getting started](getting-started.md)**.
+
+## Documentation
+
+| Start here | Use PPLF | Run it | Build on it |
+|---|---|---|---|
+| [Prerequisites](prerequisites.md) | [Canvas apps](canvas-apps.md) | [Configuration App](configuration-app.md) | [Architecture](architecture.md) |
+| [Getting started](getting-started.md) | [Power Automate](power-automate.md) | [Configuration](configuration.md) | [ALM and Git](alm-and-git.md) |
+| [How PPLF compares](comparison.md) | [Power Pages](power-pages.md) | [Retention and alerts](retention-and-alerts.md) | [Schema reference](reference/schema.md) |
+| [FAQ](faq.md) | [Model-driven apps](model-driven-apps.md) | [Security and privacy](security.md) | [Decisions (ADRs)](adr/README.md) |
+| | [Plug-ins and Custom API](plugins.md) | [Licensing](licensing.md) · [Troubleshooting](troubleshooting.md) | [Contributing](https://github.com/manjugundala/PPLF/blob/main/CONTRIBUTING.md) |
 
 ## What a log entry looks like
 

@@ -6,9 +6,16 @@ The solution version in Dataverse is the same number with a fourth part (1.0.0 â
 
 ## [Unreleased]
 
-## [1.0.0] - 2026-11-23
+## [1.0.0] - 2026-11-24
 
 ### Added
+- PPLF - Configuration App built and published in the dev environment, with the Texas flag theme shared with PPMF
+  (`BrandTheme` in `App.OnStart`), title bands, and nav icons; app icon in `brand/`.
+- Exported, unpacked solution in `src/solution` (environment variable values excluded) and the
+  *Unpack solution drop* workflow for exports made without a service principal.
+- Studio paste files and guide for the Configuration App, with a lint that blocks properties Studio rejects.
+- Documentation: prerequisites, Configuration App guide, comparison with Power Platform monitoring tools, FAQ;
+  `SUPPORT.md` and `GOVERNANCE.md`.
 - Schema-as-code (`schema/pplf.schema.json`): one definition for the Dataverse tables, the SharePoint lists, environment variables, connection references and security roles.
 - `PPLF Log` and `PPLF Log Configuration` Dataverse tables with global choices for level and source type.
 - SharePoint lists with the same columns (indexed for large lists), created by a flow, a browser script or the CLI.

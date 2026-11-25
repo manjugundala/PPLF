@@ -8,6 +8,8 @@ edit_uri: edit/main/docs/
 docs_dir: docs
 theme:
   name: material
+  logo: images/logging-icon.svg
+  favicon: images/logging-icon.svg
   features:
     - navigation.sections
     - navigation.top
@@ -15,11 +17,13 @@ theme:
     - search.highlight
   palette:
     - scheme: default
-      primary: blue
+      primary: custom
       toggle: { icon: material/brightness-7, name: Dark mode }
     - scheme: slate
-      primary: blue
+      primary: custom
       toggle: { icon: material/brightness-4, name: Light mode }
+extra_css:
+  - stylesheets/brand.css
 markdown_extensions:
   - admonition
   - tables
@@ -35,9 +39,12 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
 nav:
   - Home: index.md
+  - Prerequisites: prerequisites.md
   - Getting started: getting-started.md
+  - How PPLF compares: comparison.md
   - Architecture: architecture.md
   - Configuration: configuration.md
+  - Configuration App: configuration-app.md
   - Using PPLF:
       - Canvas apps: canvas-apps.md
       - Power Automate: power-automate.md
@@ -49,6 +56,7 @@ nav:
       - Security and privacy: security.md
       - Retention and alerts: retention-and-alerts.md
       - Troubleshooting: troubleshooting.md
+      - FAQ: faq.md
   - Contributing:
       - ALM and Git: alm-and-git.md
       - Schema reference: reference/schema.md
