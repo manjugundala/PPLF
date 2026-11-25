@@ -48,6 +48,12 @@ jobs:
             Write-Host "Removing $($_.FullName)"
             Remove-Item $_.FullName
           }
+          # flows snapshot environment variable values into their parameter defaults; blank them
+          Get-ChildItem src/solution/Workflows -Filter *.json | ForEach-Object {
+            $t = Get-Content $_.FullName -Raw
+            $n = [regex]::Replace($t, '("PPLF \| [^"]+ \(pplf_(AlertRecipients|SharePointSite|SharePointLogList|SharePointConfigList)\)":\s*\{\s*"defaultValue":\s*)"[^"]*"', '$1""')
+            if ($n -ne $t) { Set-Content $_.FullName $n -NoNewline; Write-Host "Blanked defaults in $($_.Name)" }
+          }
           Remove-Item .drop -Recurse -Force
           # unpack replaces the folder; keep the hand-written README
           git checkout HEAD -- src/solution/README.md
