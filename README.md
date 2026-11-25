@@ -34,6 +34,14 @@ PPLF gives every Power Platform component **the same log entry**, **the same lev
 - **PPLF - Configuration App**: a modern Fluent canvas app to choose the target, create SharePoint lists, manage settings and read logs.
 - **Built for Git**: schema-as-code, generated flows, unit tests, CI, an export-to-pull-request workflow and tagged releases with managed and unmanaged solutions.
 
+## Configuration App
+
+![PPLF - Configuration App](docs/images/configuration-app.png)
+
+The **PPLF - Configuration App** (canvas, modern controls) chooses the log target, creates the SharePoint lists,
+sets levels, retention and alerts, and browses logs by level, source and correlation id. It uses the same
+Texas flag theme as the [Power Platform Monitoring Framework](https://github.com/manjugundala/PPMF).
+
 ## How it works
 
 ```mermaid
