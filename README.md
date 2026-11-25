@@ -24,7 +24,7 @@ Low-code solutions fail quietly. A Patch fails on one user's phone, a flow times
 Logging is how you find out. Without it:
 
 - a user's "it didn't save" can't be diagnosed, because the error happened on their device and is gone;
-- flow run history is gone after 28 days, and plug-in traces after 24 hours;
+- by default, flow run history is gone after 28 days, and plug-in traces after 24 hours ([sources](docs/why-logging.md#sources));
 - an `IfError` that hides a failure from the user hides it from you too;
 - nobody can show an auditor who changed what, and when.
 

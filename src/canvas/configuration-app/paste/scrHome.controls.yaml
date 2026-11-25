@@ -121,7 +121,7 @@
                 Variant: AutoLayout
                 Properties:
                   LayoutDirection: =LayoutDirection.Horizontal
-                  Height: =112
+                  Height: =120
                   FillPortions: =0
                   LayoutGap: =PplfGap
                   DropShadow: =DropShadow.None
@@ -140,7 +140,7 @@
                               ))
                         TemplateSize: =240
                         TemplatePadding: =0
-                        Height: =112
+                        Height: =120
                         Width: =Parent.Width
                         OnSelect: =Set(gblLogLevelFilter, If(ThisItem.Label = "All entries", Blank(), ThisItem.Severity)); Navigate(scrLogs, ScreenTransition.None)
                       Children:
@@ -167,18 +167,18 @@
                               Size: =32
                               Weight: ='TextCanvas.Weight'.Semibold
                               X: =20
-                              Y: =40
+                              Y: =52
                               Width: =Parent.TemplateWidth - 40
-                              Height: =56
+                              Height: =52
                         - lblKpiLabel:
                             Control: Text@0.0.51
                             Properties:
                               Text: =ThisItem.Label
                               FontColor: =BrandTheme.TextSecondary
                               X: =20
-                              Y: =10
+                              Y: =12
                               Width: =Parent.TemplateWidth - 40
-                              Height: =24
+                              Height: =28
             - lblRecentTitle:
                 Control: Text@0.0.51
                 Properties:

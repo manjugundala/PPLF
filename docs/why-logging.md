@@ -9,8 +9,8 @@ problems only show up later, in production, on someone else's device.
 | Situation | Without logging | With PPLF |
 |---|---|---|
 | A user says "it didn't save" | You ask for a screenshot, try to reproduce it, and usually can't. The error happened on their device and is gone. | Search their UPN or the screen name and read the exact error, the record and the time. |
-| A flow failed last month | Flow run history is kept for 28 days. Older failures are gone, and only the flow's owners and admins can see them. | Failures are kept for as long as you set, in one place, readable by your support team. |
-| A plug-in throws in production | The plug-in trace log is off by default, and its entries are deleted after 24 hours. | The plug-in writes an entry with the error code and details, kept like every other entry. |
+| A flow failed last month | Flow run history is kept for 28 days by default.[^flowruns] Older failures are gone, and only the flow's owners and admins can see them. | Failures are kept for as long as you set, in one place, readable by your support team. |
+| A plug-in throws in production | The plug-in trace log is meant for debugging and is usually off in production. Its entries are kept for 24 hours.[^tracelog] | The plug-in writes an entry with the error code and details, kept like every other entry. |
 | One click starts an app, a flow and a plug-in | Three products, three tools, no shared id. You line them up by timestamps and guesswork. | One correlation id shows the whole chain in order. |
 | An `IfError` hides a failure from the user | Nobody finds out. The data is quietly wrong. | The `IfError` branch logs the failure, and alerts can email you. |
 | An auditor asks who changed the configuration | There's no record. | The Configuration App logs every target, level and retention change with the user and time. |
@@ -50,3 +50,8 @@ PPLF does not replace these tools. It adds the business-level log that sits acro
 - **Never in the way**: a failed log write must not break the app or process that called it.
 
 PPLF is built around these rules. [Get started](getting-started.md).
+
+## Sources
+
+[^flowruns]: Microsoft Learn, [Missing runs or triggers history for a flow](https://learn.microsoft.com/troubleshoot/power-platform/power-automate/flow-run-issues/missing-runs-or-triggers-history-for-a-flow) and [Manage cloud flow run history in Dataverse](https://learn.microsoft.com/power-automate/dataverse/cloud-flow-run-metadata). Admins can store run history in Dataverse, but that covers flows only.
+[^tracelog]: Microsoft Learn, [Plug-ins: tracing and logging](https://learn.microsoft.com/power-apps/developer/data-platform/logging-tracing) and [Write telemetry to Application Insights using ILogger](https://learn.microsoft.com/power-apps/developer/data-platform/application-insights-ilogger) (trace log data is stored for 24 hours).
