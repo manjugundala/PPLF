@@ -1,0 +1,59 @@
+name: Unpack solution drop
+
+# For exports made by hand (no service principal needed):
+#   1. Export the PPLF solution from dev twice: unmanaged and managed.
+#   2. Commit both zips to .drop/ as PPLF.zip and PPLF_managed.zip and push.
+# This workflow unpacks them into src/solution (canvas app sources included),
+# removes environment variable *values* so no tenant-specific settings are
+# published, deletes .drop/ and commits the result.
+
+on:
+  push:
+    branches: [main]
+    paths: ['.drop/**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  unpack:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the drop
+        shell: pwsh
+        run: |
+          foreach ($f in '.drop/PPLF.zip', '.drop/PPLF_managed.zip') {
+            if (-not (Test-Path $f)) { throw "Missing $f" }
+          }
+
+      - uses: microsoft/powerplatform-actions/actions-install@v1
+
+      - name: Unpack (unmanaged + managed)
+        uses: microsoft/powerplatform-actions/unpack-solution@v1
+        with:
+          solution-file: .drop/PPLF.zip
+          solution-folder: src/solution
+          solution-type: Both
+          process-canvas-apps: true
+          overwrite-files: true
+
+      - name: Remove environment variable values
+        shell: pwsh
+        run: |
+          Get-ChildItem src/solution -Recurse -Filter environmentvariablevalues.json | ForEach-Object {
+            Write-Host "Removing $($_.FullName)"
+            Remove-Item $_.FullName
+          }
+          Remove-Item .drop -Recurse -Force
+
+      - name: Commit
+        shell: pwsh
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A src/solution .drop
+          git commit -m "solution: unpack PPLF export into src/solution"
+          git push

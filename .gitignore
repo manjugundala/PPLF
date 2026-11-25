@@ -5,6 +5,7 @@ bin/
 obj/
 *.zip
 !samples/**/*.zip
+!.drop/*.zip
 
 # Local tooling
 node_modules/

@@ -64,6 +64,17 @@ For flows, change `tools/build/flows.mjs` (not the generated JSON), run `npm run
 3. Repository **Settings → Secrets and variables → Actions**: add `PPLF_DEV_URL`, `PPLF_APP_ID`, `PPLF_CLIENT_SECRET`, `PPLF_TENANT_ID`.
 4. **Actions → Export solution from dev → Run workflow**.
 
+## Exporting without a service principal
+
+If the export workflow's secrets are not set up yet, export by hand:
+
+1. In the dev environment, export the **PPLF** solution twice: unmanaged and managed.
+2. Copy the files to `.drop/PPLF.zip` and `.drop/PPLF_managed.zip`, commit and push to `main`.
+
+The **Unpack solution drop** workflow (`.github/workflows/unpack-solution-drop.yml`) unpacks both into
+`src/solution`, canvas app sources included, removes every `environmentvariablevalues.json` so no
+tenant-specific settings are published, deletes `.drop/` and commits the result.
+
 ## Native Git integration (alternative)
 
 Power Platform's built-in [Git integration](https://learn.microsoft.com/power-platform/alm/git-integration/overview) can commit the solution from the maker portal instead of the export workflow. If you use it, point it at a separate branch and folder (for example `src/solution`), and keep the release workflow as the only way to build zips.
