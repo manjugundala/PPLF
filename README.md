@@ -9,9 +9,9 @@
 [![CI](https://github.com/manjugundala/PPLF/actions/workflows/ci.yml/badge.svg)](https://github.com/manjugundala/PPLF/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/manjugundala/PPLF?sort=semver)](https://github.com/manjugundala/PPLF/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-0F6CBD)](https://manjugundala.github.io/PPLF/)
+[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-002868)](https://manjugundala.github.io/PPLF/)
 
-[Get started](docs/getting-started.md) · [Architecture](docs/architecture.md) · [Canvas apps](docs/canvas-apps.md) · [Flows](docs/power-automate.md) · [Power Pages](docs/power-pages.md) · [Contribute](CONTRIBUTING.md)
+[Prerequisites](docs/prerequisites.md) · [Get started](docs/getting-started.md) · [Architecture](docs/architecture.md) · [Canvas apps](docs/canvas-apps.md) · [Flows](docs/power-automate.md) · [Power Pages](docs/power-pages.md) · [Contribute](CONTRIBUTING.md)
 
 </div>
 
@@ -63,6 +63,15 @@ flowchart LR
 
 Details, sequence diagrams and the data model: **[docs/architecture.md](docs/architecture.md)**.
 
+## Prerequisites
+
+- A Power Platform environment **with Dataverse**, and **System Administrator** or **System Customizer** in it
+- Connections for **Dataverse**, plus **SharePoint** (SharePoint target) and **Office 365 Outlook** (alerts), in the same DLP group
+- For the SharePoint target: a site where you can create lists
+- Licences that match your target: see [Licensing](docs/licensing.md)
+
+Full list, including tools for contributors: **[Prerequisites](docs/prerequisites.md)**.
+
 ## Quick start
 
 1. **Install**: import the managed solution from [Releases](https://github.com/manjugundala/PPLF/releases), or build it from source in your browser:
@@ -81,6 +90,16 @@ IfError(
 ```
 
 Full walkthrough: **[Getting started](docs/getting-started.md)**.
+
+## Documentation
+
+| Start here | Use PPLF | Run it | Build on it |
+|---|---|---|---|
+| [Prerequisites](docs/prerequisites.md) | [Canvas apps](docs/canvas-apps.md) | [Configuration App](docs/configuration-app.md) | [Architecture](docs/architecture.md) |
+| [Getting started](docs/getting-started.md) | [Power Automate](docs/power-automate.md) | [Configuration](docs/configuration.md) | [ALM and Git](docs/alm-and-git.md) |
+| [How PPLF compares](docs/comparison.md) | [Power Pages](docs/power-pages.md) | [Retention and alerts](docs/retention-and-alerts.md) | [Schema reference](docs/reference/schema.md) |
+| [FAQ](docs/faq.md) | [Model-driven apps](docs/model-driven-apps.md) | [Security and privacy](docs/security.md) | [Decisions (ADRs)](docs/adr/README.md) |
+| | [Plug-ins and Custom API](docs/plugins.md) | [Licensing](docs/licensing.md) · [Troubleshooting](docs/troubleshooting.md) | [Contributing](CONTRIBUTING.md) |
 
 ## What a log entry looks like
 
@@ -108,6 +127,8 @@ Schema: [docs/reference/schema.md](docs/reference/schema.md) · Wire format: [sc
 | [`src/solution/`](src/solution) | The exported, unpacked solution |
 | [`tools/`](tools) | Generators, deployer and SharePoint provisioning |
 | [`docs/`](docs) | Documentation, ADRs and diagrams |
+| [`brand/`](brand) | App icon and theme colours (shared with PPMF) |
+| [`.github/`](.github) | CI, release, export and unpack workflows; issue and pull request templates |
 | [`samples/`](samples) | A sample canvas screen and a Power Pages snippet |
 
 ## Development
@@ -132,9 +153,10 @@ No dependencies to install: Node 22+ and Python 3 with PyYAML are all you need. 
 
 Ideas and votes welcome in [Discussions](https://github.com/manjugundala/PPLF/discussions).
 
-## Contributing
+## Contributing and support
 
-Contributions are welcome: bug reports, docs, new targets or clients. Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [code of conduct](CODE_OF_CONDUCT.md). Security issues: [SECURITY.md](SECURITY.md).
+Contributions are welcome: bug reports, docs, new targets or clients. Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [code of conduct](CODE_OF_CONDUCT.md).
+Questions: [SUPPORT.md](SUPPORT.md). Security issues: [SECURITY.md](SECURITY.md). How decisions and releases are made: [GOVERNANCE.md](GOVERNANCE.md).
 
 ## Citing
 

@@ -4,6 +4,8 @@ This guide takes you from nothing to a working log entry in about 20 minutes.
 
 ## Before you start
 
+The short version is below; the full list is in [Prerequisites](prerequisites.md).
+
 You need:
 
 - A Power Platform environment **with Dataverse** (a developer environment is fine). The solution, its environment variables and the admin app live in Dataverse, even if logs go to SharePoint.

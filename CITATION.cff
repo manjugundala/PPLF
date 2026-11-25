@@ -5,7 +5,7 @@ abstract: "An open-source, configurable logging framework for Microsoft Power Pl
 type: software
 license: MIT
 version: 1.0.0
-date-released: 2026-11-23
+date-released: 2026-11-24
 keywords:
   - power-platform
   - logging
@@ -13,6 +13,10 @@ keywords:
   - dataverse
   - sharepoint
   - low-code
+  - power-apps
+  - power-automate
+  - power-pages
+  - application-lifecycle-management
 authors:
   - family-names: "Gundala"
     given-names: "Manjunath"

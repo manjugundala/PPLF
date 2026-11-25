@@ -1,0 +1,12 @@
+/* Texas flag palette, shared with the Power Platform Monitoring Framework (PPMF) */
+:root, [data-md-color-scheme="default"] {
+  --md-primary-fg-color: #002868;
+  --md-primary-fg-color--light: #0a3a8c;
+  --md-primary-fg-color--dark: #00205b;
+  --md-accent-fg-color: #bf0d3e;
+}
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #002868;
+  --md-accent-fg-color: #ff4d6d;
+}
+.md-header { border-bottom: 4px solid #bf0d3e; }

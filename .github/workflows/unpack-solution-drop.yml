@@ -48,6 +48,8 @@ jobs:
             Remove-Item $_.FullName
           }
           Remove-Item .drop -Recurse -Force
+          # unpack replaces the folder; keep the hand-written README
+          git checkout HEAD -- src/solution/README.md
 
       - name: Commit
         shell: pwsh
