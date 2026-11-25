@@ -5,7 +5,7 @@ name: Unpack solution drop
 #   2. Commit both zips to .drop/ as PPLF.zip and PPLF_managed.zip and push.
 # This workflow unpacks them into src/solution (canvas app sources included),
 # removes environment variable *values* so no tenant-specific settings are
-# published, deletes .drop/ and commits the result.
+# published, deletes .drop/ and opens a pull request (main is protected).
 
 on:
   push:
@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   unpack:
@@ -51,11 +52,16 @@ jobs:
           # unpack replaces the folder; keep the hand-written README
           git checkout HEAD -- src/solution/README.md
 
-      - name: Commit
-        shell: pwsh
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A src/solution .drop
-          git commit -m "solution: unpack PPLF export into src/solution"
-          git push
+      - name: Open pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: solution/unpack-drop
+          delete-branch: true
+          commit-message: "solution: unpack PPLF export into src/solution"
+          title: "solution: unpack PPLF export into src/solution"
+          body: |
+            Unpacked from `.drop/` by the *Unpack solution drop* workflow.
+            Environment variable values were removed. Review the diff, then merge.
+          add-paths: |
+            src/solution
+            .drop
