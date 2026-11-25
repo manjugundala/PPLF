@@ -5,10 +5,6 @@
       "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
       "contentVersion": "1.0.0.0",
       "parameters": {
-        "$connections": {
-          "defaultValue": {},
-          "type": "Object"
-        },
         "$authentication": {
           "defaultValue": {},
           "type": "SecureObject"
@@ -16,6 +12,9 @@
       },
       "triggers": {
         "manual": {
+          "metadata": {
+            "operationMetadataId": "acdeac13-5f5a-4f3d-86af-fa0b5226ba57"
+          },
           "type": "Request",
           "kind": "Button",
           "inputs": {
@@ -104,6 +103,10 @@
       },
       "actions": {
         "Build_entry": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "928f9c27-54e4-42ca-981e-2f9784fbcbd0"
+          },
           "type": "Compose",
           "inputs": [
             {
@@ -121,10 +124,17 @@
               "clientTimestamp": "@{utcNow()}",
               "clientInfo": "Power Automate"
             }
-          ],
-          "runAfter": {}
+          ]
         },
         "Route": {
+          "runAfter": {
+            "Build_entry": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "64acdeda-36ef-432c-95db-b8a32612a4ec"
+          },
           "type": "Workflow",
           "inputs": {
             "host": {
@@ -133,14 +143,17 @@
             "body": {
               "text": "@{string(outputs('Build_entry'))}"
             }
-          },
-          "runAfter": {
-            "Build_entry": [
-              "Succeeded"
-            ]
           }
         },
         "Respond": {
+          "runAfter": {
+            "Route": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "9d54a39d-0a34-40f1-9ddb-e59c64f5f7b2"
+          },
           "type": "Response",
           "kind": "PowerApp",
           "inputs": {
@@ -158,11 +171,6 @@
                 }
               }
             }
-          },
-          "runAfter": {
-            "Route": [
-              "Succeeded"
-            ]
           }
         }
       },

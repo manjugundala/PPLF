@@ -5,10 +5,6 @@
       "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
       "contentVersion": "1.0.0.0",
       "parameters": {
-        "$connections": {
-          "defaultValue": {},
-          "type": "Object"
-        },
         "$authentication": {
           "defaultValue": {},
           "type": "SecureObject"
@@ -16,6 +12,9 @@
       },
       "triggers": {
         "manual": {
+          "metadata": {
+            "operationMetadataId": "b08e83bb-ef2e-44b6-9a28-e80948ce0489"
+          },
           "type": "Request",
           "kind": "Button",
           "inputs": {
@@ -37,6 +36,10 @@
       },
       "actions": {
         "CorrelationId": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "cc78c8f5-a06b-4c35-a499-8eff69d3c060"
+          },
           "type": "InitializeVariable",
           "inputs": {
             "variables": [
@@ -46,10 +49,17 @@
                 "value": "@{coalesce(triggerBody()?['text'], guid())}"
               }
             ]
-          },
-          "runAfter": {}
+          }
         },
         "Started": {
+          "runAfter": {
+            "CorrelationId": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "d0df9d17-baa0-4611-870a-3a055ed3c5fa"
+          },
           "type": "InitializeVariable",
           "inputs": {
             "variables": [
@@ -59,40 +69,51 @@
                 "value": "@{utcNow()}"
               }
             ]
-          },
-          "runAfter": {
-            "CorrelationId": [
-              "Succeeded"
-            ]
           }
         },
         "Try": {
-          "type": "Scope",
           "actions": {
             "Your_steps_go_here": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "d56237e7-63ac-447f-bbbc-e898026f01b5"
+              },
               "type": "Compose",
-              "inputs": "Replace this with the real work.",
-              "runAfter": {}
+              "inputs": "Replace this with the real work."
             }
           },
           "runAfter": {
             "Started": [
               "Succeeded"
             ]
-          }
+          },
+          "metadata": {
+            "operationMetadataId": "245be1b7-fd2a-4833-b03a-51376b0ee850"
+          },
+          "type": "Scope"
         },
         "Catch": {
-          "type": "Scope",
           "actions": {
             "Failed_actions": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "20edd32f-6930-45dd-9b64-7e53e2336db4"
+              },
               "type": "Query",
               "inputs": {
                 "from": "@result('Try')",
                 "where": "@contains(createArray('Failed', 'TimedOut'), item()?['status'])"
-              },
-              "runAfter": {}
+              }
             },
             "Log_error": {
+              "runAfter": {
+                "Failed_actions": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "c1a89368-200a-4d0c-a0f9-6d8cdff0b07b"
+              },
               "type": "Workflow",
               "inputs": {
                 "host": {
@@ -108,14 +129,18 @@
                   "text_7": "@{concat('https://make.powerautomate.com/environments/', workflow()?['tags']?['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']?['name'])}",
                   "text_8": "@{first(body('Failed_actions'))?['code']}"
                 }
-              },
-              "runAfter": {
-                "Failed_actions": [
-                  "Succeeded"
-                ]
               }
             },
             "Fail_the_run": {
+              "runAfter": {
+                "Log_error": [
+                  "Succeeded",
+                  "Failed"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "ffe09638-db10-43a3-aabe-388498fa36fd"
+              },
               "type": "Terminate",
               "inputs": {
                 "runStatus": "Failed",
@@ -123,12 +148,6 @@
                   "code": "PPLF_TRY_FAILED",
                   "message": "@{first(body('Failed_actions'))?['name']} failed. See the PPLF log for details."
                 }
-              },
-              "runAfter": {
-                "Log_error": [
-                  "Succeeded",
-                  "Failed"
-                ]
               }
             }
           },
@@ -137,12 +156,19 @@
               "Failed",
               "TimedOut"
             ]
-          }
+          },
+          "metadata": {
+            "operationMetadataId": "f75b76fa-925e-42b3-8974-8071cbce561f"
+          },
+          "type": "Scope"
         },
         "Finally": {
-          "type": "Scope",
           "actions": {
             "Log_completed": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "ecab4700-5fa6-4d75-96a1-ac5ec63226ed"
+              },
               "type": "Workflow",
               "inputs": {
                 "host": {
@@ -157,15 +183,18 @@
                   "text_6": "@{variables('CorrelationId')}",
                   "text_7": "@{concat('https://make.powerautomate.com/environments/', workflow()?['tags']?['environmentName'], '/flows/', workflow()?['name'], '/runs/', workflow()?['run']?['name'])}"
                 }
-              },
-              "runAfter": {}
+              }
             }
           },
           "runAfter": {
             "Try": [
               "Succeeded"
             ]
-          }
+          },
+          "metadata": {
+            "operationMetadataId": "c9df6e5a-0942-4f76-8a61-be7f22fc3765"
+          },
+          "type": "Scope"
         }
       },
       "outputs": {}

@@ -50,6 +50,9 @@
       },
       "triggers": {
         "manual": {
+          "metadata": {
+            "operationMetadataId": "a116c0f4-c8ac-44e2-aa6f-e32e08ea6828"
+          },
           "type": "Request",
           "kind": "Button",
           "inputs": {
@@ -73,6 +76,10 @@
       },
       "actions": {
         "Severity_Map": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "22d2faad-19a2-4189-ae81-c3de016e489b"
+          },
           "type": "Compose",
           "inputs": {
             "Trace": 0,
@@ -82,10 +89,13 @@
             "Error": 4,
             "Critical": 5,
             "None": 99
-          },
-          "runAfter": {}
+          }
         },
         "SourceType_Map": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "54b2b396-e392-4838-8dcd-04bd2590984b"
+          },
           "type": "Compose",
           "inputs": {
             "Canvas App": 917000000,
@@ -94,12 +104,9 @@
             "Power Pages": 917000003,
             "Plug-in": 917000004,
             "Custom": 917000005
-          },
-          "runAfter": {}
+          }
         },
         "Entries": {
-          "type": "Compose",
-          "inputs": "@json(triggerBody()?['text'])",
           "runAfter": {
             "Severity_Map": [
               "Succeeded"
@@ -107,16 +114,28 @@
             "SourceType_Map": [
               "Succeeded"
             ]
-          }
+          },
+          "metadata": {
+            "operationMetadataId": "8eb139ce-1880-425d-a0d1-c9fde2adbca1"
+          },
+          "type": "Compose",
+          "inputs": "@json(triggerBody()?['text'])"
         },
         "Route_by_target": {
-          "type": "Switch",
-          "expression": "@parameters('PPLF | Log Target (pplf_LogTarget)')",
+          "runAfter": {
+            "Entries": [
+              "Succeeded"
+            ]
+          },
           "cases": {
             "SharePoint": {
               "case": "SharePoint",
               "actions": {
                 "Write_to_SharePoint": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "44644a4f-0837-45bf-bf98-9e4af371cd07"
+                  },
                   "type": "Workflow",
                   "inputs": {
                     "host": {
@@ -125,8 +144,7 @@
                     "body": {
                       "text": "@{triggerBody()?['text']}"
                     }
-                  },
-                  "runAfter": {}
+                  }
                 }
               }
             },
@@ -134,6 +152,10 @@
               "case": "Both",
               "actions": {
                 "Write_to_Dataverse_both": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "dd5b2f46-d400-40b7-bb15-484bf568c242"
+                  },
                   "type": "Workflow",
                   "inputs": {
                     "host": {
@@ -142,10 +164,13 @@
                     "body": {
                       "text": "@{triggerBody()?['text']}"
                     }
-                  },
-                  "runAfter": {}
+                  }
                 },
                 "Write_to_SharePoint_both": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "3342ff5e-2bd4-415b-b0e8-f71f84848203"
+                  },
                   "type": "Workflow",
                   "inputs": {
                     "host": {
@@ -154,8 +179,7 @@
                     "body": {
                       "text": "@{triggerBody()?['text']}"
                     }
-                  },
-                  "runAfter": {}
+                  }
                 }
               }
             }
@@ -163,6 +187,10 @@
           "default": {
             "actions": {
               "Write_to_Dataverse": {
+                "runAfter": {},
+                "metadata": {
+                  "operationMetadataId": "f1a27cce-ceb3-4b20-886a-75eccf84f2a5"
+                },
                 "type": "Workflow",
                 "inputs": {
                   "host": {
@@ -171,51 +199,38 @@
                   "body": {
                     "text": "@{triggerBody()?['text']}"
                   }
-                },
-                "runAfter": {}
+                }
               }
             }
           },
+          "expression": "@parameters('PPLF | Log Target (pplf_LogTarget)')",
+          "metadata": {
+            "operationMetadataId": "cf8860d4-b0e5-4704-8194-cfaa825d5816"
+          },
+          "type": "Switch"
+        },
+        "Alert_entries": {
           "runAfter": {
             "Entries": [
               "Succeeded"
             ]
-          }
-        },
-        "Alert_entries": {
+          },
+          "metadata": {
+            "operationMetadataId": "5d93199e-8d49-41c2-a6b8-53bc2e4a4cce"
+          },
           "type": "Query",
           "inputs": {
             "from": "@outputs('Entries')",
             "where": "@and(not(equals(parameters('PPLF | Alert Minimum Level (pplf_AlertMinimumLevel)'), 'None')), greaterOrEquals(coalesce(outputs('Severity_Map')?[item()?['level']], 2), coalesce(outputs('Severity_Map')?[parameters('PPLF | Alert Minimum Level (pplf_AlertMinimumLevel)')], 2)))"
-          },
-          "runAfter": {
-            "Entries": [
-              "Succeeded"
-            ]
           }
         },
         "Send_alert_if_needed": {
-          "type": "If",
-          "expression": {
-            "and": [
-              {
-                "greater": [
-                  "@length(body('Alert_entries'))",
-                  0
-                ]
-              },
-              {
-                "not": {
-                  "equals": [
-                    "@trim(parameters('PPLF | Alert Recipients (pplf_AlertRecipients)'))",
-                    ""
-                  ]
-                }
-              }
-            ]
-          },
           "actions": {
             "Alert_table": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "4247850f-2909-483d-90bb-8c8e691263b0"
+              },
               "type": "Table",
               "inputs": {
                 "from": "@body('Alert_entries')",
@@ -246,10 +261,17 @@
                     "value": "@coalesce(item()?['clientTimestamp'], utcNow())"
                   }
                 ]
-              },
-              "runAfter": {}
+              }
             },
             "Send_alert_email": {
+              "runAfter": {
+                "Alert_table": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "2ecd64b7-d503-41be-87c3-99797b0805d6"
+              },
               "type": "OpenApiConnection",
               "inputs": {
                 "host": {
@@ -263,25 +285,57 @@
                   "emailMessage/Body": "<p>The Power Platform Logging Framework recorded entries at or above the alert level.</p>@{body('Alert_table')}",
                   "emailMessage/Importance": "High"
                 },
-                "authentication": "@parameters('$authentication')"
-              },
-              "runAfter": {
-                "Alert_table": [
-                  "Succeeded"
-                ]
+                "authentication": {
+                  "type": "Raw",
+                  "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+                }
               }
             }
-          },
-          "else": {
-            "actions": {}
           },
           "runAfter": {
             "Alert_entries": [
               "Succeeded"
             ]
-          }
+          },
+          "expression": {
+            "and": [
+              {
+                "greater": [
+                  "@length(body('Alert_entries'))",
+                  0
+                ]
+              },
+              {
+                "not": {
+                  "equals": [
+                    "@trim(parameters('PPLF | Alert Recipients (pplf_AlertRecipients)'))",
+                    ""
+                  ]
+                }
+              }
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "e33476b6-4a41-402b-9034-02f18bd61152"
+          },
+          "type": "If"
         },
         "Respond": {
+          "runAfter": {
+            "Route_by_target": [
+              "Succeeded",
+              "Failed",
+              "Skipped"
+            ],
+            "Send_alert_if_needed": [
+              "Succeeded",
+              "Failed",
+              "Skipped"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "97c447d3-9495-4add-af18-67ef9f90ba1d"
+          },
           "type": "Response",
           "kind": "PowerApp",
           "inputs": {
@@ -305,18 +359,6 @@
                 }
               }
             }
-          },
-          "runAfter": {
-            "Route_by_target": [
-              "Succeeded",
-              "Failed",
-              "Skipped"
-            ],
-            "Send_alert_if_needed": [
-              "Succeeded",
-              "Failed",
-              "Skipped"
-            ]
           }
         }
       },
