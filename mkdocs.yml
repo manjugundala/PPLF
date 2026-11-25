@@ -39,6 +39,7 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
 nav:
   - Home: index.md
+  - Why logging: why-logging.md
   - Prerequisites: prerequisites.md
   - Getting started: getting-started.md
   - How PPLF compares: comparison.md

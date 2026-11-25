@@ -21,7 +21,15 @@
 
 Low-code solutions fail quietly. A Patch fails on one user's phone, a flow times out at 2 a.m., a portal form throws a script error, and nobody finds out until a user complains. The run history and monitor tools show one product at a time, they don't keep data for long, and you can't follow one user action from the app to the flow to the plug-in.
 
+Logging is how you find out. Without it:
+
+- a user's "it didn't save" can't be diagnosed, because the error happened on their device and is gone;
+- flow run history is gone after 28 days, and plug-in traces after 24 hours;
+- an `IfError` that hides a failure from the user hides it from you too;
+- nobody can show an auditor who changed what, and when.
+
 PPLF gives every Power Platform component **the same log entry**, **the same levels**, and **one place to read them**, with a **correlation id** that ties a user action together across products.
+More: **[Why logging is a necessity](docs/why-logging.md)**.
 
 ## Features
 
@@ -96,7 +104,7 @@ Full walkthrough: **[Getting started](docs/getting-started.md)**.
 |---|---|---|---|
 | [Prerequisites](docs/prerequisites.md) | [Canvas apps](docs/canvas-apps.md) | [Configuration App](docs/configuration-app.md) | [Architecture](docs/architecture.md) |
 | [Getting started](docs/getting-started.md) | [Power Automate](docs/power-automate.md) | [Configuration](docs/configuration.md) | [ALM and Git](docs/alm-and-git.md) |
-| [How PPLF compares](docs/comparison.md) | [Power Pages](docs/power-pages.md) | [Retention and alerts](docs/retention-and-alerts.md) | [Schema reference](docs/reference/schema.md) |
+| [Why logging](docs/why-logging.md) · [How PPLF compares](docs/comparison.md) | [Power Pages](docs/power-pages.md) | [Retention and alerts](docs/retention-and-alerts.md) | [Schema reference](docs/reference/schema.md) |
 | [FAQ](docs/faq.md) | [Model-driven apps](docs/model-driven-apps.md) | [Security and privacy](docs/security.md) | [Decisions (ADRs)](docs/adr/README.md) |
 | | [Plug-ins and Custom API](docs/plugins.md) | [Licensing](docs/licensing.md) · [Troubleshooting](docs/troubleshooting.md) | [Contributing](CONTRIBUTING.md) |
 
