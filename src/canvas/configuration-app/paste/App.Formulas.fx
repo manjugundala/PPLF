@@ -50,7 +50,7 @@ PplfGap = 16;
 
 // ---- Self-logging (the admin app logs its own actions) -----------------
 PplfSourceName = "PPLF - Configuration App";
-PplfAppVersion = "1.0.0";
+PplfAppVersion = "1.0.1";
 PplfAdminLog(Level: Text, Component: Text, Message: Text): Void = {
     If(IsBlank(gblPplfSessionId), Set(gblPplfSessionId, GUID()));
     IfError(

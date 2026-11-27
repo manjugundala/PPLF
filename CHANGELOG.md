@@ -6,6 +6,9 @@ The solution version in Dataverse is the same number with a fourth part (1.0.0 â
 
 ## [Unreleased]
 
+### Changed
+- Configuration App: `PplfAppVersion` is 1.0.1, so the app's own log entries carry the current version.
+
 ## [1.0.1] - 2026-11-24
 
 ### Changed
