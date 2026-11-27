@@ -8,7 +8,7 @@
     <Descriptions>
       <Description description="PPLF is a Power Platform native logging framework that gives Power Apps, Power Automate, Power Pages, model-driven apps and plug-ins one log format, configurable per source, stored in Dataverse, SharePoint or both." languagecode="1033" />
     </Descriptions>
-    <Version>1.0.0.0</Version>
+    <Version>1.0.1.0</Version>
     <Managed>2</Managed>
     <Publisher>
       <UniqueName>pplf</UniqueName>

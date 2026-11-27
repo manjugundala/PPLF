@@ -6,6 +6,20 @@ The solution version in Dataverse is the same number with a fourth part (1.0.0 â
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-24
+
+### Changed
+- Overview: the level count cards use solid Flat UI colours with white text (Critical, Errors, Warnings, All entries),
+  and the label no longer overlaps the count.
+
+### Fixed
+- Logs: the level filter shows "All levels" and "â‰¥ <level>" instead of record numbers.
+- Settings: level dropdowns show level names, and labels are no longer cut off.
+- The unpack workflow also blanks tenant values that flows capture in their parameter defaults.
+
+### Documentation
+- Why logging: Microsoft Learn sources for the 28-day flow run history and 24-hour plug-in trace retention.
+
 ## [1.0.0] - 2026-11-24
 
 ### Added

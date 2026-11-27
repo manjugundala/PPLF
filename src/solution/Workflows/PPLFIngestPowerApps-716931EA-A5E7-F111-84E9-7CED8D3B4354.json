@@ -5,10 +5,6 @@
       "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
       "contentVersion": "1.0.0.0",
       "parameters": {
-        "$connections": {
-          "defaultValue": {},
-          "type": "Object"
-        },
         "$authentication": {
           "defaultValue": {},
           "type": "SecureObject"
@@ -16,6 +12,9 @@
       },
       "triggers": {
         "manual": {
+          "metadata": {
+            "operationMetadataId": "9f706bc6-0522-4f4d-b975-dcc4b2373fa7"
+          },
           "type": "Request",
           "kind": "PowerAppV2",
           "inputs": {
@@ -39,6 +38,10 @@
       },
       "actions": {
         "Route": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "da43d1f9-2830-45d9-b7b8-4db967e26ae2"
+          },
           "type": "Workflow",
           "inputs": {
             "host": {
@@ -47,10 +50,17 @@
             "body": {
               "text": "@{triggerBody()?['text']}"
             }
-          },
-          "runAfter": {}
+          }
         },
         "Respond": {
+          "runAfter": {
+            "Route": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "080e6ed3-6aa1-4734-9ce8-4924944f7cec"
+          },
           "type": "Response",
           "kind": "PowerApp",
           "inputs": {
@@ -68,11 +78,6 @@
                 }
               }
             }
-          },
-          "runAfter": {
-            "Route": [
-              "Succeeded"
-            ]
           }
         }
       },

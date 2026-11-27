@@ -121,7 +121,7 @@
                 Variant: AutoLayout
                 Properties:
                   LayoutDirection: =LayoutDirection.Horizontal
-                  Height: =112
+                  Height: =120
                   FillPortions: =0
                   LayoutGap: =PplfGap
                   DropShadow: =DropShadow.None
@@ -140,45 +140,38 @@
                               ))
                         TemplateSize: =240
                         TemplatePadding: =0
-                        Height: =112
+                        Height: =120
                         Width: =Parent.Width
                         OnSelect: =Set(gblLogLevelFilter, If(ThisItem.Label = "All entries", Blank(), ThisItem.Severity)); Navigate(scrLogs, ScreenTransition.None)
                       Children:
                         - recKpiCard:
                             Control: Rectangle@2.3.0
                             Properties:
-                              Fill: =BrandTheme.Surface
-                              BorderColor: =BrandTheme.Border
-                              BorderThickness: =1
+                              Fill: =Switch(ThisItem.Severity, 5, RGBA(192, 57, 43, 1), 4, RGBA(231, 76, 60, 1), 3, RGBA(211, 84, 0, 1), RGBA(41, 128, 185, 1))
+                              BorderThickness: =0
                               Width: =Parent.TemplateWidth - PplfGap
                               Height: =Parent.TemplateHeight
-                        - recKpiAccent:
-                            Control: Rectangle@2.3.0
-                            Properties:
-                              Fill: =PplfLevelColor(ThisItem.Severity)
-                              Width: =4
-                              Height: =Parent.TemplateHeight - 32
-                              X: =0
-                              Y: =16
                         - lblKpiValue:
                             Control: Text@0.0.51
                             Properties:
                               Text: =Text(ThisItem.Count, "#,##0")
+                              FontColor: =Color.White
                               Size: =32
                               Weight: ='TextCanvas.Weight'.Semibold
                               X: =20
-                              Y: =40
+                              Y: =52
                               Width: =Parent.TemplateWidth - 40
-                              Height: =56
+                              Height: =52
                         - lblKpiLabel:
                             Control: Text@0.0.51
                             Properties:
                               Text: =ThisItem.Label
-                              FontColor: =BrandTheme.TextSecondary
+                              FontColor: =Color.White
+                              Weight: ='TextCanvas.Weight'.Semibold
                               X: =20
-                              Y: =10
+                              Y: =12
                               Width: =Parent.TemplateWidth - 40
-                              Height: =24
+                              Height: =28
             - lblRecentTitle:
                 Control: Text@0.0.51
                 Properties:

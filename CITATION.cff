@@ -4,7 +4,7 @@ title: "Power Platform Logging Framework"
 abstract: "An open-source, configurable logging framework for Microsoft Power Platform (Power Apps, Power Automate, Power Pages, model-driven apps and Dataverse plug-ins) that stores logs in Dataverse or SharePoint from one schema."
 type: software
 license: MIT
-version: 1.0.0
+version: 1.0.1
 date-released: 2026-11-24
 keywords:
   - power-platform
