@@ -1,6 +1,6 @@
 {
   "name": "pplf",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Configurable logging for Power Apps, Power Automate, Power Pages, model-driven apps and plug-ins, with Dataverse or SharePoint storage.",
   "license": "MIT",
